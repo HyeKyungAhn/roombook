@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="site.roombook.dao.deptMapper">
+    <select id="selectAll" resultType="DeptDto">
+        SELECT * FROM dept
+    </select>
+
+    <select id="select" resultType="DeptDto">
+        SELECT * FROM dept WHERE DEPT_CD = #{deptCd}
+    </select>
+
+    <insert id="insert" parameterType="DeptDto">
+        INSERT INTO dept (DEPT_CD, UPP_DEPT_CD, DEPT_MNGR_EMPL_NO, DEPT_NM, DEPT_SORT_ODR, FST_REGR_IDNF_NO,
+                          LAST_UPDR_IDNF_NO)
+        VALUES (#{DEPT_CD},
+                #{UPP_DEPT_CD},
+                #{DEPT_MNGR_EMPL_NO},
+                #{DEPT_NM},
+                #{DEPT_SORT_ODR},
+                #{FST_REGR_IDNF_NO},
+                #{LAST_UPDR_IDNF_NO})
+    </insert>
+
+    <update id="updateAllDeptTreeOdrData" parameterType="List">
+            UPDATE dept
+            SET UPP_DEPT_CD = #{UPP_DEPT_CD},
+            DEPT_SORT_ODR = #{DEPT_SORT_ODR},
+            LAST_UPDR_IDNF_NO = #{LAST_UPDR_IDNF_NO},
+            Last_UPD_DTM = CURRENT_TIMESTAMP
+            WHERE DEPT_CD = #{DEPT_CD}
+            AND (UPP_DEPT_CD <![CDATA[<>]]> #{UPP_DEPT_CD} OR DEPT_SORT_ODR <![CDATA[<>]]> #{DEPT_SORT_ODR})
+    </update>
+
+    <update id="updateManager" parameterType="Map">
+        UPDATE dept
+        SET DEPT_MNGR_EMPL_NO = #{manager},
+            LAST_UPD_DTM = CURRENT_TIMESTAMP,
+            LAST_UPDR_IDNF_NO = #{empId}
+        WHERE DEPT_CD = #{deptCd}
+    </update>
+
+    <update id="updateDeptOrder" parameterType="Map">
+        UPDATE dept
+        SET DEPT_SORT_ODR = #{num}
+        WHERE DEPT_CD = #{deptCd}
+    </update>
+
+    <delete id="delete" parameterType="String">
+        DELETE FROM dept
+        WHERE DEPT_CD = #{deptCd}
+    </delete>
+
+    <delete id="deleteAll">
+        DELETE FROM dept
+    </delete>
+
+    <select id="selectAllDeptCnt" resultType="int">
+        SELECT COUNT(*) FROM dept
+    </select>
+
+
+</mapper>

@@ -4,6 +4,7 @@
         "http://mybatis.org/dtd/mybatis-3-config.dtd">
 <configuration>
     <typeAliases>
-
+        <typeAlias alias="DeptDto" type="site.roombook.domain.DeptDto"/>
+        <typeAlias alias="List" type="java.util.List"/>
     </typeAliases>
 </configuration>
