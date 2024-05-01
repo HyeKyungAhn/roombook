@@ -1,9 +1,11 @@
 package site.roombook.dao;
 
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,24 +23,85 @@ class DeptDaoTest {
 
     @Test
     @Transactional
-    void insertDeptTest() throws Exception{
-        DeptDto deptDto = new DeptDto("11111112", "", "asdf", "HR", 0,"asdf","asdf");
+    void insertDeptTest() throws Exception {
+        DeptDto deptDto = new DeptDto("11111112", "#", "asdf", "인사부", "HR", 0, "asdf", "asdf");
         int rowCnt = deptDao.insertDept(deptDto);
         assertEquals(1, rowCnt);
     }
 
     @Test
     @Transactional
-    void insertDeptFailTest() throws Exception{
+    @DisplayName("중복된 부서 코드 insert 테스트")
+    void insertDuplicatedDeptTest() throws Exception {
+        DeptDto deptDto = new DeptDto("11111112", "#", "asdf", "인사팀", "HR", 0, "asdf", "asdf");
+        int rowCnt = deptDao.insertDept(deptDto);
+        assertEquals(1, rowCnt);
+        DeptDto duplicatedDeptDto = new DeptDto("11111112", "#", "asdf", "AA", "AA", 0, "asdf", "asdf");
+        int result = 0;
+        try {
+            result = deptDao.insertDept(duplicatedDeptDto);
+        } catch (DuplicateKeyException e) {
+            e.printStackTrace();
+            String errorMsg = e.getMessage();
+        }
+        assertEquals(0, result);
+    }
+
+    @Test
+    @Transactional
+    @DisplayName("중복된 부서 이름 insert 테스트")
+    void insertDuplicatedDeptNmTest() throws Exception {
+        deptDao.deleteAll();
+
+        DeptDto deptDto = new DeptDto("11111111", "#", "asdf", "HR", "eng", 0, "asdf", "asdf");
+        deptDao.insertDept(deptDto);
+
+        DeptDto duplicatedDeptDto = new DeptDto("22222222", "#", "asdf", "HR", "eng", 0, "asdf", "asdf");
+        int result = 0;
+
+        try {
+            result = deptDao.insertDept(duplicatedDeptDto);
+        } catch (DuplicateKeyException e) {
+            String errorMsg = e.getMessage();
+        }
+
+        assertEquals(0, result);
+    }
+
+    @Test
+    @Transactional
+    @DisplayName("매니저 이름 없는 부서 insert 테스트")
+    void insertDeptTestWithoutMngr() throws Exception {
+        deptDao.deleteAll();
+
+        DeptDto deptDto = new DeptDto();
+        deptDto.setDEPT_CD("11111112");
+        deptDto.setUPP_DEPT_CD("#");
+        deptDto.setDEPT_NM("a");
+        deptDto.setENG_DEPT_NM("a");
+        deptDto.setDEPT_SORT_ODR(0);
+        deptDto.setFST_REGR_IDNF_NO("asdf");
+        deptDto.setLAST_UPDR_IDNF_NO("asdf");
+
+        int rowCnt = deptDao.insertDept(deptDto);
+        assertEquals(1, rowCnt);
+
+        DeptDto deptdto2 = deptDao.selectDept(deptDto.getDEPT_CD());
+        System.out.println("deptdto2 = " + deptdto2);
+    }
+
+    @Test
+    @Transactional
+    void insertDeptFailTest() throws Exception {
         deptDao.deleteAll();
 
         DeptDto deptDto = new DeptDto();
         deptDto.setDEPT_CD("11111112");
 
         int rowCnt = 0;
-        try{
+        try {
             rowCnt = deptDao.insertDept(deptDto);
-        } catch (DataIntegrityViolationException e){
+        } catch (DataIntegrityViolationException e) {
             e.printStackTrace();
         }
 
@@ -47,16 +110,30 @@ class DeptDaoTest {
 
     @Test
     @Transactional
-    void selectDeptTest() throws Exception{
-        DeptDto deptDto = deptDao.selectDept("11111111");
-        assertEquals("HR", deptDto.getDEPT_NM());
+    void selectDeptTest() throws Exception {
+        DeptDto deptDto = new DeptDto("11111112", "#", "asdf", "인사부", "HR", 0, "asdf", "asdf");
+        int rowCnt = deptDao.insertDept(deptDto);
+
+        assertEquals(1, rowCnt);
+        assertEquals(deptDto.getENG_DEPT_NM(), deptDao.selectDept(deptDto.getDEPT_CD()).getENG_DEPT_NM());
+    }
+
+    @Test
+    @Transactional
+    @DisplayName("부서명으로 부서 수 조회 테스트")
+    void selectDeptNmTest() throws Exception {
+        DeptDto deptDto = new DeptDto("11111112", "#", "asdf", "인사부", "HR", 0, "asdf", "asdf");
+        int rowCnt = deptDao.insertDept(deptDto);
+
+        assertEquals(1, rowCnt);
+        assertEquals(1, deptDao.selectDeptCntWithNm(deptDto.getDEPT_NM()));
     }
 
     @Test
     @Transactional
     void updateManagerTest() throws Exception {
         deptDao.deleteAll();
-        DeptDto deptDto = new DeptDto("11111112", "", "asdf", "HR", 0,"asdf","asdf");
+        DeptDto deptDto = new DeptDto("11111112", "", "asdf", "HR", "eng", 0, "asdf", "asdf");
         int rowCnt = deptDao.insertDept(deptDto);
         assertEquals(1, rowCnt);
 
@@ -78,11 +155,11 @@ class DeptDaoTest {
     @Transactional
     void selectAllDept() throws Exception {
         deptDao.deleteAll();
-        DeptDto deptDto = new DeptDto("11111111", "", "asdf", "HR", 0,"asdf","asdf");
+        DeptDto deptDto = new DeptDto("11111111", "", "asdf", "HR", "eng", 0, "asdf", "asdf");
         int rowCnt = deptDao.insertDept(deptDto);
         assertEquals(1, rowCnt);
 
-        DeptDto deptDto2 = new DeptDto("11111112", "", "asdf", "HR", 0,"asdf","asdf");
+        DeptDto deptDto2 = new DeptDto("11111112", "", "asdf", "AA", "eng", 0, "asdf", "asdf");
         rowCnt = deptDao.insertDept(deptDto2);
         assertEquals(1, rowCnt);
 
@@ -94,8 +171,8 @@ class DeptDaoTest {
     @Transactional
     void selectAllDeptCntTest() throws Exception {
         deptDao.deleteAll();
-        DeptDto deptDto = new DeptDto("11111111", "", "asdf", "HR", 0,"asdf","asdf");
-        DeptDto deptDto2 = new DeptDto("11111112", "", "asdf", "HR", 0,"asdf","asdf");
+        DeptDto deptDto = new DeptDto("11111111", "", "asdf", "HR", "eng", 0, "asdf", "asdf");
+        DeptDto deptDto2 = new DeptDto("11111112", "", "asdf", "AA", "eng", 0, "asdf", "asdf");
         deptDao.insertDept(deptDto);
         deptDao.insertDept(deptDto2);
 
@@ -107,8 +184,8 @@ class DeptDaoTest {
     @Transactional
     void deleteAllTest() throws Exception {
         deptDao.deleteAll();
-        DeptDto deptDto = new DeptDto("11111111", "", "asdf", "HR", 0,"asdf","asdf");
-        DeptDto deptDto2 = new DeptDto("11111112", "", "asdf", "HR", 0,"asdf","asdf");
+        DeptDto deptDto = new DeptDto("11111111", "", "asdf", "HR", "eng", 0, "asdf", "asdf");
+        DeptDto deptDto2 = new DeptDto("11111112", "", "asdf", "AA", "eng", 0, "asdf", "asdf");
         deptDao.insertDept(deptDto);
         deptDao.insertDept(deptDto2);
 
@@ -126,11 +203,11 @@ class DeptDaoTest {
     @Transactional
     void updateAllDeptTreeDataTest() throws Exception {
         deptDao.deleteAll();
-        DeptDto deptDto1 = new DeptDto("11111111", "#", "kim", "a", 0,"asdf","asdf");
-        DeptDto deptDto2 = new DeptDto("11112222", "#", "lee", "b", 1,"asdf","asdf");
-        DeptDto deptDto3 = new DeptDto("22222222", "11111111", "park", "c", 0,"asdf","asdf");
-        DeptDto deptDto4 = new DeptDto("22222233", "11111111", "yang", "d", 1,"asdf","asdf");
-        DeptDto deptDto5 = new DeptDto("33333333", "22222222", "kwang", "e", 0,"asdf","asdf");
+        DeptDto deptDto1 = new DeptDto("11111111", "#", "kim", "a", "eng", 0, "asdf", "asdf");
+        DeptDto deptDto2 = new DeptDto("11112222", "#", "lee", "b", "eng", 1, "asdf", "asdf");
+        DeptDto deptDto3 = new DeptDto("22222222", "11111111", "park", "c", "eng", 0, "asdf", "asdf");
+        DeptDto deptDto4 = new DeptDto("22222233", "11111111", "yang", "d", "eng", 1, "asdf", "asdf");
+        DeptDto deptDto5 = new DeptDto("33333333", "22222222", "kwang", "e", "eng", 0, "asdf", "asdf");
         deptDao.insertDept(deptDto1);
         deptDao.insertDept(deptDto2);
         deptDao.insertDept(deptDto3);
@@ -155,7 +232,85 @@ class DeptDaoTest {
         modifiedList.add(deptDto2);
         modifiedList.add(deptDto5);
 
-        int rowCnt = deptDao.updateAllDeptTreeData(modifiedList);
+        int rowCnt = deptDao.updateAllDeptTreeOdrData(modifiedList);
         assertEquals(3, rowCnt);
+    }
+
+    @Test
+    @Transactional
+    void selectDeptCdAndNm() throws Exception {
+        //GIVEN
+        deptDao.deleteAll();
+
+        DeptDto deptDto1 = new DeptDto("11111111", "#", "kim", "a", "eng", 0, "asdf", "asdf");
+        DeptDto deptDto2 = new DeptDto("11112222", "#", "lee", "b", "eng", 1, "asdf", "asdf");
+        DeptDto deptDto3 = new DeptDto("22222222", "11111111", "park", "c", "eng", 0, "asdf", "asdf");
+        DeptDto deptDto4 = new DeptDto("22222233", "11111111", "yang", "d", "eng", 1, "asdf", "asdf");
+        DeptDto deptDto5 = new DeptDto("33333333", "22222222", "kwang", "e", "eng", 0, "asdf", "asdf");
+
+        deptDao.insertDept(deptDto1);
+        deptDao.insertDept(deptDto2);
+        deptDao.insertDept(deptDto3);
+        deptDao.insertDept(deptDto4);
+        deptDao.insertDept(deptDto5);
+
+        List<DeptDto> list = new ArrayList<>();
+        list.add(deptDto1);
+        list.add(deptDto2);
+        list.add(deptDto3);
+        list.add(deptDto4);
+        list.add(deptDto5);
+
+        int allDeptCnt = deptDao.selectAllDeptCnt();
+        assertEquals(5, allDeptCnt);
+
+        List<DeptDto> selectedList = deptDao.selectDeptCdAndNm();
+
+        for (DeptDto deptDto : selectedList) {
+            for (DeptDto oldDeptDto : list) {
+                if (deptDto.getDEPT_CD().equals(oldDeptDto.getDEPT_CD())) {
+                    assertEquals(deptDto.getDEPT_NM(), oldDeptDto.getDEPT_NM());
+                }
+            }
+        }
+    }
+
+    @Test
+    @Transactional
+    @DisplayName("부서 계층 구조 표시를 위한 부서 데이터 조회 테스트")
+    void selectAllDeptForTreeTest() throws Exception {
+        deptDao.deleteAll();
+
+        DeptDto deptDto1 = new DeptDto("11111111", "#", "kim", "a", "eng", 0, "asdf", "asdf");
+        DeptDto deptDto2 = new DeptDto("11112222", "#", "lee", "b", "eng", 1, "asdf", "asdf");
+        DeptDto deptDto3 = new DeptDto("22222222", "11111111", "park", "c", "eng", 0, "asdf", "asdf");
+        DeptDto deptDto4 = new DeptDto("22222233", "11111111", "yang", "d", "eng", 1, "asdf", "asdf");
+        DeptDto deptDto5 = new DeptDto("33333333", "22222222", "kwang", "e", "eng", 0, "asdf", "asdf");
+
+        deptDao.insertDept(deptDto1);
+        deptDao.insertDept(deptDto2);
+        deptDao.insertDept(deptDto3);
+        deptDao.insertDept(deptDto4);
+        deptDao.insertDept(deptDto5);
+
+        List<DeptDto> oldList = new ArrayList<>();
+        oldList.add(deptDto1);
+        oldList.add(deptDto2);
+        oldList.add(deptDto3);
+        oldList.add(deptDto4);
+        oldList.add(deptDto5);
+
+        List<DeptDto> selectedList = deptDao.selectAllDeptForTree();
+
+        assertEquals(oldList.size(), selectedList.size());
+
+        for (DeptDto inputDept : oldList) {
+            for(DeptDto selectedDept : selectedList){
+                if(selectedDept.getDEPT_CD().equals(inputDept.getDEPT_CD())){
+                    assertNull(selectedDept.getDEPT_MNGR_EMPL_NO());
+                    assertNull(selectedDept.getENG_DEPT_NM());
+                }
+            }
+        }
     }
 }

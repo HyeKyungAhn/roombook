@@ -36,4 +36,10 @@ class DeptControllerTest {
                 .andExpect(status().isOk())
                 .andReturn();
     }
+
+    @Test
+    void getDeptCdAndNm() throws Exception {
+        mockMvc.perform(get("/dept/new"))
+                .andReturn();
+    }
 }
