@@ -7,24 +7,17 @@
 --%>
 <%@ page contentType="text/html;charset=UTF-8" %>
 <!DOCTYPE html>
-<html lang="en">
+<html lang="kr">
 <head>
     <meta charset="utf-8">
-    <title>jsTree test</title>
-    <!-- 2 load the theme CSS file -->
+    <title>roombook | 부서 이동</title>
     <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/dist/themes/default/style.min.css" />
 </head>
 <body>
-<!-- 3 setup a container element -->
-<div id="jstree">
-
-</div>
+<div id="jstree"></div>
 <button>저장</button>
 
-<!-- 4 include the jQuery library -->
-
-<!-- 5 include the minified jstree source -->
 <script src="${pageContext.request.contextPath}/dist/jstree.min.js"></script>
 <script>
     $(function () {
@@ -40,7 +33,7 @@
                         type: 'GET',
                         dataType: 'text',
                         contentType: 'application/json',
-                        url: '/dept/data',
+                        url: '/dept/tree',
                         }).done(function (d){cb(JSON.parse(d));})
                 }
             },
@@ -96,7 +89,7 @@
 
         $('button').on('click', function () {
             const nodes = $('#jstree').jstree(true).get_json('#', {flat:true});
-            fetch('/dept/data', {
+            fetch('/dept/move', {
                 method : 'POST',
                 headers: {
                     'Content-Type': 'application/json'

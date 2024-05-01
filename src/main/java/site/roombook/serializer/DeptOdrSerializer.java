@@ -6,7 +6,7 @@ import com.fasterxml.jackson.databind.SerializerProvider;
 
 import java.io.IOException;
 
-public class CustomSerializer extends JsonSerializer<Integer> {
+public class DeptOdrSerializer extends JsonSerializer<Integer> {
     @Override
     public void serialize(Integer value, JsonGenerator jsonGenerator, SerializerProvider serializerProvider) throws IOException {
         jsonGenerator.writeStartObject();

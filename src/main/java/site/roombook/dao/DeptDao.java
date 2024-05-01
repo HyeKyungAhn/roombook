@@ -1,5 +1,6 @@
 package site.roombook.dao;
 
+import org.springframework.dao.DuplicateKeyException;
 import site.roombook.domain.DeptDto;
 
 import java.util.List;
@@ -8,15 +9,21 @@ import java.util.Map;
 public interface DeptDao {
     List<DeptDto> selectAllDept() throws Exception;
 
-    DeptDto selectDept(String deptCd) throws Exception;
+    DeptDto selectDept(String deptCd);
 
     int selectAllDeptCnt();
 
-    int insertDept(DeptDto deptDto) throws Exception;
+    List<DeptDto> selectAllDeptForTree();
+
+    int selectDeptCntWithNm(String deptNm);
+
+    int insertDept(DeptDto deptDto) throws DuplicateKeyException;
 
     int updateManager(Map<String, String> map);
 
-    int updateAllDeptTreeData(List<DeptDto> list) throws Exception;
+    int updateAllDeptTreeOdrData(List<DeptDto> list);
 
     int deleteAll();
+
+    List<DeptDto> selectDeptCdAndNm();
 }

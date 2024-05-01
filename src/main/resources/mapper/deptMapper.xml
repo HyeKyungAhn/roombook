@@ -11,13 +11,23 @@
         SELECT * FROM dept WHERE DEPT_CD = #{deptCd}
     </select>
 
+    <select id="selectAllForTree" resultType="DeptDto">
+        SELECT DEPT_CD, UPP_DEPT_CD, DEPT_NM, DEPT_SORT_ODR
+        FROM dept
+    </select>
+
+    <select id="selectDeptCntWithNm" parameterType="String" resultType="int">
+        SELECT COUNT(*) FROM dept WHERE DEPT_NM = #{deptNm}
+    </select>
+
     <insert id="insert" parameterType="DeptDto">
-        INSERT INTO dept (DEPT_CD, UPP_DEPT_CD, DEPT_MNGR_EMPL_NO, DEPT_NM, DEPT_SORT_ODR, FST_REGR_IDNF_NO,
+        INSERT INTO dept (DEPT_CD, UPP_DEPT_CD, DEPT_MNGR_EMPL_NO, DEPT_NM, ENG_DEPT_NM, DEPT_SORT_ODR, FST_REGR_IDNF_NO,
                           LAST_UPDR_IDNF_NO)
         VALUES (#{DEPT_CD},
                 #{UPP_DEPT_CD},
                 #{DEPT_MNGR_EMPL_NO},
                 #{DEPT_NM},
+                #{ENG_DEPT_NM},
                 #{DEPT_SORT_ODR},
                 #{FST_REGR_IDNF_NO},
                 #{LAST_UPDR_IDNF_NO})
@@ -60,5 +70,9 @@
         SELECT COUNT(*) FROM dept
     </select>
 
+    <select id="selectDeptCdAndNm" resultType="DeptDto">
+        SELECT DEPT_CD, DEPT_NM
+        FROM dept
+    </select>
 
 </mapper>
