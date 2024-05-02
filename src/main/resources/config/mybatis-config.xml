@@ -6,5 +6,7 @@
     <typeAliases>
         <typeAlias alias="DeptDto" type="site.roombook.domain.DeptDto"/>
         <typeAlias alias="List" type="java.util.List"/>
+        <typeAlias alias="EmplDto" type="site.roombook.domain.EmplDto"/>
+        <typeAlias alias="BlngDeptDto" type="site.roombook.domain.BlngDeptDto"/>
     </typeAliases>
 </configuration>
