@@ -70,7 +70,7 @@ public class DeptController {
         return "/dept/deptMove";
     }
 
-    @GetMapping("/tree")
+    @GetMapping(value = "/tree", produces = "application/json;charset=UTF-8")
     @ResponseBody
     public String getDeptTreeDataForMove(){
         //권한 확인 필요
@@ -88,7 +88,7 @@ public class DeptController {
         return deptData;
     }
 
-    @GetMapping("/tree2")
+    @GetMapping(value = "/tree2", produces = "application/json;charset=UTF-8")
     @ResponseBody
     public String getDeptTreeDataForInsert(String deptNm, String parent, String mngr){
         List<DeptDto> deptDtoList = deptService.getAllDeptTreeData();
@@ -129,7 +129,7 @@ public class DeptController {
         return max;
     }
 
-    @PostMapping("/move")
+    @PostMapping(value = "/move", produces = "application/json;charset=UTF-8")
     @ResponseBody
     public String modifyDeptDataForMove(@RequestBody List<DeptDto> list){
         list.forEach( deptDto -> deptDto.setLAST_UPDR_IDNF_NO("ahk")); // TODO : 실제 변경 직원 이름 넣기
@@ -164,7 +164,7 @@ public class DeptController {
         return "/dept/deptInsert2";
     }
 
-    @PostMapping("/save2")
+    @PostMapping(value = "/save2", produces = "application/json;charset=UTF-8")
     @ResponseBody
     public String insertOneDeptAndModifyDeptTreeData(HttpServletRequest req
             , RedirectAttributes rattr
@@ -189,7 +189,7 @@ public class DeptController {
         return req.getHeader("origin")+"/dept/save";
     }
 
-    @PostMapping("/del")
+    @PostMapping(value = "/del", produces = "application/json;charset=UTF-8")
     @ResponseBody
     public String deleteDeptWithNoMember(@RequestBody String deptCd){
         try{
