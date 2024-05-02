@@ -2,6 +2,7 @@ package site.roombook.service;
 
 import org.springframework.dao.DuplicateKeyException;
 import site.roombook.domain.DeptDto;
+import site.roombook.domain.EmplDto;
 
 import java.util.List;
 
@@ -18,5 +19,13 @@ public interface DeptService {
 
     void deleteAll();
 
+    void deleteDeptWithNoEmpl(String deptCd);
+
     List<DeptDto> getDeptCdAndNm();
+
+    DeptDto getOneDept(String deptCd);
+
+    List<EmplDto> getDeptMembers(String deptCd);
+
+    EmplDto getDeptMngr(String emplNo);
 }

@@ -26,4 +26,6 @@ public interface DeptDao {
     int deleteAll();
 
     List<DeptDto> selectDeptCdAndNm();
+
+    int deleteDeptWithNoEmpl(String deptCd);
 }

@@ -64,4 +64,7 @@ public class DeptDaoImpl implements DeptDao {
     public List<DeptDto> selectDeptCdAndNm(){
         return session.selectList(namespace+"selectDeptCdAndNm");
     }
+
+    @Override
+    public int deleteDeptWithNoEmpl(String deptCd) { return session.delete(namespace+"deleteDeptWithNoEmpl", deptCd); }
 }

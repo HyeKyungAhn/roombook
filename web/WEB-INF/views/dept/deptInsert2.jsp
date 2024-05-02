@@ -12,7 +12,7 @@
 <html lang="kr">
 <head>
     <meta charset="utf-8">
-    <title>roombook | 부서 이동</title>
+    <title>roombook | 부서 추가</title>
     <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/dist/themes/default/style.min.css" />
 </head>

@@ -66,6 +66,14 @@
         DELETE FROM dept
     </delete>
 
+    <delete id="deleteDeptWithNoEmpl" parameterType="String">
+        DELETE FROM dept
+        WHERE DEPT_CD = #{deptCd}
+          AND 0 = (SELECT COUNT(*)
+            FROM blng_dept
+            WHERE BLNG_DEPT_CD = #{deptCd});
+    </delete>
+
     <select id="selectAllDeptCnt" resultType="int">
         SELECT COUNT(*) FROM dept
     </select>

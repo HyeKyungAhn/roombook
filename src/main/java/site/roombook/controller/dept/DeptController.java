@@ -2,6 +2,7 @@ package site.roombook.controller.dept;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.apache.logging.log4j.util.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Controller;
@@ -13,6 +14,8 @@ import site.roombook.service.DeptService;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
+import java.util.NoSuchElementException;
+import java.util.Objects;
 
 @Controller
 @RequestMapping("/dept")
@@ -21,6 +24,46 @@ public class DeptController {
 
     @Autowired
     DeptService deptService;
+
+    @ExceptionHandler(IllegalArgumentException.class)
+    public String catcher(IllegalArgumentException e){
+        return "error";
+    }
+
+    @ExceptionHandler(NoSuchElementException.class)
+    public String catcher2(NoSuchElementException e){
+        return "error";
+    }
+
+
+    @GetMapping("/dept")
+    public String getDeptDetailPage(@RequestParam String deptCd, Model m, RedirectAttributes rattr){
+        // LEARN: controller내의 service는 합치는게 좋을까?
+        if(Strings.isEmpty(deptCd)){
+            throw new IllegalArgumentException("/dept/detp GET method, no DeptCd");
+        }
+
+        DeptDto deptDto = deptService.getOneDept(deptCd);
+
+        if(Objects.isNull(deptDto)){
+            throw new NoSuchElementException("Not Existing dept");
+        }
+
+        String mngrEmplNo = deptDto.getDEPT_MNGR_EMPL_NO();
+
+        if(!Strings.isEmpty(mngrEmplNo)){
+            m.addAttribute("mngr", deptService.getDeptMngr(mngrEmplNo));
+        }
+
+        m.addAttribute("deptInfo", deptDto);
+        m.addAttribute("memberInfo", deptService.getDeptMembers(deptCd));
+        return "dept/deptDetail";
+    }
+
+    @GetMapping("/list")
+    public String getDeptListPage(){
+        return "/dept/deptList";
+    }
 
     @GetMapping("/move")
     public String getDeptMovePage(){
@@ -144,6 +187,17 @@ public class DeptController {
         }
 
         return req.getHeader("origin")+"/dept/save";
+    }
+
+    @PostMapping("/del")
+    @ResponseBody
+    public String deleteDeptWithNoMember(@RequestBody String deptCd){
+        try{
+            deptService.deleteDeptWithNoEmpl(deptCd);
+        } catch (RuntimeException e){
+            return "DEL_FAIL";
+        }
+        return "DEL_OK";
     }
 
     private void addAttribute(String deptNm, String engDeptNm, String parent, String mngr, RedirectAttributes rattr) {

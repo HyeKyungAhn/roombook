@@ -11,7 +11,7 @@
 <!DOCTYPE>
 <html lang="kr">
 <head>
-    <title>Title</title>
+    <title>roombook | 부서 추가</title>
 </head>
 <script>
     const msg = '${msg}';

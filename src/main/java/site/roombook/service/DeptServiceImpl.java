@@ -5,11 +5,11 @@ import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import site.roombook.dao.DeptDao;
+import site.roombook.dao.EmplDao;
 import site.roombook.domain.DeptDto;
+import site.roombook.domain.EmplDto;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
 
 @Service
@@ -18,6 +18,9 @@ public class DeptServiceImpl implements DeptService {
 
     @Autowired
     DeptDao deptDao;
+
+    @Autowired
+    EmplDao emplDao;
 
     @Override
     public boolean haveIdenticalDeptNm(String deptNm) {
@@ -98,7 +101,32 @@ public class DeptServiceImpl implements DeptService {
 
     @Transactional
     @Override
+    public void deleteDeptWithNoEmpl(String deptCd) throws RuntimeException{
+        int deletedRowCnt = deptDao.deleteDeptWithNoEmpl(deptCd);
+
+        if(deletedRowCnt==0){
+            throw new RuntimeException("Dept with members cannot be deleted");
+        }
+
+    }
+
+    @Override
     public List<DeptDto> getDeptCdAndNm(){
         return deptDao.selectDeptCdAndNm();
+    }
+
+    @Override
+    public DeptDto getOneDept(String deptCd){
+        return deptDao.selectDept(deptCd);
+    }
+
+    @Override
+    public List<EmplDto> getDeptMembers(String deptCd){
+        return emplDao.selectDeptMembers(deptCd);
+    }
+
+    @Override
+    public EmplDto getDeptMngr(String emplNo){
+        return emplDao.selectOneEmplProfile(emplNo);
     }
 }
