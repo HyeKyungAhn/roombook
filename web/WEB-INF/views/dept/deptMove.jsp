@@ -22,7 +22,7 @@
 <script>
     $(function () {
         $('#jstree').on('ready.jstree', (e, data) => {
-            data.instance.sort = () => {};
+            data.instance.sort = () => {}; //drag and drop 시 sort 되지 않게 하기 위함
         });
 
         $('#jstree').jstree({
@@ -111,8 +111,6 @@
                 });
         });
     });
-
-
 </script>
 </body>
 </html>
