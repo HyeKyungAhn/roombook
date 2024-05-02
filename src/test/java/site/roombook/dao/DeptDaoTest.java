@@ -9,6 +9,7 @@ import org.springframework.dao.DuplicateKeyException;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.transaction.annotation.Transactional;
+import site.roombook.domain.BlngDeptDto;
 import site.roombook.domain.DeptDto;
 
 import java.util.*;
@@ -21,10 +22,14 @@ class DeptDaoTest {
     @Autowired
     DeptDao deptDao;
 
+    @Autowired
+    BlngDeptDao blngDeptDao;
+
     @Test
     @Transactional
-    void insertDeptTest() throws Exception {
-        DeptDto deptDto = new DeptDto("11111112", "#", "asdf", "인사부", "HR", 0, "asdf", "asdf");
+    void insertDeptTest(){
+        deptDao.deleteAll();
+        DeptDto deptDto = new DeptDto("11111111", "#", "asdf", "인사부2", "HR", 0, "asdf", "asdf");
         int rowCnt = deptDao.insertDept(deptDto);
         assertEquals(1, rowCnt);
     }
@@ -32,7 +37,7 @@ class DeptDaoTest {
     @Test
     @Transactional
     @DisplayName("중복된 부서 코드 insert 테스트")
-    void insertDuplicatedDeptTest() throws Exception {
+    void insertDuplicatedDeptTest(){
         DeptDto deptDto = new DeptDto("11111112", "#", "asdf", "인사팀", "HR", 0, "asdf", "asdf");
         int rowCnt = deptDao.insertDept(deptDto);
         assertEquals(1, rowCnt);
@@ -42,7 +47,6 @@ class DeptDaoTest {
             result = deptDao.insertDept(duplicatedDeptDto);
         } catch (DuplicateKeyException e) {
             e.printStackTrace();
-            String errorMsg = e.getMessage();
         }
         assertEquals(0, result);
     }
@@ -50,7 +54,7 @@ class DeptDaoTest {
     @Test
     @Transactional
     @DisplayName("중복된 부서 이름 insert 테스트")
-    void insertDuplicatedDeptNmTest() throws Exception {
+    void insertDuplicatedDeptNmTest(){
         deptDao.deleteAll();
 
         DeptDto deptDto = new DeptDto("11111111", "#", "asdf", "HR", "eng", 0, "asdf", "asdf");
@@ -62,7 +66,7 @@ class DeptDaoTest {
         try {
             result = deptDao.insertDept(duplicatedDeptDto);
         } catch (DuplicateKeyException e) {
-            String errorMsg = e.getMessage();
+            e.printStackTrace();
         }
 
         assertEquals(0, result);
@@ -71,7 +75,7 @@ class DeptDaoTest {
     @Test
     @Transactional
     @DisplayName("매니저 이름 없는 부서 insert 테스트")
-    void insertDeptTestWithoutMngr() throws Exception {
+    void insertDeptTestWithoutMngr(){
         deptDao.deleteAll();
 
         DeptDto deptDto = new DeptDto();
@@ -92,7 +96,7 @@ class DeptDaoTest {
 
     @Test
     @Transactional
-    void insertDeptFailTest() throws Exception {
+    void insertDeptFailTest(){
         deptDao.deleteAll();
 
         DeptDto deptDto = new DeptDto();
@@ -110,7 +114,7 @@ class DeptDaoTest {
 
     @Test
     @Transactional
-    void selectDeptTest() throws Exception {
+    void selectDeptTest(){
         DeptDto deptDto = new DeptDto("11111112", "#", "asdf", "인사부", "HR", 0, "asdf", "asdf");
         int rowCnt = deptDao.insertDept(deptDto);
 
@@ -121,7 +125,7 @@ class DeptDaoTest {
     @Test
     @Transactional
     @DisplayName("부서명으로 부서 수 조회 테스트")
-    void selectDeptNmTest() throws Exception {
+    void selectDeptNmTest(){
         DeptDto deptDto = new DeptDto("11111112", "#", "asdf", "인사부", "HR", 0, "asdf", "asdf");
         int rowCnt = deptDao.insertDept(deptDto);
 
@@ -131,7 +135,7 @@ class DeptDaoTest {
 
     @Test
     @Transactional
-    void updateManagerTest() throws Exception {
+    void updateManagerTest() {
         deptDao.deleteAll();
         DeptDto deptDto = new DeptDto("11111112", "", "asdf", "HR", "eng", 0, "asdf", "asdf");
         int rowCnt = deptDao.insertDept(deptDto);
@@ -169,7 +173,7 @@ class DeptDaoTest {
 
     @Test
     @Transactional
-    void selectAllDeptCntTest() throws Exception {
+    void selectAllDeptCntTest(){
         deptDao.deleteAll();
         DeptDto deptDto = new DeptDto("11111111", "", "asdf", "HR", "eng", 0, "asdf", "asdf");
         DeptDto deptDto2 = new DeptDto("11111112", "", "asdf", "AA", "eng", 0, "asdf", "asdf");
@@ -182,7 +186,7 @@ class DeptDaoTest {
 
     @Test
     @Transactional
-    void deleteAllTest() throws Exception {
+    void deleteAllTest() {
         deptDao.deleteAll();
         DeptDto deptDto = new DeptDto("11111111", "", "asdf", "HR", "eng", 0, "asdf", "asdf");
         DeptDto deptDto2 = new DeptDto("11111112", "", "asdf", "AA", "eng", 0, "asdf", "asdf");
@@ -238,7 +242,7 @@ class DeptDaoTest {
 
     @Test
     @Transactional
-    void selectDeptCdAndNm() throws Exception {
+    void selectDeptCdAndNm() {
         //GIVEN
         deptDao.deleteAll();
 
@@ -278,7 +282,7 @@ class DeptDaoTest {
     @Test
     @Transactional
     @DisplayName("부서 계층 구조 표시를 위한 부서 데이터 조회 테스트")
-    void selectAllDeptForTreeTest() throws Exception {
+    void selectAllDeptForTreeTest() {
         deptDao.deleteAll();
 
         DeptDto deptDto1 = new DeptDto("11111111", "#", "kim", "a", "eng", 0, "asdf", "asdf");
@@ -312,5 +316,76 @@ class DeptDaoTest {
                 }
             }
         }
+    }
+
+    @Test
+    @Transactional
+    @DisplayName("구성원이 있는 부서 삭제 실패 테스트")
+    void deleteDeptWithEmpl(){
+        deptDao.deleteAll();
+
+        String deptCd1 = "11111111";
+        String deptCd2 = "22222222";
+        String deptCd3 = "33333333";
+        String deptCd4 = "44444444";
+        String deptCd5 = "55555555";
+
+        DeptDto deptDto1 = new DeptDto(deptCd1, "#", "kim", "a", "eng", 0, "asdf", "asdf");
+        DeptDto deptDto2 = new DeptDto(deptCd2, "#", "lee", "b", "eng", 1, "asdf", "asdf");
+        DeptDto deptDto3 = new DeptDto(deptCd3, "11111111", "park", "c", "eng", 0, "asdf", "asdf");
+        DeptDto deptDto4 = new DeptDto(deptCd4, "11111111", "yang", "d", "eng", 1, "asdf", "asdf");
+        DeptDto deptDto5 = new DeptDto(deptCd5, "22222222", "kwang", "e", "eng", 0, "asdf", "asdf");
+
+        assertEquals(1, deptDao.insertDept(deptDto1));
+        assertEquals(1, deptDao.insertDept(deptDto2));
+        assertEquals(1, deptDao.insertDept(deptDto3));
+        assertEquals(1, deptDao.insertDept(deptDto4));
+        assertEquals(1, deptDao.insertDept(deptDto5));
+
+        BlngDeptDto blngDeptDto1 = new BlngDeptDto(deptCd1, "00000001", 'N', "00000002", "00000002");
+        BlngDeptDto blngDeptDto2 = new BlngDeptDto(deptCd1, "00000002", 'N', "00000002", "00000002");
+        BlngDeptDto blngDeptDto3 = new BlngDeptDto(deptCd1, "00000003", 'N', "00000002", "00000002");
+
+        assertEquals(1, blngDeptDao.insertBlngDept(blngDeptDto1));
+        assertEquals(1, blngDeptDao.insertBlngDept(blngDeptDto2));
+        assertEquals(1, blngDeptDao.insertBlngDept(blngDeptDto3));
+
+        assertEquals(0, deptDao.deleteDeptWithNoEmpl(deptCd1));
+    }
+
+    @Test
+    @Transactional
+    @DisplayName("구성원이 없는 부서 삭제 성공 테스트")
+    void deleteDeptWithNoEmpl(){
+        deptDao.deleteAll();
+        blngDeptDao.deleteAllBlngDept();
+
+        String deptCd1 = "11111111";
+        String deptCd2 = "22222222";
+        String deptCd3 = "33333333";
+        String deptCd4 = "44444444";
+        String deptCd5 = "55555555";
+
+        DeptDto deptDto1 = new DeptDto(deptCd1, "#", "kim", "a", "eng", 0, "asdf", "asdf");
+        DeptDto deptDto2 = new DeptDto(deptCd2, "#", "lee", "b", "eng", 1, "asdf", "asdf");
+        DeptDto deptDto3 = new DeptDto(deptCd3, "11111111", "park", "c", "eng", 0, "asdf", "asdf");
+        DeptDto deptDto4 = new DeptDto(deptCd4, "11111111", "yang", "d", "eng", 1, "asdf", "asdf");
+        DeptDto deptDto5 = new DeptDto(deptCd5, "22222222", "kwang", "e", "eng", 0, "asdf", "asdf");
+
+        assertEquals(1, deptDao.insertDept(deptDto1));
+        assertEquals(1, deptDao.insertDept(deptDto2));
+        assertEquals(1, deptDao.insertDept(deptDto3));
+        assertEquals(1, deptDao.insertDept(deptDto4));
+        assertEquals(1, deptDao.insertDept(deptDto5));
+
+        BlngDeptDto blngDeptDto1 = new BlngDeptDto(deptCd1, "00000001", 'N', "00000002", "00000002");
+        BlngDeptDto blngDeptDto2 = new BlngDeptDto(deptCd1, "00000002", 'N', "00000002", "00000002");
+        BlngDeptDto blngDeptDto3 = new BlngDeptDto(deptCd1, "00000003", 'N', "00000002", "00000002");
+
+        assertEquals(1, blngDeptDao.insertBlngDept(blngDeptDto1));
+        assertEquals(1, blngDeptDao.insertBlngDept(blngDeptDto2));
+        assertEquals(1, blngDeptDao.insertBlngDept(blngDeptDto3));
+
+        assertEquals(1, deptDao.deleteDeptWithNoEmpl(deptCd2));
     }
 }
