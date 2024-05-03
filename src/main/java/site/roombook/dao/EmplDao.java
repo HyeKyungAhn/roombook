@@ -11,6 +11,8 @@ public interface EmplDao {
 
     EmplDto selectOneEmplProfile(String emplNo);
 
+    List<EmplDto> selectEmplProfilesWithRnmOrEmail(String keyword);
+
     int insertEmpl(EmplDto emplDto);
 
     List<EmplDto> selectAllEmpl();

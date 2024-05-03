@@ -24,6 +24,9 @@ public class EmplDaoImpl implements EmplDao{
     public EmplDto selectOneEmplProfile(String emplNo) { return session.selectOne(namespace+"selectOneEmplProfile", emplNo); }
 
     @Override
+    public List<EmplDto> selectEmplProfilesWithRnmOrEmail(String keyword) { return session.selectList(namespace+"selectEmplProfiles", keyword); }
+
+    @Override
     public int insertEmpl(EmplDto emplDto) { return session.insert(namespace+"insertEmpl", emplDto); }
 
     @Override

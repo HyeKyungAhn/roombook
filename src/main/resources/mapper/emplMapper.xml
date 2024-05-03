@@ -19,6 +19,12 @@
         WHERE EMPL_NO = #{emplNo}
     </select>
 
+    <select id="selectEmplProfiles" parameterType="String" resultType="EmplDto">
+        SELECT EMPL_ID, PRF_PHOTO_PATH, RNM, EMPNO, EMAIL
+        FROM empl
+        WHERE RNM LIKE CONCAT('%', #{keyword}, '%') OR EMAIL LIKE CONCAT('%', #{keyword}, '%');
+    </select>
+
     <insert id="insertEmpl" parameterType="EmplDto">
         INSERT INTO empl(EMPL_NO, EMPL_ID, PWD, EMAIL, PWD_ERR_TMS, RNM, ENG_NM, ENT_DT, BRDT, WNCOM_TELNO, EMPNO,
         MSGR_ID, PRF_PHOTO_PATH, SUBS_CERTI_YN, TERMS_AGRE_YN, SUBS_APRV_YN, SECSN_YN,
