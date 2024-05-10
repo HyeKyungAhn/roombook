@@ -21,7 +21,7 @@
         <h1>${param.deptNm}</h1>
         <h1>${param.engDeptNm}</h1>
         <h1>${param.parent}</h1>
-        <h1>${param.mngr}</h1>
+        <h1>${param.mngrId}</h1>
     </div>
 
     <div id="jstree"></div>
@@ -43,7 +43,7 @@
                             data: {
                                 'deptNm': '${param.deptNm}',
                                 'parent': '${param.parent}',
-                                'mngr': '${param.mngr}'
+                                'mngrId': '${param.mngrId}'
                             },
                             contentType: 'application/json',
                             url: '/dept/tree2',
@@ -120,7 +120,7 @@
 
                     if(parseInt(node.id)===0){
                         node.engDeptNm = '${param.engDeptNm}';
-                        node.mngr = '${param.mngr}';
+                        node.mngrId = '${param.mngrId}';
                     }
                 }
 
@@ -132,6 +132,7 @@
                     alert("부서 정보가 추가되었습니다");
                     return response.text();
                 }).then(url => {
+                    window.onbeforeunload = null;
                     location.href = url;
                 }).catch(error => {
                     console.error('Error sending data:', error);

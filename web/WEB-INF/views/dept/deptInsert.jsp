@@ -12,6 +12,9 @@
 <html lang="kr">
 <head>
     <title>roombook | 부서 추가</title>
+    <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/style.scss">
+    <link rel='stylesheet' href='https://unpkg.com/ionicons@4.5.10-0/dist/css/ionicons.min.css'>
+    <link rel='stylesheet' href='https://fonts.googleapis.com/css?family=Montserrat:500,700&amp;display=swap'>
 </head>
 <script>
     const msg = '${msg}';
@@ -26,21 +29,22 @@
     }
 </script>
 <body>
-    <div> <!-- TODO 필수 값 입력 체크 -->
+    <div>
         <form method="post" action="<c:url value='/dept/save'/>" accept-charset="UTF-8" name="deptInfo" id="deptForm">
+            <p>* 필수정보를 모두 입력해주세요</p>
             <div>
-                <label>부서명
-                <input type="text" name="deptNm" value="${deptNm}" ${param != null ? 'autofocus': null}>
+                <label>부서명*
+                <input type="text" name="deptNm" id="deptNm" value="${deptNm}" ${param != null ? 'autofocus': null}>
                 </label>
             </div>
             <div>
                 <label>영문 부서명
-                <input type="text" name="engDeptNm" value="${engDeptNm}">
+                <input type="text" name="engDeptNm" id="engDeptNm" value="${engDeptNm}">
                 </label>
             </div>
             <div>
-                <label>상위 부서
-                <select name="parent">
+                <label>상위 부서*
+                <select name="parent" id="parent">
                     <option value="#">최상위 부서</option>
                     <c:forEach var="dept" items="${CdAndNm}">
                         <option value="${dept.DEPT_CD}" ${dept.DEPT_NM==param.parent ? 'selected' : null}>${dept.DEPT_NM}</option>
@@ -49,25 +53,51 @@
                 </label>
             </div>
             <div>
-                <label>부서장
-                <input type="text" name="mngr" value="${mngr}">
-                </label>
+                <div>관리자 직원</div>
+                <input type="hidden" name="mngrId" id="mngrId" value="${mngr.EMPL_ID}">
+                <div id="searchMngr" class="hide">
+                    <label>
+                        <input id="searchInput" type="text" placeholder="이름 또는 이메일을 입력하세요"/>
+                    </label>
+                    <div id="searchResult" class="searchResult hide"></div>
+                </div>
+                <div id="mngrProfile" class="mngrProfile hide">
+                    <span id="closeBtn" class="closeBtn">&times;</span>
+                    <div>
+                        <img src="${mngr.PRF_PHOTO_PATH}" class="profilePhoto" alt="프로필 사진"/>
+                    </div>
+                    <div>
+                        <p class='profileNm'><span class='nm'>${mngr.RNM}</span><span class='engNm'>${mngr.ENG_NM?mngr.ENG_NM:''}</span></p>
+                        <p class='profileEmail'>${mngr.EMAIL}</p>
+                    </div>
+                </div>
             </div>
         </form>
 
         <button type="submit" form="deptForm">제출하기</button>
     </div>
-<script>
+    <script src="${pageContext.request.contextPath}/js/searchScript.js"></script>
+    <script>
     window.onbeforeunload = function(e) {
         console.log(e);
         e.preventDefault();
         return false;
     };
-
-    document.getElementById("deptForm").onsubmit = function() {
+    const submitForm = document.getElementById('deptForm');
+    submitForm.addEventListener('submit', function(e) {
+        e.preventDefault();
         window.onbeforeunload = null;
-        return true;
-    };
+        let deptNm = document.getElementById('deptNm').value;
+        let parent = document.getElementById('parent').value;
+        let engDeptNm = document.getElementById('engDeptNm').value;
+
+        if(deptNm===''||parent===''||engDeptNm===''){
+            alert('필수 정보를 모두 입력해주세요');
+            return false;
+        }
+        window.onbeforeunload = null;
+        submitForm.submit();
+    });
 </script>
 </body>
 </html>

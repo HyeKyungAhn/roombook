@@ -8,5 +8,7 @@
         <typeAlias alias="List" type="java.util.List"/>
         <typeAlias alias="EmplDto" type="site.roombook.domain.EmplDto"/>
         <typeAlias alias="BlngDeptDto" type="site.roombook.domain.BlngDeptDto"/>
+        <typeAlias alias="DeptAndEmplDto" type="site.roombook.domain.DeptAndEmplDto"/>
+        <typeAlias alias="BlngDeptAndEmplIdDto" type="site.roombook.domain.BlngDeptAndEmplIdDto"/>
     </typeAliases>
 </configuration>

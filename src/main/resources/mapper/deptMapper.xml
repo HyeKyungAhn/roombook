@@ -25,7 +25,9 @@
                           LAST_UPDR_IDNF_NO)
         VALUES (#{DEPT_CD},
                 #{UPP_DEPT_CD},
-                #{DEPT_MNGR_EMPL_NO},
+                (SELECT EMPL_NO
+                    FROM empl
+                    WHERE EMPL_ID = #{EMPL_ID}),
                 #{DEPT_NM},
                 #{ENG_DEPT_NM},
                 #{DEPT_SORT_ODR},
@@ -69,9 +71,9 @@
     <delete id="deleteDeptWithNoEmpl" parameterType="String">
         DELETE FROM dept
         WHERE DEPT_CD = #{deptCd}
-          AND 0 = (SELECT COUNT(*)
-            FROM blng_dept
-            WHERE BLNG_DEPT_CD = #{deptCd});
+            AND 0 = (SELECT COUNT(*)
+                    FROM blng_dept
+                    WHERE BLNG_DEPT_CD = #{deptCd})
     </delete>
 
     <select id="selectAllDeptCnt" resultType="int">
@@ -83,4 +85,41 @@
         FROM dept
     </select>
 
+    <update id="updateDept" parameterType="map">
+        update dept
+        set DEPT_MNGR_EMPL_NO = (select EMPL_NO from empl where EMPL_ID = #{EMPL_ID}),
+            DEPT_NM = #{DEPT_NM},
+            ENG_DEPT_NM = #{ENG_DEPT_NM},
+            LAST_UPD_DTM = current_timestamp,
+            LAST_UPDR_IDNF_NO = #{LAST_UPDR_IDNF_NO}
+        where DEPT_CD = #{DEPT_CD};
+    </update>
+
+    <select id="selectMemberProfilesAndDeptName" parameterType="String" resultType="DeptAndEmplDto">
+        SELECT d.DEPT_CD, d.DEPT_NM, d.ENG_DEPT_NM, e.EMPL_ID, e.PRF_PHOTO_PATH, e.RNM, e.ENG_NM, e.EMPNO, e.EMAIL
+        FROM empl e
+                 INNER JOIN blng_dept b ON e.EMPL_NO = b.BLNG_EMPL_NO
+                 RIGHT JOIN dept d ON b.BLNG_DEPT_CD = d.DEPT_CD
+        WHERE d.DEPT_CD=#{deptCd}
+    </select>
+
+    <select id="selectOneDeptAndMngrAndCdrDeptCnt" parameterType="String" resultType="DeptAndEmplDto">
+        SELECT d.DEPT_NM, d.ENG_DEPT_NM, d.DEPT_CD, e.EMPL_ID, e.PRF_PHOTO_PATH, e.RNM, e.ENG_NM, e.EMPNO, e.EMAIL, c.CDR_DEPT_CNT
+        FROM dept d
+            LEFT JOIN empl e
+                    ON e.EMPL_NO = d.DEPT_MNGR_EMPL_NO
+            LEFT JOIN (
+            SELECT UPP_DEPT_CD, COUNT(*) AS CDR_DEPT_CNT
+            FROM dept
+            WHERE UPP_DEPT_CD = #{deptCd}
+            ) c
+            ON c.UPP_DEPT_CD = d.DEPT_CD
+        WHERE d.DEPT_CD = #{deptCd}
+    </select>
+
+    <select id="selectCdrDeptCnt" parameterType="String" resultType="int">
+        SELECT COUNT(*)
+        FROM dept
+        WHERE UPP_DEPT_CD = #{deptCd}
+    </select>
 </mapper>

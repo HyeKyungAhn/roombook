@@ -21,8 +21,7 @@ public class DeptDto {
     @NonNull
     @JsonProperty("parent")
     private String UPP_DEPT_CD;
-    @NonNull
-    @JsonProperty("mngr")
+//    @JsonProperty("mngrId")
     private String DEPT_MNGR_EMPL_NO;
     @NonNull
     @JsonProperty("text")
@@ -45,6 +44,31 @@ public class DeptDto {
     @NonNull
     @JsonIgnore
     private String LAST_UPDR_IDNF_NO;
+    @JsonProperty("mngrId")
+    private String EMPL_ID; //부서 저장 시 입력받는 관리자 아이디
+
+    public DeptDto(String DEPT_CD, String UPP_DEPT_CD, String DEPT_MNGR_EMPL_NO, String DEPT_NM, String ENG_DEPT_NM, Integer DEPT_SORT_ODR, String FST_REGR_IDNF_NO, String LAST_UPDR_IDNF_NO) {
+        this.DEPT_CD = DEPT_CD;
+        this.UPP_DEPT_CD = UPP_DEPT_CD;
+        this.DEPT_MNGR_EMPL_NO = DEPT_MNGR_EMPL_NO;
+        this.DEPT_NM = DEPT_NM;
+        this.ENG_DEPT_NM = ENG_DEPT_NM;
+        this.DEPT_SORT_ODR = DEPT_SORT_ODR;
+        this.FST_REGR_IDNF_NO = FST_REGR_IDNF_NO;
+        this.LAST_UPDR_IDNF_NO = LAST_UPDR_IDNF_NO;
+    }
+
+    public DeptDto(String DEPT_CD, String UPP_DEPT_CD, String DEPT_MNGR_EMPL_NO, String DEPT_NM, String ENG_DEPT_NM, Integer DEPT_SORT_ODR, String FST_REGR_IDNF_NO, String LAST_UPDR_IDNF_NO, String EMPL_ID) {
+        this.DEPT_CD = DEPT_CD;
+        this.UPP_DEPT_CD = UPP_DEPT_CD;
+        this.DEPT_MNGR_EMPL_NO = DEPT_MNGR_EMPL_NO;
+        this.DEPT_NM = DEPT_NM;
+        this.ENG_DEPT_NM = ENG_DEPT_NM;
+        this.DEPT_SORT_ODR = DEPT_SORT_ODR;
+        this.FST_REGR_IDNF_NO = FST_REGR_IDNF_NO;
+        this.LAST_UPDR_IDNF_NO = LAST_UPDR_IDNF_NO;
+        this.EMPL_ID = EMPL_ID;
+    }
 
     @Override
     public boolean equals(Object o) {
@@ -72,6 +96,7 @@ public class DeptDto {
                 ", FST_REGR_IDNF_NO='" + FST_REGR_IDNF_NO + '\'' +
                 ", LAST_UPD_DTM=" + LAST_UPD_DTM +
                 ", LAST_UPDR_IDNF_NO='" + LAST_UPDR_IDNF_NO + '\'' +
+                ", EMPL_ID='" + EMPL_ID + '\'' +
                 '}';
     }
 }

@@ -24,6 +24,13 @@
 <div id="jstree"></div>
 <script src="${pageContext.request.contextPath}/dist/jstree.min.js"></script>
 <script>
+    document.getElementById('deptMove').addEventListener('click', function (){
+       location.href = '<c:url value="/dept/move"/>';
+    });
+
+    document.getElementById('deptAdd').addEventListener('click', function (){
+        location.href = '<c:url value="/dept/save"/>';
+    });
     $(function () {
         const $jstree = $('#jstree');
         $jstree.on('ready.jstree', () => {

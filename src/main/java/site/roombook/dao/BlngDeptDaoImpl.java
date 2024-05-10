@@ -2,10 +2,14 @@ package site.roombook.dao;
 
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Repository;
+import site.roombook.domain.BlngDeptAndEmplIdDto;
 import site.roombook.domain.BlngDeptDto;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.List;
+import java.util.Map;
 
 @Repository
 public class BlngDeptDaoImpl implements BlngDeptDao {
@@ -25,4 +29,15 @@ public class BlngDeptDaoImpl implements BlngDeptDao {
 
     @Override
     public int deleteAllBlngDept() { return session.delete(namespace+"deleteAll"); }
+
+    @Override
+    public int deleteBlngDepts(Map<String, Object> blngDepts) throws InvocationTargetException{ return session.delete(namespace+"deleteBlngDepts", blngDepts); }
+
+    @Override
+    public int insertBlngDepts(List<BlngDeptAndEmplIdDto> blngDepts) throws DataIntegrityViolationException, InvocationTargetException  {
+        return session.insert(namespace+"insertBlngDepts", blngDepts);
+    }
+
+    @Override
+    public int insertOneBlngDept(BlngDeptAndEmplIdDto blngDept) throws DataIntegrityViolationException{ return session.insert(namespace+"insertOneBlngDept", blngDept); }
 }

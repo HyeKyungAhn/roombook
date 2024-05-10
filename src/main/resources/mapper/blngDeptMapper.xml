@@ -18,4 +18,28 @@
     <delete id="deleteAll">
         DELETE FROM blng_dept
     </delete>
+
+    <delete id="deleteBlngDepts" parameterType="Map">
+        DELETE FROM blng_dept
+        WHERE BLNG_DEPT_CD = #{BLNG_DEPT_CD}
+        AND BLNG_EMPL_NO IN
+        <foreach item="item" collection="emplIDs"
+                 open="(" separator="," close=")">
+            (SELECT EMPL_NO from empl where EMPL_ID = #{item})
+        </foreach>
+    </delete>
+
+    <insert id="insertBlngDepts" parameterType="BlngDeptAndEmplIdDto">
+        INSERT INTO blng_dept(BLNG_DEPT_CD, BLNG_EMPL_NO, FST_REGR_IDNF_NO, LAST_UPDR_IDNF_NO)
+        VALUES
+        <foreach item="item" collection="list" separator=",">
+            (#{item.BLNG_DEPT_CD}, (SELECT EMPL_NO from empl where EMPL_ID = #{item.EMPL_ID}), #{item.FST_REGR_IDNF_NO}, #{item.LAST_UPDR_IDNF_NO})
+        </foreach>
+    </insert>
+
+    <insert id="insertOneBlngDept" parameterType="BlngDeptAndEmplIdDto">
+        INSERT INTO blng_dept(BLNG_DEPT_CD, BLNG_EMPL_NO, FST_REGR_IDNF_NO, LAST_UPDR_IDNF_NO)
+        VALUES (#{BLNG_DEPT_CD}, (SELECT EMPL_NO from empl where EMPL_ID = #{EMPL_ID}), #{FST_REGR_IDNF_NO}, #{LAST_UPDR_IDNF_NO})
+
+    </insert>
 </mapper>

@@ -7,6 +7,7 @@ import org.apache.ibatis.session.SqlSessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Repository;
+import site.roombook.domain.DeptAndEmplDto;
 import site.roombook.domain.DeptDto;
 
 import java.util.Arrays;
@@ -67,4 +68,24 @@ public class DeptDaoImpl implements DeptDao {
 
     @Override
     public int deleteDeptWithNoEmpl(String deptCd) { return session.delete(namespace+"deleteDeptWithNoEmpl", deptCd); }
+
+    @Override
+    public int updateDept(Map<String, String> deptDataAndEmplId) {
+        return session.update(namespace+"updateDept",deptDataAndEmplId);
+    }
+
+    @Override
+    public List<DeptAndEmplDto> selectMemberProfilesAndDeptName(String deptCd){
+        return session.selectList(namespace + "selectMemberProfilesAndDeptName", deptCd);
+    }
+
+    @Override
+    public DeptAndEmplDto selectOneDeptAndMngrAndCdrDeptCnt(String deptCd){
+        return session.selectOne(namespace + "selectOneDeptAndMngrAndCdrDeptCnt", deptCd);
+    }
+
+    @Override
+    public int selectCdrDeptCnt(String deptCd) {
+        return session.selectOne(namespace + "selectCdrDeptCnt", deptCd);
+    }
 }
