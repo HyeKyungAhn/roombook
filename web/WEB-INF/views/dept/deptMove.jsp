@@ -12,13 +12,13 @@
     <meta charset="utf-8">
     <title>roombook | 부서 이동</title>
     <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/dist/themes/default/style.min.css" />
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/jstree/dist/themes/default/style.min.css" />
 </head>
 <body>
 <div id="jstree"></div>
 <button>저장</button>
 
-<script src="${pageContext.request.contextPath}/dist/jstree.min.js"></script>
+<script src="${pageContext.request.contextPath}/jstree/dist/jstree.min.js"></script>
 <script>
     $(function () {
         $('#jstree').on('ready.jstree', (e, data) => {

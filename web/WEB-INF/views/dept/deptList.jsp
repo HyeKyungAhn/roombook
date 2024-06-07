@@ -14,7 +14,7 @@
     <meta charset="utf-8">
     <title>roombook | 부서 목록</title>
     <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/dist/themes/default/style.min.css" />
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/jstree/dist/themes/default/style.min.css" />
 </head>
 <body>
 <h1>조직도</h1>
@@ -22,7 +22,7 @@
 <button id="deptMove">부서 이동</button>
 <button id="deptAdd">부서 추가</button>
 <div id="jstree"></div>
-<script src="${pageContext.request.contextPath}/dist/jstree.min.js"></script>
+<script src="${pageContext.request.contextPath}/jstree/dist/jstree.min.js"></script>
 <script>
     document.getElementById('deptMove').addEventListener('click', function (){
        location.href = '<c:url value="/dept/move"/>';
