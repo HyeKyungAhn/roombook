@@ -9,7 +9,9 @@
 
     <annotation-driven/>
     <context:component-scan base-package="site.roombook"/>
-<!--    <view-controller path="/" view-name="index"/>-->
+    <context:property-placeholder location="classpath:application.properties"/>
+
+    <!--    <view-controller path="/" view-name="index"/>-->
 
     <!-- Handles HTTP GET requests for /resources/** by efficiently serving up static resources in the ${webappRoot}/resources directory -->
     <resources mapping="/**" location="/resources/" />
@@ -19,6 +21,10 @@
         <beans:property name="prefix" value="/WEB-INF/views/" />
         <beans:property name="suffix" value=".jsp" />
         <beans:property name="order" value="1" />
+    </beans:bean>
+
+    <beans:bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+        <beans:property name="maxUploadSize" value="5000000"/> <!-- 5MB -->
     </beans:bean>
 
 </beans:beans>
