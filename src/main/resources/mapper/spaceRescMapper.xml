@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="site.roombook.dao.spaceRescMapper">
+    <insert id="insertSpaceResc" parameterType="RescDto">
+        INSERT ignore INTO space_resc(SPACE_NO, RESC_NO, FST_REGR_IDNF_NO, LAST_UPDR_IDNF_NO)
+        VALUES <foreach item="item" collection="list" separator=",">
+                    (#{item.SPACE_NO},
+                    (SELECT RESC_NO
+                        FROM resc
+                        WHERE RESC_NM = #{item.RESC_NM}),
+                    #{item.FST_REGR_IDNF_NO},
+                    #{item.FST_REGR_IDNF_NO})
+                </foreach>
+    </insert>
+    <select id="selectAll" resultType="SpaceRescDto">
+        SELECT * FROM space_resc
+    </select>
+    <delete id="deleteAll">
+        DELETE FROM space_resc
+    </delete>
+    <delete id="deleteSpaceRescs" parameterType="Map">
+        DELETE FROM space_resc
+        WHERE SPACE_NO = #{spaceNo}
+          <if test="rescs != null">
+          AND RESC_NO NOT IN
+            <foreach item="item" collection="rescs" open="(" close=")" separator=",">
+                (SELECT RESC_NO FROM resc WHERE RESC_NM = #{item.RESC_NM})
+            </foreach>
+          </if>
+    </delete>
+</mapper>

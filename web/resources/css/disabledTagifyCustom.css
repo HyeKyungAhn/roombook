@@ -1,0 +1,7 @@
+.customLook{
+    pointer-events: none;
+    --readonly-striped: 0;
+    --tag-border-radius: 25px;
+    --tags-border-color: none;
+}
+

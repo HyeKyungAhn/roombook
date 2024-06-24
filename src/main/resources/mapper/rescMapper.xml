@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="site.roombook.dao.rescMapper">
+    <select id="selectAllResc" resultType="RescDto">
+        SELECT *
+        FROM resc
+    </select>
+    <select id="selectAllRescCnt" resultType="int">
+        SELECT COUNT(*)
+        FROM resc
+    </select>
+    <select id="selectNoAndNmListWithKeyword" parameterType="string" resultType="RescDto">
+        SELECT RESC_NO, RESC_NM
+        FROM resc
+        WHERE RESC_NM LIKE CONCAT('%', #{keyword}, '%')
+    </select>
+    <select id="selectSpaceResc" parameterType="int" resultType="RescDto">
+        SELECT s.SPACE_NO, s.RESC_NO, r.RESC_NM
+        FROM space_resc s INNER JOIN resc r
+        WHERE s.RESC_NO = r.RESC_NO AND SPACE_NO = #{spaceNo}
+    </select>
+    <insert id="insertRescs" parameterType="RescDto">
+        INSERT IGNORE INTO resc(RESC_NM, FST_REGR_IDNF_NO, LAST_UPDR_IDNF_NO)
+        VALUES <foreach item="item" collection="list" separator=",">
+                    (#{item.RESC_NM}, #{item.FST_REGR_IDNF_NO}, #{item.FST_REGR_IDNF_NO})
+                </foreach>
+    </insert>
+    <delete id="deleteAll">
+        DELETE FROM resc
+    </delete>
+</mapper>

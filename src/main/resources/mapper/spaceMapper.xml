@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="site.roombook.dao.spaceMapper">
+    <insert id="insertSpace" parameterType="SpaceDto">
+        INSERT INTO space(SPACE_NO, SPACE_NM, SPACE_MAX_PSON_CNT, SPACE_LOC_DESC, SPACE_ADTN_DESC, SPACE_MAX_RSVD_TMS,
+            SPACE_USG_POSBL_BGN_TM, SPACE_USG_POSBL_END_TM, SPACE_WKEND_USG_POSBL_YN, SPACE_HIDE_YN,
+            FST_REGR_IDNF_NO, LAST_UPDR_IDNF_NO)
+        VALUES (#{SPACE_NO},#{SPACE_NM},#{SPACE_MAX_PSON_CNT}, #{SPACE_LOC_DESC}, #{SPACE_ADTN_DESC}, #{SPACE_MAX_RSVD_TMS},
+                #{SPACE_USG_POSBL_BGN_TM}, #{SPACE_USG_POSBL_END_TM}, #{SPACE_WKEND_USG_POSBL_YN},
+                #{SPACE_HIDE_YN}, #{FST_REGR_IDNF_NO}, #{FST_REGR_IDNF_NO})
+    </insert>
+    <select id="selectAll" resultType="SpaceDto">
+        SELECT * FROM space
+    </select>
+    <select id="selectCntAll" resultType="int">
+        SELECT COUNT(*) FROM space
+    </select>
+    <select id="selectCntAllNotHiddenSpace" resultType="int">
+        SELECT COUNT(*) FROM space WHERE SPACE_HIDE_YN = 'N'
+    </select>
+    <select id="selectOne" parameterType="int" resultType="SpaceDto">
+        SELECT * FROM space WHERE SPACE_NO = #{spaceNo}
+    </select>
+    <select id="selectTenSpace" resultType="SpaceDto">
+
+    </select>
+    <select id="selectSpacesAndRescAndFile" parameterType="Map" resultType="SpaceRescFileDto">
+        SELECT s.SPACE_NO, s.SPACE_NM, s.SPACE_MAX_PSON_CNT, s.SPACE_LOC_DESC, s.SPACE_ADTN_DESC,
+        s.SPACE_MAX_RSVD_TMS, s.SPACE_USG_POSBL_BGN_TM, s.SPACE_USG_POSBL_END_TM, s.SPACE_WKEND_USG_POSBL_YN,
+        s.SPACE_HIDE_YN, f.FILE_NO, f.FILE_NM, f.FILE_ORGL_NM, f.FILE_TYP_NM, f.FILE_SIZE, r.RESC_NO, r.RESC_NM
+        FROM (
+            SELECT * FROM space
+            <if test="isHiddenSpaceInvisible eq true">
+            WHERE SPACE_HIDE_YN = 'N'
+            </if>
+            ORDER BY FST_REG_DTM DESC
+            LIMIT #{spaceCnt} OFFSET #{offset}
+        ) s
+        LEFT JOIN (
+            SELECT SPACE_NO, RESC_NO
+            FROM (
+                SELECT SPACE_NO, RESC_NO, ROW_NUMBER() OVER (PARTITION BY SPACE_NO) AS rn
+                FROM space_resc) sub
+            WHERE rn <![CDATA[<=]]> #{rescCnt}
+        ) sr ON sr.SPACE_NO = s.SPACE_NO
+        LEFT JOIN resc r ON r.RESC_NO = sr.RESC_NO
+        LEFT JOIN (
+            SELECT FILE_NO, ATCH_LOC_NO, FILE_NM, FILE_ORGL_NM, FILE_TYP_NM, FILE_SIZE
+            FROM (
+                SELECT *, ROW_NUMBER() OVER (PARTITION BY ATCH_LOC_NO ORDER BY FILE_NO) AS rn
+                FROM file f
+                WHERE f.ATCH_LOC_CD = #{atchLocCd}) sub
+            WHERE rn = 1
+        ) f ON s.SPACE_NO = f.ATCH_LOC_NO
+        ORDER BY s.FST_REG_DTM DESC, SPACE_NO
+    </select>
+    <select id="selectOneSpaceAndRescAndFIle" parameterType="Map" resultType="SpaceRescFileDto">
+        SELECT s.SPACE_NO, s.SPACE_NM, s.SPACE_MAX_PSON_CNT, s.SPACE_LOC_DESC, s.SPACE_ADTN_DESC,
+               s.SPACE_MAX_RSVD_TMS, s.SPACE_USG_POSBL_BGN_TM, s.SPACE_USG_POSBL_END_TM, s.SPACE_WKEND_USG_POSBL_YN,
+               s.SPACE_HIDE_YN, r.RESC_NO, r.RESC_NM, f.FILE_NO, f.FILE_NM, f.FILE_ORGL_NM, f.FILE_TYP_NM, f.FILE_SIZE
+        FROM (SELECT * FROM space WHERE SPACE_NO = #{spaceNo}
+            <if test="isHiddenSpaceInvisible eq true">
+            AND SPACE_HIDE_YN = 'N'
+            </if>
+            ) s
+                 LEFT JOIN space_resc sr
+                           ON s.SPACE_NO = sr.SPACE_NO
+                 LEFT JOIN resc r
+                            ON sr.RESC_NO = r.RESC_NO
+                 LEFT JOIN file f ON s.SPACE_NO = f.ATCH_LOC_NO AND f.ATCH_LOC_CD = #{atchLocCd}
+    </select>
+    <update id="updateSpace" parameterType="SpaceDto">
+        UPDATE space SET SPACE_NM = #{SPACE_NM}, SPACE_MAX_PSON_CNT = #{SPACE_MAX_PSON_CNT}, SPACE_LOC_DESC = #{SPACE_LOC_DESC},
+                         SPACE_ADTN_DESC=#{SPACE_ADTN_DESC}, SPACE_MAX_RSVD_TMS=#{SPACE_MAX_RSVD_TMS},
+                         SPACE_USG_POSBL_BGN_TM=#{SPACE_USG_POSBL_BGN_TM}, SPACE_USG_POSBL_END_TM=#{SPACE_USG_POSBL_END_TM},
+                         SPACE_WKEND_USG_POSBL_YN=#{SPACE_WKEND_USG_POSBL_YN}, SPACE_HIDE_YN=#{SPACE_HIDE_YN},
+                         LAST_UPD_DTM=CURRENT_TIMESTAMP, LAST_UPDR_IDNF_NO=#{LAST_UPDR_IDNF_NO}
+        WHERE SPACE_NO = #{SPACE_NO}
+    </update>
+    <delete id="deleteAll">
+        DELETE FROM space
+    </delete>
+    <delete id="deleteWithSpaceNo" parameterType="int">
+        DELETE FROM space WHERE SPACE_NO = #{spaceNo}
+    </delete>
+</mapper>

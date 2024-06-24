@@ -1,0 +1,32 @@
+.customLook{
+    --tag-border-radius: 25px;
+}
+
+.tagify__tag:focus div::before,.tagify__tag:hover:not([readonly]) div::before {
+    --tag-bg-inset: -1.5px;
+}
+
+.info {
+    color: #d03030;
+}
+
+.tagify__input{
+    min-width: 300px;
+}
+
+.tagify__tag + .tagify__input::before {
+    display: none;
+}
+
+table {
+    width: 100%;
+}
+th, td {
+    text-align: left;
+    padding: 8px;
+}
+tr:nth-child(even){background-color: #f2f2f2}
+th {
+    background-color: #4CAF50;
+    color: white;
+}

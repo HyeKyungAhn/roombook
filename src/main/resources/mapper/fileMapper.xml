@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="site.roombook.dao.fileMapper">
+    <insert id="insertFiles" parameterType="FileDto">
+        INSERT INTO file(ATCH_LOC_NO, ATCH_LOC_CD, FILE_NM, FILE_ORGL_NM, FILE_TYP_NM, FILE_SIZE, FST_REGR_IDNF_NO, LAST_UPDR_IDNF_NO)
+        VALUES
+        <foreach item="item" collection="list" separator=",">
+            (#{item.ATCH_LOC_NO},#{item.ATCH_LOC_CD},#{item.FILE_NM},#{item.FILE_ORGL_NM},#{item.FILE_TYP_NM},#{item.FILE_SIZE},#{item.FST_REGR_IDNF_NO},#{item.FST_REGR_IDNF_NO})
+        </foreach>
+    </insert>
+    <select id="selectAll" resultType="FileDto">
+        SELECT * FROM file
+    </select>
+    <select id="selectAllCnt" resultType="int">
+        SELECT COUNT(*) FROM file
+    </select>
+    <select id="selectFilesWithSpaceData" parameterType="Map" resultType="FileDto">
+        SELECT * FROM file WHERE ATCH_LOC_CD = #{ATCH_LOC_CD} AND ATCH_LOC_NO = #{ATCH_LOC_NO}
+    </select>
+    <select id="selectOneFileWithSpaceData" parameterType="Map" resultType="FileDto">
+        SELECT ATCH_LOC_NO, ATCH_LOC_CD, FILE_NM, FILE_ORGL_NM, FILE_TYP_NM, FILE_SIZE
+        FROM file
+        WHERE ATCH_LOC_CD = #{ATCH_LOC_CD} AND ATCH_LOC_NO = #{ATCH_LOC_NO}
+        ORDER BY FILE_NO ASC LIMIT 1
+    </select>
+    <select id="checkExceedingMaxFileCnt" parameterType="FileDto" resultType="int">
+        SELECT COUNT(*) <![CDATA[<=]]> #{maxFileCnt}
+        FROM file
+        WHERE ATCH_LOC_CD = #{ATCH_LOC_CD} AND ATCH_LOC_NO = #{ATCH_LOC_NO}
+    </select>
+    <delete id="deleteAll">
+        DELETE FROM file
+    </delete>
+    <delete id="deleteWithNames" parameterType="list">
+        DELETE FROM file WHERE FILE_NM IN
+        <foreach item="name" collection="list" open="(" close=")" separator=",">
+            #{name}
+        </foreach>
+    </delete>
+</mapper>
