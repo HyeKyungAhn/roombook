@@ -23,26 +23,26 @@
     <insert id="insert" parameterType="DeptDto">
         INSERT INTO dept (DEPT_CD, UPP_DEPT_CD, DEPT_MNGR_EMPL_NO, DEPT_NM, ENG_DEPT_NM, DEPT_SORT_ODR, FST_REGR_IDNF_NO,
                           LAST_UPDR_IDNF_NO)
-        VALUES (#{DEPT_CD},
-                #{UPP_DEPT_CD},
+        VALUES (#{deptCd},
+                #{uppDeptCd},
                 (SELECT EMPL_NO
                     FROM empl
-                    WHERE EMPL_ID = #{EMPL_ID}),
-                #{DEPT_NM},
-                #{ENG_DEPT_NM},
-                #{DEPT_SORT_ODR},
-                #{FST_REGR_IDNF_NO},
-                #{LAST_UPDR_IDNF_NO})
+                    WHERE EMPL_ID = #{emplId}),
+                #{deptNm},
+                #{engDeptNm},
+                #{deptSortOdr},
+                #{fstRegrIdnfNo},
+                #{lastUpdrIdnfNo})
     </insert>
 
     <update id="updateAllDeptTreeOdrData" parameterType="List">
             UPDATE dept
-            SET UPP_DEPT_CD = #{UPP_DEPT_CD},
-            DEPT_SORT_ODR = #{DEPT_SORT_ODR},
-            LAST_UPDR_IDNF_NO = #{LAST_UPDR_IDNF_NO},
+            SET UPP_DEPT_CD = #{uppDeptCd},
+            DEPT_SORT_ODR = #{deptSortOdr},
+            LAST_UPDR_IDNF_NO = #{lastUpdrIdnfNo},
             Last_UPD_DTM = CURRENT_TIMESTAMP
-            WHERE DEPT_CD = #{DEPT_CD}
-            AND (UPP_DEPT_CD <![CDATA[<>]]> #{UPP_DEPT_CD} OR DEPT_SORT_ODR <![CDATA[<>]]> #{DEPT_SORT_ODR})
+            WHERE DEPT_CD = #{deptCd}
+            AND (UPP_DEPT_CD <![CDATA[<>]]> #{uppDeptCd} OR DEPT_SORT_ODR <![CDATA[<>]]> #{deptSortOdr})
     </update>
 
     <update id="updateManager" parameterType="Map">
@@ -87,12 +87,12 @@
 
     <update id="updateDept" parameterType="map">
         update dept
-        set DEPT_MNGR_EMPL_NO = (select EMPL_NO from empl where EMPL_ID = #{EMPL_ID}),
-            DEPT_NM = #{DEPT_NM},
-            ENG_DEPT_NM = #{ENG_DEPT_NM},
+        set DEPT_MNGR_EMPL_NO = (select EMPL_NO from empl where EMPL_ID = #{emplId}),
+            DEPT_NM = #{deptNm},
+            ENG_DEPT_NM = #{engDeptNm},
             LAST_UPD_DTM = current_timestamp,
-            LAST_UPDR_IDNF_NO = #{LAST_UPDR_IDNF_NO}
-        where DEPT_CD = #{DEPT_CD};
+            LAST_UPDR_IDNF_NO = #{lastUpdrIdnfNo}
+        where DEPT_CD = #{deptCd};
     </update>
 
     <select id="selectMemberProfilesAndDeptName" parameterType="String" resultType="DeptAndEmplDto">

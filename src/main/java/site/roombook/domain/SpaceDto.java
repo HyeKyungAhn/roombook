@@ -19,33 +19,33 @@ import java.util.List;
 @Builder(builderMethodName = "SpaceDtoBuilder")
 public class SpaceDto {
     @JsonIgnore
-    private Integer SPACE_NO;
+    private Integer spaceNo;
     @JsonProperty("spaceNm")
-    private String SPACE_NM;
+    private String spaceNm;
     @JsonProperty("maxCapacity")
-    private Integer SPACE_MAX_PSON_CNT;
+    private Integer spaceMaxPsonCnt;
     @JsonProperty("spaceLoc")
-    private String SPACE_LOC_DESC;
+    private String spaceLocDesc;
     @JsonProperty("spaceDesc")
-    private String SPACE_ADTN_DESC;
+    private String spaceAdtnDesc;
     @JsonProperty("maxRsvsTms")
-    private Integer SPACE_MAX_RSVD_TMS;
+    private Integer spaceMaxRsvdTms;
     @JsonProperty("startTm")
-    private LocalTime SPACE_USG_POSBL_BGN_TM;
+    private LocalTime spaceUsgPosblBgnTm;
     @JsonProperty("finishTm")
-    private LocalTime SPACE_USG_POSBL_END_TM;
+    private LocalTime spaceUsgPosblEndTm;
     @JsonProperty("weekend")
-    private Character SPACE_WKEND_USG_POSBL_YN = 'N';
+    private Character spaceWkendUsgPosblYn = 'N';
     @JsonProperty("hide")
-    private Character SPACE_HIDE_YN = 'N';
+    private Character spaceHideYn = 'N';
     @JsonIgnore
-    private LocalDateTime FST_REG_DTM;
+    private LocalDateTime fstRegDtm;
     @JsonIgnore
-    private String FST_REGR_IDNF_NO;
+    private String fstRegrIdnfNo;
     @JsonIgnore
-    private LocalDateTime LAST_UPD_DTM;
+    private LocalDateTime lastUpdDtm;
     @JsonIgnore
-    private String LAST_UPDR_IDNF_NO;
+    private String lastUpdrIdnfNo;
 
     @JsonProperty("files")
     private MultipartFile[] FILES;
@@ -53,112 +53,112 @@ public class SpaceDto {
     private List<RescDto> RESCS;
 
     private SpaceDto(Builder builder) {
-        this.SPACE_NO = builder.SPACE_NO;
-        this.SPACE_NM = builder.SPACE_NM;
-        this.SPACE_MAX_PSON_CNT = builder.SPACE_MAX_PSON_CNT;
-        this.SPACE_LOC_DESC = builder.SPACE_LOC_DESC;
-        this.SPACE_ADTN_DESC = builder.SPACE_ADTN_DESC;
-        this.SPACE_MAX_RSVD_TMS = builder.SPACE_MAX_RSVD_TMS;
-        this.SPACE_USG_POSBL_BGN_TM = builder.SPACE_USG_POSBL_BGN_TM;
-        this.SPACE_USG_POSBL_END_TM = builder.SPACE_USG_POSBL_END_TM;
-        this.SPACE_WKEND_USG_POSBL_YN = builder.SPACE_WKEND_USG_POSBL_YN;
-        this.SPACE_HIDE_YN = builder.SPACE_HIDE_YN;
-        this.FST_REG_DTM = builder.FST_REG_DTM;
-        this.FST_REGR_IDNF_NO = builder.FST_REGR_IDNF_NO;
-        this.LAST_UPD_DTM = builder.LAST_UPD_DTM;
-        this.LAST_UPDR_IDNF_NO = builder.LAST_UPDR_IDNF_NO;
+        this.spaceNo = builder.spaceNo;
+        this.spaceNm = builder.spaceNm;
+        this.spaceMaxPsonCnt = builder.spaceMaxPsonCnt;
+        this.spaceLocDesc = builder.spaceLocDesc;
+        this.spaceAdtnDesc = builder.spaceAdtnDesc;
+        this.spaceMaxRsvdTms = builder.spaceMaxRsvdTms;
+        this.spaceUsgPosblBgnTm = builder.spaceUsgPosblBgnTm;
+        this.spaceUsgPosblEndTm = builder.spaceUsgPosblEndTm;
+        this.spaceWkendUsgPosblYn = builder.spaceWkendUsgPosblYn;
+        this.spaceHideYn = builder.spaceHideYn;
+        this.fstRegDtm = builder.fstRegDtm;
+        this.fstRegrIdnfNo = builder.fstRegrIdnfNo;
+        this.lastUpdDtm = builder.lastUpdDtm;
+        this.lastUpdrIdnfNo = builder.lastUpdrIdnfNo;
         this.FILES = builder.FILES;
         this.RESCS = builder.RESCS;
     }
 
     public static class Builder{
         //필수
-        private String SPACE_NM;
-        private Integer SPACE_MAX_PSON_CNT;
-        private String SPACE_LOC_DESC;
-        private String SPACE_ADTN_DESC;
-        private Integer SPACE_MAX_RSVD_TMS;
-        private LocalTime SPACE_USG_POSBL_BGN_TM;
-        private LocalTime SPACE_USG_POSBL_END_TM;
-        private Character SPACE_WKEND_USG_POSBL_YN = 'N';
-        private Character SPACE_HIDE_YN = 'N';
+        private String spaceNm;
+        private Integer spaceMaxPsonCnt;
+        private String spaceLocDesc;
+        private String spaceAdtnDesc;
+        private Integer spaceMaxRsvdTms;
+        private LocalTime spaceUsgPosblBgnTm;
+        private LocalTime spaceUsgPosblEndTm;
+        private Character spaceWkendUsgPosblYn = 'N';
+        private Character spaceHideYn = 'N';
 
         //비필수
-        private Integer SPACE_NO;
-        private LocalDateTime FST_REG_DTM;
-        private String FST_REGR_IDNF_NO;
-        private LocalDateTime LAST_UPD_DTM;
-        private String LAST_UPDR_IDNF_NO;
+        private Integer spaceNo;
+        private LocalDateTime fstRegDtm;
+        private String fstRegrIdnfNo;
+        private LocalDateTime lastUpdDtm;
+        private String lastUpdrIdnfNo;
         private MultipartFile[] FILES;
         private List<RescDto> RESCS;
 
-        public Builder spaceNo(Integer SPACE_NO) {
-            this.SPACE_NO = SPACE_NO;
+        public Builder spaceNo(Integer spaceNo) {
+            this.spaceNo = spaceNo;
             return this;
         }
 
-        public Builder spaceNm(String SPACE_NM) {
-            this.SPACE_NM = SPACE_NM;
+        public Builder spaceNm(String spaceNm) {
+            this.spaceNm = spaceNm;
             return this;
         }
 
-        public Builder spaceMaxPsonCnt(Integer SPACE_MAX_PSON_CNT) {
-            this.SPACE_MAX_PSON_CNT = SPACE_MAX_PSON_CNT;
+        public Builder spaceMaxPsonCnt(Integer spaceMaxPsonCnt) {
+            this.spaceMaxPsonCnt = spaceMaxPsonCnt;
             return this;
         }
 
-        public Builder spaceLocDesc(String SPACE_LOC_DESC) {
-            this.SPACE_LOC_DESC = SPACE_LOC_DESC;
+        public Builder spaceLocDesc(String spaceLocDesc) {
+            this.spaceLocDesc = spaceLocDesc;
             return this;
         }
 
-        public Builder spaceAdtnDesc(String SPACE_ADTN_DESC) {
-            this.SPACE_ADTN_DESC = SPACE_ADTN_DESC;
+        public Builder spaceAdtnDesc(String spaceAdtnDesc) {
+            this.spaceAdtnDesc = spaceAdtnDesc;
             return this;
         }
 
-        public Builder spaceMaxRsvdTms(Integer SPACE_MAX_RSVD_TMS) {
-            this.SPACE_MAX_RSVD_TMS = SPACE_MAX_RSVD_TMS;
+        public Builder spaceMaxRsvdTms(Integer spaceMaxRsvdTms) {
+            this.spaceMaxRsvdTms = spaceMaxRsvdTms;
             return this;
         }
 
-        public Builder spaceUsgPosblBgnTm(LocalTime SPACE_USG_POSBL_BGN_TM) {
-            this.SPACE_USG_POSBL_BGN_TM = SPACE_USG_POSBL_BGN_TM;
+        public Builder spaceUsgPosblBgnTm(LocalTime spaceUsgPosblBgnTm) {
+            this.spaceUsgPosblBgnTm = spaceUsgPosblBgnTm;
             return this;
         }
 
-        public Builder spaceUsgPosblEndTm(LocalTime SPACE_USG_POSBL_END_TM) {
-            this.SPACE_USG_POSBL_END_TM = SPACE_USG_POSBL_END_TM;
+        public Builder spaceUsgPosblEndTm(LocalTime spaceUsgPosblEndTm) {
+            this.spaceUsgPosblEndTm = spaceUsgPosblEndTm;
             return this;
         }
 
-        public Builder spaceWkendUsgPosblYn(Character SPACE_WKEND_USG_POSBL_YN) {
-            this.SPACE_WKEND_USG_POSBL_YN = SPACE_WKEND_USG_POSBL_YN;
+        public Builder spaceWkendUsgPosblYn(Character spaceWkendUsgPosblYn) {
+            this.spaceWkendUsgPosblYn = spaceWkendUsgPosblYn;
             return this;
         }
 
-        public Builder spaceHideYn(Character SPACE_HIDE_YN) {
-            this.SPACE_HIDE_YN = SPACE_HIDE_YN;
+        public Builder spaceHideYn(Character spaceHideYn) {
+            this.spaceHideYn = spaceHideYn;
             return this;
         }
 
-        public Builder fstRegDtm(LocalDateTime FST_REG_DTM) {
-            this.FST_REG_DTM = FST_REG_DTM;
+        public Builder fstRegDtm(LocalDateTime fstRegDtm) {
+            this.fstRegDtm = fstRegDtm;
             return this;
         }
 
-        public Builder fstRegrIdnfNo(String FST_REGR_IDNF_NO) {
-            this.FST_REGR_IDNF_NO = FST_REGR_IDNF_NO;
+        public Builder fstRegrIdnfNo(String fstRegrIdnfNo) {
+            this.fstRegrIdnfNo = fstRegrIdnfNo;
             return this;
         }
 
-        public Builder lastUpdDtm(LocalDateTime LAST_UPD_DTM) {
-            this.LAST_UPD_DTM = LAST_UPD_DTM;
+        public Builder lastUpdDtm(LocalDateTime lastUpdDtm) {
+            this.lastUpdDtm = lastUpdDtm;
             return this;
         }
 
-        public Builder lastUpdrIdnfNo(String LAST_UPDR_IDNF_NO) {
-            this.LAST_UPDR_IDNF_NO = LAST_UPDR_IDNF_NO;
+        public Builder lastUpdrIdnfNo(String lastUpdrIdnfNo) {
+            this.lastUpdrIdnfNo = lastUpdrIdnfNo;
             return this;
         }
 
@@ -173,39 +173,39 @@ public class SpaceDto {
         }
 
         public SpaceDto build(){
-            if (this.SPACE_NM == null || this.SPACE_NM.isEmpty()) {
+            if (this.spaceNm == null || this.spaceNm.isEmpty()) {
                 throw new IllegalArgumentException("spaceNm is a required field and cannot be null or empty");
             }
 
-            if (this.SPACE_MAX_PSON_CNT == null || this.SPACE_MAX_PSON_CNT==0) {
+            if (this.spaceMaxPsonCnt == null || this.spaceMaxPsonCnt==0) {
                 throw new IllegalArgumentException("spaceMaxPsonCnt is a required field and cannot be null");
             }
 
-            if (this.SPACE_LOC_DESC == null || this.SPACE_LOC_DESC.isEmpty()) {
+            if (this.spaceLocDesc == null || this.spaceLocDesc.isEmpty()) {
                 throw new IllegalArgumentException("spaceLocDesc is a required field and cannot be null or empty");
             }
 
-            if (this.SPACE_ADTN_DESC == null || this.SPACE_ADTN_DESC.isEmpty()) {
+            if (this.spaceAdtnDesc == null || this.spaceAdtnDesc.isEmpty()) {
                 throw new IllegalArgumentException("spaceAdtnDesc is a required field and cannot be null or empty");
             }
 
-            if (this.SPACE_MAX_RSVD_TMS == null || this.SPACE_MAX_RSVD_TMS == 0) {
+            if (this.spaceMaxRsvdTms == null || this.spaceMaxRsvdTms == 0) {
                 throw new IllegalArgumentException("spaceMaxRsvdTms is a required field and cannot be null or zero");
             }
 
-            if (this.SPACE_USG_POSBL_BGN_TM == null) {
+            if (this.spaceUsgPosblBgnTm == null) {
                 throw new IllegalArgumentException("spaceUsgPosblBgnTm is a required field and cannot be null or empty");
             }
 
-            if (this.SPACE_USG_POSBL_END_TM == null) {
+            if (this.spaceUsgPosblEndTm == null) {
                 throw new IllegalArgumentException("spaceUsgPosblEndTm is a required field and cannot be null or empty");
             }
 
-            if (this.SPACE_WKEND_USG_POSBL_YN == null) {
+            if (this.spaceWkendUsgPosblYn == null) {
                 throw new IllegalArgumentException("spaceWkendUsgPosblYn is a required field and cannot be null or empty");
             }
 
-            if (this.SPACE_HIDE_YN == null) {
+            if (this.spaceHideYn == null) {
                 throw new IllegalArgumentException("spaceHideYn is a required field and cannot be null or empty");
             }
 

@@ -4,264 +4,264 @@ import java.util.Date;
 import java.util.Objects;
 
 public class EmplDto {
-    private String EMPL_NO;
-    private String EMPL_ID;
-    private String PWD;
-    private String EMAIL;
-    private int PWD_ERR_TMS;
-    private String RNM;
-    private String ENG_NM;
-    private Date SUBS_DTM;
-    private String ENT_DT;
-    private String BRDT;
-    private String WNCOM_TELNO;
-    private int EMPNO;
-    private String MSGR_ID;
-    private String PRF_PHOTO_PATH;
-    private char SUBS_CERTI_YN;
-    private char TERMS_AGRE_YN;
-    private char SUBS_APRV_YN;
-    private char SECSN_YN;
-    private Date ACCT_SECSN_DTM;
-    private Date FST_REG_DTM;
-    private String FST_REGR_IDNF_NO;
-    private Date LAST_UPD_DTM;
-    private String LAST_UPDR_IDNF_NO;
+    private String emplNo;
+    private String emplId;
+    private String pwd;
+    private String email;
+    private int pwdErrTms;
+    private String rnm;
+    private String engNm;
+    private Date subsDtm;
+    private String entDt;
+    private String brdt;
+    private String wncomTelno;
+    private int empno;
+    private String msgrId;
+    private String prfPhotoPath;
+    private char subsCertiYn;
+    private char termsAgreYn;
+    private char subsAprvYn;
+    private char secsnYn;
+    private Date acctSecsnDtm;
+    private Date fstRegDtm;
+    private String fstRegrIdnfNo;
+    private Date lastUpdDtm;
+    private String lastUpdrIdnfNo;
 
     public EmplDto(){}
 
-    public EmplDto(String EMPL_NO, String EMPL_ID, String PWD, String EMAIL, int PWD_ERR_TMS, String RNM, String ENG_NM,
-                   String ENT_DT, String BRDT, String WNCOM_TELNO, int EMPNO, String MSGR_ID, String PRF_PHOTO_PATH,
-                   char SUBS_CERTI_YN, char TERMS_AGRE_YN, char SUBS_APRV_YN, char SECSN_YN) {
-        this.EMPL_NO = EMPL_NO;
-        this.EMPL_ID = EMPL_ID;
-        this.PWD = PWD;
-        this.EMAIL = EMAIL;
-        this.PWD_ERR_TMS = PWD_ERR_TMS;
-        this.RNM = RNM;
-        this.ENG_NM = ENG_NM;
-        this.ENT_DT = ENT_DT;
-        this.BRDT = BRDT;
-        this.WNCOM_TELNO = WNCOM_TELNO;
-        this.EMPNO = EMPNO;
-        this.MSGR_ID = MSGR_ID;
-        this.PRF_PHOTO_PATH = PRF_PHOTO_PATH;
-        this.SUBS_CERTI_YN = SUBS_CERTI_YN;
-        this.TERMS_AGRE_YN = TERMS_AGRE_YN;
-        this.SUBS_APRV_YN = SUBS_APRV_YN;
-        this.SECSN_YN = SECSN_YN;
+    public EmplDto(String emplNo, String emplId, String pwd, String email, int pwdErrTms, String rnm, String engNm,
+                   String entDt, String brdt, String wncomTelno, int empno, String msgrId, String prfPhotoPath,
+                   char subsCertiYn, char termsAgreYn, char subsAprvYn, char secsnYn) {
+        this.emplNo = emplNo;
+        this.emplId = emplId;
+        this.pwd = pwd;
+        this.email = email;
+        this.pwdErrTms = pwdErrTms;
+        this.rnm = rnm;
+        this.engNm = engNm;
+        this.entDt = entDt;
+        this.brdt = brdt;
+        this.wncomTelno = wncomTelno;
+        this.empno = empno;
+        this.msgrId = msgrId;
+        this.prfPhotoPath = prfPhotoPath;
+        this.subsCertiYn = subsCertiYn;
+        this.termsAgreYn = termsAgreYn;
+        this.subsAprvYn = subsAprvYn;
+        this.secsnYn = secsnYn;
     }
 
-    public String getEMPL_NO() {
-        return EMPL_NO;
+    public String getEmplNo() {
+        return emplNo;
     }
 
-    public void setEMPL_NO(String EMPL_NO) {
-        this.EMPL_NO = EMPL_NO;
+    public void setEmplNo(String emplNo) {
+        this.emplNo = emplNo;
     }
 
-    public String getEMPL_ID() {
-        return EMPL_ID;
+    public String getEmplId() {
+        return emplId;
     }
 
-    public void setEMPL_ID(String EMPL_ID) {
-        this.EMPL_ID = EMPL_ID;
+    public void setEmplId(String emplId) {
+        this.emplId = emplId;
     }
 
-    public String getPWD() {
-        return PWD;
+    public String getPwd() {
+        return pwd;
     }
 
-    public void setPWD(String PWD) {
-        this.PWD = PWD;
+    public void setPwd(String pwd) {
+        this.pwd = pwd;
     }
 
-    public String getEMAIL() {
-        return EMAIL;
+    public String getEmail() {
+        return email;
     }
 
-    public void setEMAIL(String EMAIL) {
-        this.EMAIL = EMAIL;
+    public void setEmail(String email) {
+        this.email = email;
     }
 
-    public int getPWD_ERR_TMS() {
-        return PWD_ERR_TMS;
+    public int getPwdErrTms() {
+        return pwdErrTms;
     }
 
-    public void setPWD_ERR_TMS(int PWD_ERR_TMS) {
-        this.PWD_ERR_TMS = PWD_ERR_TMS;
+    public void setPwdErrTms(int pwdErrTms) {
+        this.pwdErrTms = pwdErrTms;
     }
 
-    public String getRNM() {
-        return RNM;
+    public String getRnm() {
+        return rnm;
     }
 
-    public void setRNM(String RNM) {
-        this.RNM = RNM;
+    public void setRnm(String rnm) {
+        this.rnm = rnm;
     }
 
-    public String getENG_NM() {
-        return ENG_NM;
+    public String getEngNm() {
+        return engNm;
     }
 
-    public void setENG_NM(String ENG_NM) {
-        this.ENG_NM = ENG_NM;
+    public void setEngNm(String engNm) {
+        this.engNm = engNm;
     }
 
-    public Date getSUBS_DTM() {
-        return SUBS_DTM;
+    public Date getSubsDtm() {
+        return subsDtm;
     }
 
-    public void setSUBS_DTM(Date SUBS_DTM) {
-        this.SUBS_DTM = SUBS_DTM;
+    public void setSubsDtm(Date subsDtm) {
+        this.subsDtm = subsDtm;
     }
 
-    public String getENT_DT() {
-        return ENT_DT;
+    public String getEntDt() {
+        return entDt;
     }
 
-    public void setENT_DT(String ENT_DT) {
-        this.ENT_DT = ENT_DT;
+    public void setEntDt(String entDt) {
+        this.entDt = entDt;
     }
 
-    public String getBRDT() {
-        return BRDT;
+    public String getBrdt() {
+        return brdt;
     }
 
-    public void setBRDT(String BRDT) {
-        this.BRDT = BRDT;
+    public void setBrdt(String brdt) {
+        this.brdt = brdt;
     }
 
-    public String getWNCOM_TELNO() {
-        return WNCOM_TELNO;
+    public String getWncomTelno() {
+        return wncomTelno;
     }
 
-    public void setWNCOM_TELNO(String WNCOM_TELNO) {
-        this.WNCOM_TELNO = WNCOM_TELNO;
+    public void setWncomTelno(String wncomTelno) {
+        this.wncomTelno = wncomTelno;
     }
 
-    public int getEMPNO() {
-        return EMPNO;
+    public int getEmpno() {
+        return empno;
     }
 
-    public void setEMPNO(int EMPNO) {
-        this.EMPNO = EMPNO;
+    public void setEmpno(int empno) {
+        this.empno = empno;
     }
 
-    public String getMSGR_ID() {
-        return MSGR_ID;
+    public String getMsgrId() {
+        return msgrId;
     }
 
-    public void setMSGR_ID(String MSGR_ID) {
-        this.MSGR_ID = MSGR_ID;
+    public void setMsgrId(String msgrId) {
+        this.msgrId = msgrId;
     }
 
-    public String getPRF_PHOTO_PATH() {
-        return PRF_PHOTO_PATH;
+    public String getPrfPhotoPath() {
+        return prfPhotoPath;
     }
 
-    public void setPRF_PHOTO_PATH(String PRF_PHOTO_PATH) {
-        this.PRF_PHOTO_PATH = PRF_PHOTO_PATH;
+    public void setPrfPhotoPath(String prfPhotoPath) {
+        this.prfPhotoPath = prfPhotoPath;
     }
 
-    public char getSUBS_CERTI_YN() {
-        return SUBS_CERTI_YN;
+    public char getSubsCertiYn() {
+        return subsCertiYn;
     }
 
-    public void setSUBS_CERTI_YN(char SUBS_CERTI_YN) {
-        this.SUBS_CERTI_YN = SUBS_CERTI_YN;
+    public void setSubsCertiYn(char subsCertiYn) {
+        this.subsCertiYn = subsCertiYn;
     }
 
-    public char getTERMS_AGRE_YN() {
-        return TERMS_AGRE_YN;
+    public char getTermsAgreYn() {
+        return termsAgreYn;
     }
 
-    public void setTERMS_AGRE_YN(char TERMS_AGRE_YN) {
-        this.TERMS_AGRE_YN = TERMS_AGRE_YN;
+    public void setTermsAgreYn(char termsAgreYn) {
+        this.termsAgreYn = termsAgreYn;
     }
 
-    public char getSUBS_APRV_YN() {
-        return SUBS_APRV_YN;
+    public char getSubsAprvYn() {
+        return subsAprvYn;
     }
 
-    public void setSUBS_APRV_YN(char SUBS_APRV_YN) {
-        this.SUBS_APRV_YN = SUBS_APRV_YN;
+    public void setSubsAprvYn(char subsAprvYn) {
+        this.subsAprvYn = subsAprvYn;
     }
 
-    public char getSECSN_YN() {
-        return SECSN_YN;
+    public char getSecsnYn() {
+        return secsnYn;
     }
 
-    public void setSECSN_YN(char SECSN_YN) {
-        this.SECSN_YN = SECSN_YN;
+    public void setSecsnYn(char secsnYn) {
+        this.secsnYn = secsnYn;
     }
 
-    public Date getACCT_SECSN_DTM() {
-        return ACCT_SECSN_DTM;
+    public Date getAcctSecsnDtm() {
+        return acctSecsnDtm;
     }
 
-    public void setACCT_SECSN_DTM(Date ACCT_SECSN_DTM) {
-        this.ACCT_SECSN_DTM = ACCT_SECSN_DTM;
+    public void setAcctSecsnDtm(Date acctSecsnDtm) {
+        this.acctSecsnDtm = acctSecsnDtm;
     }
 
-    public Date getFST_REG_DTM() {
-        return FST_REG_DTM;
+    public Date getFstRegDtm() {
+        return fstRegDtm;
     }
 
-    public void setFST_REG_DTM(Date FST_REG_DTM) {
-        this.FST_REG_DTM = FST_REG_DTM;
+    public void setFstRegDtm(Date fstRegDtm) {
+        this.fstRegDtm = fstRegDtm;
     }
 
-    public String getFST_REGR_IDNF_NO() {
-        return FST_REGR_IDNF_NO;
+    public String getFstRegrIdnfNo() {
+        return fstRegrIdnfNo;
     }
 
-    public void setFST_REGR_IDNF_NO(String FST_REGR_IDNF_NO) {
-        this.FST_REGR_IDNF_NO = FST_REGR_IDNF_NO;
+    public void setFstRegrIdnfNo(String fstRegrIdnfNo) {
+        this.fstRegrIdnfNo = fstRegrIdnfNo;
     }
 
-    public Date getLAST_UPD_DTM() {
-        return LAST_UPD_DTM;
+    public Date getLastUpdDtm() {
+        return lastUpdDtm;
     }
 
-    public void setLAST_UPD_DTM(Date LAST_UPD_DTM) {
-        this.LAST_UPD_DTM = LAST_UPD_DTM;
+    public void setLastUpdDtm(Date lastUpdDtm) {
+        this.lastUpdDtm = lastUpdDtm;
     }
 
-    public String getLAST_UPDR_IDNF_NO() {
-        return LAST_UPDR_IDNF_NO;
+    public String getLastUpdrIdnfNo() {
+        return lastUpdrIdnfNo;
     }
 
-    public void setLAST_UPDR_IDNF_NO(String LAST_UPDR_IDNF_NO) {
-        this.LAST_UPDR_IDNF_NO = LAST_UPDR_IDNF_NO;
+    public void setLastUpdrIdnfNo(String lastUpdrIdnfNo) {
+        this.lastUpdrIdnfNo = lastUpdrIdnfNo;
     }
 
     @Override
     public String toString() {
         return "EmplDto{" +
-                "EMPL_NO='" + EMPL_NO + '\'' +
-                ", EMPL_ID='" + EMPL_ID + '\'' +
-                ", PWD='" + PWD + '\'' +
-                ", EMAIL='" + EMAIL + '\'' +
-                ", PWD_ERR_TMS=" + PWD_ERR_TMS +
-                ", RNM='" + RNM + '\'' +
-                ", ENG_NM='" + ENG_NM + '\'' +
-                ", SUBS_DTM=" + SUBS_DTM +
-                ", ENT_DT='" + ENT_DT + '\'' +
-                ", BRDT='" + BRDT + '\'' +
-                ", WNCOM_TELNO='" + WNCOM_TELNO + '\'' +
-                ", EMPNO=" + EMPNO +
-                ", MSGR_ID='" + MSGR_ID + '\'' +
-                ", PRF_PHOTO_PATH='" + PRF_PHOTO_PATH + '\'' +
-                ", SUBS_CERTI_YN=" + SUBS_CERTI_YN +
-                ", TERMS_AGRE_YN=" + TERMS_AGRE_YN +
-                ", SUBS_APRV_YN=" + SUBS_APRV_YN +
-                ", SECSN_YN=" + SECSN_YN +
-                ", ACCT_SECSN_DTM=" + ACCT_SECSN_DTM +
-                ", FST_REG_DTM=" + FST_REG_DTM +
-                ", FST_REGR_IDNF_NO='" + FST_REGR_IDNF_NO + '\'' +
-                ", LAST_UPD_DTM=" + LAST_UPD_DTM +
-                ", LAST_UPDR_IDNF_NO='" + LAST_UPDR_IDNF_NO + '\'' +
+                "emplNo='" + emplNo + '\'' +
+                ", emplId='" + emplId + '\'' +
+                ", pwd='" + pwd + '\'' +
+                ", email='" + email + '\'' +
+                ", pwdErrTms=" + pwdErrTms +
+                ", rnm='" + rnm + '\'' +
+                ", engNm='" + engNm + '\'' +
+                ", subsDtm=" + subsDtm +
+                ", entDt='" + entDt + '\'' +
+                ", brdt='" + brdt + '\'' +
+                ", wncomTelno='" + wncomTelno + '\'' +
+                ", empno=" + empno +
+                ", msgrId='" + msgrId + '\'' +
+                ", prfPhotoPath='" + prfPhotoPath + '\'' +
+                ", subsCertiYn=" + subsCertiYn +
+                ", termsAgreYn=" + termsAgreYn +
+                ", subsAprvYn=" + subsAprvYn +
+                ", secsnYn=" + secsnYn +
+                ", acctSecsnDtm=" + acctSecsnDtm +
+                ", fstRegDtm=" + fstRegDtm +
+                ", fstRegrIdnfNo='" + fstRegrIdnfNo + '\'' +
+                ", lastUpdDtm=" + lastUpdDtm +
+                ", lastUpdrIdnfNo='" + lastUpdrIdnfNo + '\'' +
                 '}';
     }
 
@@ -270,11 +270,11 @@ public class EmplDto {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         EmplDto emplDto = (EmplDto) o;
-        return PWD_ERR_TMS == emplDto.PWD_ERR_TMS && EMPNO == emplDto.EMPNO && SUBS_CERTI_YN == emplDto.SUBS_CERTI_YN && TERMS_AGRE_YN == emplDto.TERMS_AGRE_YN && SUBS_APRV_YN == emplDto.SUBS_APRV_YN && SECSN_YN == emplDto.SECSN_YN && EMPL_NO.equals(emplDto.EMPL_NO) && EMPL_ID.equals(emplDto.EMPL_ID) && PWD.equals(emplDto.PWD) && EMAIL.equals(emplDto.EMAIL) && RNM.equals(emplDto.RNM) && Objects.equals(ENG_NM, emplDto.ENG_NM) && SUBS_DTM.equals(emplDto.SUBS_DTM) && Objects.equals(ENT_DT, emplDto.ENT_DT) && Objects.equals(BRDT, emplDto.BRDT) && Objects.equals(WNCOM_TELNO, emplDto.WNCOM_TELNO) && Objects.equals(MSGR_ID, emplDto.MSGR_ID) && Objects.equals(PRF_PHOTO_PATH, emplDto.PRF_PHOTO_PATH) && Objects.equals(ACCT_SECSN_DTM, emplDto.ACCT_SECSN_DTM) && FST_REG_DTM.equals(emplDto.FST_REG_DTM) && FST_REGR_IDNF_NO.equals(emplDto.FST_REGR_IDNF_NO) && LAST_UPD_DTM.equals(emplDto.LAST_UPD_DTM) && LAST_UPDR_IDNF_NO.equals(emplDto.LAST_UPDR_IDNF_NO);
+        return pwdErrTms == emplDto.pwdErrTms && empno == emplDto.empno && subsCertiYn == emplDto.subsCertiYn && termsAgreYn == emplDto.termsAgreYn && subsAprvYn == emplDto.subsAprvYn && secsnYn == emplDto.secsnYn && emplNo.equals(emplDto.emplNo) && emplId.equals(emplDto.emplId) && pwd.equals(emplDto.pwd) && email.equals(emplDto.email) && rnm.equals(emplDto.rnm) && Objects.equals(engNm, emplDto.engNm) && subsDtm.equals(emplDto.subsDtm) && Objects.equals(entDt, emplDto.entDt) && Objects.equals(brdt, emplDto.brdt) && Objects.equals(wncomTelno, emplDto.wncomTelno) && Objects.equals(msgrId, emplDto.msgrId) && Objects.equals(prfPhotoPath, emplDto.prfPhotoPath) && Objects.equals(acctSecsnDtm, emplDto.acctSecsnDtm) && fstRegDtm.equals(emplDto.fstRegDtm) && fstRegrIdnfNo.equals(emplDto.fstRegrIdnfNo) && lastUpdDtm.equals(emplDto.lastUpdDtm) && lastUpdrIdnfNo.equals(emplDto.lastUpdrIdnfNo);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(EMPL_NO, EMPL_ID, PWD, EMAIL, PWD_ERR_TMS, RNM, ENG_NM, SUBS_DTM, ENT_DT, BRDT, WNCOM_TELNO, EMPNO, MSGR_ID, PRF_PHOTO_PATH, SUBS_CERTI_YN, TERMS_AGRE_YN, SUBS_APRV_YN, SECSN_YN, ACCT_SECSN_DTM, FST_REG_DTM, FST_REGR_IDNF_NO, LAST_UPD_DTM, LAST_UPDR_IDNF_NO);
+        return Objects.hash(emplNo, emplId, pwd, email, pwdErrTms, rnm, engNm, subsDtm, entDt, brdt, wncomTelno, empno, msgrId, prfPhotoPath, subsCertiYn, termsAgreYn, subsAprvYn, secsnYn, acctSecsnDtm, fstRegDtm, fstRegrIdnfNo, lastUpdDtm, lastUpdrIdnfNo);
     }
 }

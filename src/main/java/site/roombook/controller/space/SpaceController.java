@@ -35,8 +35,6 @@ import java.util.*;
 @Controller
 public class SpaceController {
 
-    private static final List<String> ALLOWED_IMAGE_TYPES = Arrays.asList("image/jpeg", "image/png");
-
     @Autowired
     FileService fileService;
 

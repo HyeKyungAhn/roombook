@@ -28,32 +28,32 @@
     </div>
     <div>
         <span>공간명</span>
-        <span>${space.SPACE_NM}</span>
+        <span>${space.spaceNm}</span>
     </div>
     <div>
         <span>위치(20자 이내)</span>
-        <span>${space.SPACE_LOC_DESC}</span>
+        <span>${space.spaceLocDesc}</span>
     </div>
     <div>
         <span>공간 설명(100자)</span>
-        <span>${space.SPACE_ADTN_DESC}</span>
+        <span>${space.spaceAdtnDesc}</span>
     </div>
     <div>
         <span>최대 연속 예약 가능 시간(시간 단위)</span>
-        <span>${space.SPACE_MAX_RSVD_TMS}</span>
+        <span>${space.spaceMaxRsvdTms}</span>
     </div>
     <div>
         <span>공간 주말 이용 가능 여부</span>
-        <span>${space.SPACE_WKEND_USG_POSBL_YN.toString()}</span>
+        <span>${space.spaceWkendUsgPosblYn.toString()}</span>
     </div>
     <div>
         <span>이용시간</span>
-        <span>${space.SPACE_USG_POSBL_BGN_TM}</span>
-        <span>${space.SPACE_USG_POSBL_END_TM}</span>
+        <span>${space.spaceUsgPosblBgnTm}</span>
+        <span>${space.spaceUsgPosblEndTm}</span>
     </div>
     <div>
         <span>최대 수용인원</span>
-        <span>${space.SPACE_MAX_PSON_CNT}</span>
+        <span>${space.spaceMaxPsonCnt}</span>
     </div>
     <div>
         <span>옵션(facility)</span>

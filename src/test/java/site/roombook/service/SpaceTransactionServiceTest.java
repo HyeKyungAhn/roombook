@@ -96,7 +96,6 @@ public class SpaceTransactionServiceTest {
             @BeforeEach
             void setUp(){
                 MockitoAnnotations.openMocks(this);
-                doNothing().when(rescService).updateRescs(anyInt(), anyString(), any());
             }
 
             @Test
@@ -110,7 +109,9 @@ public class SpaceTransactionServiceTest {
             @Test
             @DisplayName("수정 성공")
             void successTest() throws IOException {
+                doNothing().when(rescService).updateRescs(anyInt(), anyString(), any());
                 when(spaceService.updateSpace(anyInt(), anyString(), any(SpaceDto.class))).thenReturn(true);
+
                 SpaceTransactionServiceResult stsr = sts.modifySpace(1234, "admin", spaceDto, new MultipartFile[]{}, new ArrayList<>(), rescs);
                 assertTrue(stsr.isSpaceSaved());
             }

@@ -30,14 +30,14 @@
             <div id="memProfileContainer" class="memProfileContainer">
                 <c:if test="${deptMemAndDeptNm ne null}">
                 <c:forEach var="mem" items="${deptMemAndDeptNm}" varStatus="status">
-                    <div class="memProfile" data-id="${mem.EMPL_ID}">
+                    <div class="memProfile" data-id="${mem.emplId}">
                         <span id="closeBtn" class="closeBtn">&times;</span>
                         <div>
-                            <img src="${mem.PRF_PHOTO_PATH}" class="profilePhoto" alt="프로필 사진"/>
+                            <img src="${mem.prfPhotoPath}" class="profilePhoto" alt="프로필 사진"/>
                         </div>
                         <div>
-                            <p class='profileNm'><span class='nm'>${mem.RNM}</span><span class='engNm'>${mem.ENG_NM?mngr.ENG_NM:''}</span></p>
-                            <p class='profileEmail'>${mem.EMAIL}</p>
+                            <p class='profileNm'><span class='nm'>${mem.rnm}</span><span class='engNm'>${mem.engNm?mngr.engNm:''}</span></p>
+                            <p class='profileEmail'>${mem.email}</p>
                         </div>
                     </div>
                 </c:forEach>
@@ -203,14 +203,14 @@
                     return;
                 }
                 search.modalEl.innerHTML = objs.map((r, index) => {
-                    const isDuplicated = memProfile.checkDuplication(r.empl_ID);
+                    const isDuplicated = memProfile.checkDuplication(r.emplId);
 
-                    return `<div id='searchedEmpl${'${index}'}' class='searchedEmpl emplProfile ${'${isDuplicated?\'unclickable\':\'\'}'}' data-id='${'${r.empl_ID}'}'>
+                    return `<div id='searchedEmpl${'${index}'}' class='searchedEmpl emplProfile ${'${isDuplicated?\'unclickable\':\'\'}'}' data-id='${'${r.emplId}'}'>
                                 <div class='imgContainer'>
-                                    <img src="${'${r.prf_PHOTO_PATH?r.prf_PHOTO_PATH:\'\'}'}" class='emplImg profileImg' alt="프로필 사진"/>
+                                    <img src="${'${r.prfPhotoPath?r.prfPhotoPath:\'\'}'}" class='emplImg profileImg' alt="프로필 사진"/>
                                 </div>
                                 <div>
-                                    <p class='profileNm'><span class='emplNm'>${'${r.rnm}'}</span><span class='emplEngNm'>${'${r.eng_NM?\'(\'+r.eng_NM+\')\':\'\'}'}</span>
+                                    <p class='profileNm'><span class='emplNm'>${'${r.rnm}'}</span><span class='emplEngNm'>${'${r.engNm?\'(\'+r.engNm+\')\':\'\'}'}</span>
                                         ${'${isDuplicated?\'<span>(이미 선택된 구성원입니다.)</span>\':\'\'}'}
                                     </p>
                                     <p class='emplEmail profileEmail'>${'${r.email}'}</p>

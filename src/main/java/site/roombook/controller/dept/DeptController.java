@@ -8,6 +8,7 @@ import org.apache.logging.log4j.util.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.DuplicateKeyException;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -70,7 +71,7 @@ public class DeptController {
             throw new NoSuchElementException("Not Existing dept");
         }
 
-        String mngrEmplNo = deptDto.getDEPT_MNGR_EMPL_NO();
+        String mngrEmplNo = deptDto.getDeptMngrEmplNo();
 
         if(!Strings.isEmpty(mngrEmplNo)){
             m.addAttribute("mngr", deptService.getDeptMngr(mngrEmplNo));
@@ -114,13 +115,13 @@ public class DeptController {
         List<DeptDto> deptDtoList = deptService.getAllDeptTreeData();
 
         DeptDto newDept = new DeptDto();
-        newDept.setDEPT_CD(DeptService.NO_DEPT_CD);
-        newDept.setUPP_DEPT_CD(parent);
-        newDept.setDEPT_NM(deptNm);
-        newDept.setDEPT_MNGR_EMPL_NO(mngrId);
+        newDept.setDeptCd(DeptService.NO_DEPT_CD);
+        newDept.setUppDeptCd(parent);
+        newDept.setDeptNm(deptNm);
+        newDept.setDeptMngrEmplNo(mngrId);
 
-        int max = getMaxOdrInSameParent(newDept.getUPP_DEPT_CD(), deptDtoList);
-        newDept.setDEPT_SORT_ODR(max+1);
+        int max = getMaxOdrInSameParent(newDept.getUppDeptCd(), deptDtoList);
+        newDept.setDeptSortOdr(max+1);
 
         deptDtoList.add(newDept);
 
@@ -136,23 +137,10 @@ public class DeptController {
         return deptData;
     }
 
-    private int getMaxOdrInSameParent(String parent, List<DeptDto> deptDtoList) {
-        int max = 0;
-        int odr;
-        for (DeptDto deptDto : deptDtoList) {
-            if(deptDto.getUPP_DEPT_CD().equals(parent)){
-                odr = deptDto.getDEPT_SORT_ODR();
-                max = Math.max(odr, max);
-            }
-        }
-
-        return max;
-    }
-
-    @PostMapping(value = "/move", produces = "application/json;charset=UTF-8")
+    @PostMapping(value = "/move", produces = MediaType.APPLICATION_JSON_VALUE+";charset=UTF-8")
     @ResponseBody
     public String modifyDeptDataForMove(@RequestBody List<DeptDto> list){
-        list.forEach( deptDto -> deptDto.setLAST_UPDR_IDNF_NO("ahk")); // TODO : 실제 변경 직원 이름 넣기
+        list.forEach( deptDto -> deptDto.setLastUpdrIdnfNo("ahk")); // TODO : 실제 변경 직원 이름 넣기
         return deptService.modifyDeptOdr(list)+"";
     }
 
@@ -259,11 +247,11 @@ public class DeptController {
 
         String LAST_UPDR_IDNF_NO = "asdf"; // TODO : 실제 수정자 EmplNo로 번경하기
         Map<String, String> deptData = new HashMap<>();
-        deptData.put("EMPL_ID", mngrId);
-        deptData.put("DEPT_NM",DEPT_NM);
-        deptData.put("ENG_DEPT_NM",ENG_DEPT_NM);
-        deptData.put("LAST_UPDR_IDNF_NO",LAST_UPDR_IDNF_NO);
-        deptData.put("DEPT_CD",DEPT_CD);
+        deptData.put("emplId", mngrId);
+        deptData.put("deptNm",DEPT_NM);
+        deptData.put("engDeptNm",ENG_DEPT_NM);
+        deptData.put("lastUpdrIdnfNo",LAST_UPDR_IDNF_NO);
+        deptData.put("deptCd",DEPT_CD);
 
         boolean isModifySuccess = deptService.modifyOneDept(deptData);
 
@@ -284,9 +272,9 @@ public class DeptController {
         }
 
         List<DeptAndEmplDto> deptMembersAndName = deptService.getProfilesOfMemberAndDeptName(deptCd);
-        m.addAttribute("deptCd", deptMembersAndName.get(0).getDEPT_CD());
-        m.addAttribute("deptNm", deptMembersAndName.get(0).getDEPT_NM());
-        m.addAttribute("engDeptNm", deptMembersAndName.get(0).getENG_DEPT_NM());
+        m.addAttribute("deptCd", deptMembersAndName.get(0).getDeptCd());
+        m.addAttribute("deptNm", deptMembersAndName.get(0).getDeptNm());
+        m.addAttribute("engDeptNm", deptMembersAndName.get(0).getEngDeptNm());
         m.addAttribute("deptMemAndDeptNm", deptMembersAndName);
         return "/dept/deptMemMod";
     }
@@ -311,5 +299,18 @@ public class DeptController {
         rattr.addFlashAttribute("engDeptNm", engDeptNm);
         rattr.addFlashAttribute("parent", parent);
         rattr.addFlashAttribute("mngr", mngr);
+    }
+
+    private int getMaxOdrInSameParent(String parent, List<DeptDto> deptDtoList) {
+        int max = 0;
+        int odr;
+        for (DeptDto deptDto : deptDtoList) {
+            if(deptDto.getUppDeptCd().equals(parent)){
+                odr = deptDto.getDeptSortOdr();
+                max = Math.max(odr, max);
+            }
+        }
+
+        return max;
     }
 }

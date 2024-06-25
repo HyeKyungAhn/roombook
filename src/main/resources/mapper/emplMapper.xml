@@ -29,9 +29,9 @@
         INSERT INTO empl(EMPL_NO, EMPL_ID, PWD, EMAIL, PWD_ERR_TMS, RNM, ENG_NM, ENT_DT, BRDT, WNCOM_TELNO, EMPNO,
         MSGR_ID, PRF_PHOTO_PATH, SUBS_CERTI_YN, TERMS_AGRE_YN, SUBS_APRV_YN, SECSN_YN,
         FST_REGR_IDNF_NO, LAST_UPDR_IDNF_NO)
-        VALUES (#{EMPL_NO}, #{EMPL_ID}, #{PWD}, #{EMAIL}, #{PWD_ERR_TMS}, #{RNM}, #{ENG_NM}, #{ENT_DT}, #{BRDT}, #{WNCOM_TELNO}, #{EMPNO},
-        #{MSGR_ID}, #{PRF_PHOTO_PATH}, #{SUBS_CERTI_YN}, #{TERMS_AGRE_YN}, #{SUBS_APRV_YN}, #{SECSN_YN},
-        #{EMPL_NO}, #{EMPL_NO})
+        VALUES (#{emplNo}, #{emplId}, #{pwd}, #{email}, #{pwdErrTms}, #{rnm}, #{engNm}, #{entDt}, #{brdt}, #{wncomTelno}, #{empno},
+        #{msgrId}, #{prfPhotoPath}, #{subsCertiYn}, #{termsAgreYn}, #{subsAprvYn}, #{secsnYn},
+        #{emplNo}, #{emplNo})
     </insert>
 
     <select id="selectAllEmpl" resultType="List">

@@ -43,7 +43,7 @@ public class DeptServiceImpl implements DeptService {
         int rowCnt;
 
         for (DeptDto deptDto : depts) {
-            if(Objects.equals(deptDto.getDEPT_CD(), NO_DEPT_CD)){
+            if(Objects.equals(deptDto.getDeptCd(), NO_DEPT_CD)){
                 newDept = deptDto;
                 break;
             }
@@ -51,15 +51,15 @@ public class DeptServiceImpl implements DeptService {
 
         if(Objects.isNull(newDept)) return false;
 
-        newDept.setFST_REGR_IDNF_NO(emplNo);
-        newDept.setLAST_UPDR_IDNF_NO(emplNo);
-        newDept.setDEPT_CD(generateDeptCd());
+        newDept.setFstRegrIdnfNo(emplNo);
+        newDept.setLastUpdrIdnfNo(emplNo);
+        newDept.setDeptCd(generateDeptCd());
         rowCnt = deptDao.insertDept(newDept);
         if(rowCnt == 0){
             return false;
         }
 
-        depts.forEach( deptDto -> deptDto.setLAST_UPDR_IDNF_NO(emplNo));
+        depts.forEach( deptDto -> deptDto.setLastUpdrIdnfNo(emplNo));
 
         try{
             deptDao.updateAllDeptTreeOdrData(depts);
@@ -167,7 +167,7 @@ public class DeptServiceImpl implements DeptService {
         HashSet<String> newMemIDs = new HashSet<>(memIDs);
         HashSet<String> oldMemIDs = new HashSet<>();
         for (DeptAndEmplDto de : oldMemList) {
-            oldMemIDs.add(de.getEMPL_ID());
+            oldMemIDs.add(de.getEmplId());
         }
 
         HashSet<String> memForRemoval = new HashSet<>(oldMemIDs);
@@ -175,7 +175,7 @@ public class DeptServiceImpl implements DeptService {
 
         if(!memForRemoval.isEmpty()){
             Map<String, Object> blngDepts = new HashMap<>();
-            blngDepts.put("BLNG_DEPT_CD", deptCd);
+            blngDepts.put("blngDeptCd", deptCd);
             blngDepts.put("emplIDs", memForRemoval.toArray());
 
             try{

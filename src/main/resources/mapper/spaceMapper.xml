@@ -6,9 +6,9 @@
         INSERT INTO space(SPACE_NO, SPACE_NM, SPACE_MAX_PSON_CNT, SPACE_LOC_DESC, SPACE_ADTN_DESC, SPACE_MAX_RSVD_TMS,
             SPACE_USG_POSBL_BGN_TM, SPACE_USG_POSBL_END_TM, SPACE_WKEND_USG_POSBL_YN, SPACE_HIDE_YN,
             FST_REGR_IDNF_NO, LAST_UPDR_IDNF_NO)
-        VALUES (#{SPACE_NO},#{SPACE_NM},#{SPACE_MAX_PSON_CNT}, #{SPACE_LOC_DESC}, #{SPACE_ADTN_DESC}, #{SPACE_MAX_RSVD_TMS},
-                #{SPACE_USG_POSBL_BGN_TM}, #{SPACE_USG_POSBL_END_TM}, #{SPACE_WKEND_USG_POSBL_YN},
-                #{SPACE_HIDE_YN}, #{FST_REGR_IDNF_NO}, #{FST_REGR_IDNF_NO})
+        VALUES (#{spaceNo},#{spaceNm},#{spaceMaxPsonCnt}, #{spaceLocDesc}, #{spaceAdtnDesc}, #{spaceMaxRsvdTms},
+                #{spaceUsgPosblBgnTm}, #{spaceUsgPosblEndTm}, #{spaceWkendUsgPosblYn},
+                #{spaceHideYn}, #{fstRegrIdnfNo}, #{fstRegrIdnfNo})
     </insert>
     <select id="selectAll" resultType="SpaceDto">
         SELECT * FROM space
@@ -71,12 +71,12 @@
                  LEFT JOIN file f ON s.SPACE_NO = f.ATCH_LOC_NO AND f.ATCH_LOC_CD = #{atchLocCd}
     </select>
     <update id="updateSpace" parameterType="SpaceDto">
-        UPDATE space SET SPACE_NM = #{SPACE_NM}, SPACE_MAX_PSON_CNT = #{SPACE_MAX_PSON_CNT}, SPACE_LOC_DESC = #{SPACE_LOC_DESC},
-                         SPACE_ADTN_DESC=#{SPACE_ADTN_DESC}, SPACE_MAX_RSVD_TMS=#{SPACE_MAX_RSVD_TMS},
-                         SPACE_USG_POSBL_BGN_TM=#{SPACE_USG_POSBL_BGN_TM}, SPACE_USG_POSBL_END_TM=#{SPACE_USG_POSBL_END_TM},
-                         SPACE_WKEND_USG_POSBL_YN=#{SPACE_WKEND_USG_POSBL_YN}, SPACE_HIDE_YN=#{SPACE_HIDE_YN},
-                         LAST_UPD_DTM=CURRENT_TIMESTAMP, LAST_UPDR_IDNF_NO=#{LAST_UPDR_IDNF_NO}
-        WHERE SPACE_NO = #{SPACE_NO}
+        UPDATE space SET SPACE_NM = #{spaceNm}, SPACE_MAX_PSON_CNT = #{spaceMaxPsonCnt}, SPACE_LOC_DESC = #{spaceLocDesc},
+                         SPACE_ADTN_DESC=#{spaceAdtnDesc}, SPACE_MAX_RSVD_TMS=#{spaceMaxRsvdTms},
+                         SPACE_USG_POSBL_BGN_TM=#{spaceUsgPosblBgnTm}, SPACE_USG_POSBL_END_TM=#{spaceUsgPosblEndTm},
+                         SPACE_WKEND_USG_POSBL_YN=#{spaceWkendUsgPosblYn}, SPACE_HIDE_YN=#{spaceHideYn},
+                         LAST_UPD_DTM=CURRENT_TIMESTAMP, LAST_UPDR_IDNF_NO=#{lastUpdrIdnfNo}
+        WHERE SPACE_NO = #{spaceNo}
     </update>
     <delete id="deleteAll">
         DELETE FROM space

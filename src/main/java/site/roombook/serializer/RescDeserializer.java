@@ -20,10 +20,10 @@ public class RescDeserializer extends JsonDeserializer<RescDto> {
         String lastUpdrIdnfNo = node.has("lastUpdrIdnfNo")?node.get("lastUpdrIdnfNo").asText():null;
 
         RescDto.RescDtoBuilder build = RescDto.builder(rescNm)
-                .RESC_NO(rescNo)
-                .SPACE_NO(spaceNo)
-                .FST_REGR_IDNF_NO(fstRegrEmplNo)
-                .LAST_UPDR_IDNF_NO(lastUpdrIdnfNo);
+                .rescNo(rescNo)
+                .spaceNo(spaceNo)
+                .fstRegrIdnfNo(fstRegrEmplNo)
+                .lastUpdrIdnfNo(lastUpdrIdnfNo);
 
         return build.build();
     }

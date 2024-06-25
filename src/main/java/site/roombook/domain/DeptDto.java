@@ -17,57 +17,57 @@ import java.util.Objects;
 public class DeptDto {
     @NonNull
     @JsonProperty("id")
-    private String DEPT_CD;
+    private String deptCd;
     @NonNull
     @JsonProperty("parent")
-    private String UPP_DEPT_CD;
+    private String uppDeptCd;
 //    @JsonProperty("mngrId")
-    private String DEPT_MNGR_EMPL_NO;
+    private String deptMngrEmplNo;
     @NonNull
     @JsonProperty("text")
-    private String DEPT_NM;
+    private String deptNm;
     @NonNull
     @JsonProperty("engDeptNm")
-    private String ENG_DEPT_NM;
+    private String engDeptNm;
     @NonNull
     @JsonProperty("data")
     @JsonSerialize(using = DeptOdrSerializer.class)
     @JsonDeserialize(using = DeptOdrDeserializer.class)
-    private Integer DEPT_SORT_ODR;
+    private Integer deptSortOdr;
     @JsonIgnore
-    private Date FST_REG_DTM;
+    private Date fstRegDtm;
     @NonNull
     @JsonIgnore
-    private String FST_REGR_IDNF_NO;
+    private String fstRegrIdnfNo;
     @JsonIgnore
-    private Date LAST_UPD_DTM;
+    private Date lastUpdDtm;
     @NonNull
     @JsonIgnore
-    private String LAST_UPDR_IDNF_NO;
+    private String lastUpdrIdnfNo;
     @JsonProperty("mngrId")
-    private String EMPL_ID; //부서 저장 시 입력받는 관리자 아이디
+    private String emplId; //부서 저장 시 입력받는 관리자 아이디
 
-    public DeptDto(String DEPT_CD, String UPP_DEPT_CD, String DEPT_MNGR_EMPL_NO, String DEPT_NM, String ENG_DEPT_NM, Integer DEPT_SORT_ODR, String FST_REGR_IDNF_NO, String LAST_UPDR_IDNF_NO) {
-        this.DEPT_CD = DEPT_CD;
-        this.UPP_DEPT_CD = UPP_DEPT_CD;
-        this.DEPT_MNGR_EMPL_NO = DEPT_MNGR_EMPL_NO;
-        this.DEPT_NM = DEPT_NM;
-        this.ENG_DEPT_NM = ENG_DEPT_NM;
-        this.DEPT_SORT_ODR = DEPT_SORT_ODR;
-        this.FST_REGR_IDNF_NO = FST_REGR_IDNF_NO;
-        this.LAST_UPDR_IDNF_NO = LAST_UPDR_IDNF_NO;
+    public DeptDto(String deptCd, String uppDeptCd, String deptMngrEmplNo, String deptNm, String engDeptNm, Integer deptSortOdr, String fstRegrIdnfNo, String lastUpdrIdnfNo) {
+        this.deptCd = deptCd;
+        this.uppDeptCd = uppDeptCd;
+        this.deptMngrEmplNo = deptMngrEmplNo;
+        this.deptNm = deptNm;
+        this.engDeptNm = engDeptNm;
+        this.deptSortOdr = deptSortOdr;
+        this.fstRegrIdnfNo = fstRegrIdnfNo;
+        this.lastUpdrIdnfNo = lastUpdrIdnfNo;
     }
 
-    public DeptDto(String DEPT_CD, String UPP_DEPT_CD, String DEPT_MNGR_EMPL_NO, String DEPT_NM, String ENG_DEPT_NM, Integer DEPT_SORT_ODR, String FST_REGR_IDNF_NO, String LAST_UPDR_IDNF_NO, String EMPL_ID) {
-        this.DEPT_CD = DEPT_CD;
-        this.UPP_DEPT_CD = UPP_DEPT_CD;
-        this.DEPT_MNGR_EMPL_NO = DEPT_MNGR_EMPL_NO;
-        this.DEPT_NM = DEPT_NM;
-        this.ENG_DEPT_NM = ENG_DEPT_NM;
-        this.DEPT_SORT_ODR = DEPT_SORT_ODR;
-        this.FST_REGR_IDNF_NO = FST_REGR_IDNF_NO;
-        this.LAST_UPDR_IDNF_NO = LAST_UPDR_IDNF_NO;
-        this.EMPL_ID = EMPL_ID;
+    public DeptDto(String deptCd, String uppDeptCd, String deptMngrEmplNo, String deptNm, String engDeptNm, Integer deptSortOdr, String fstRegrIdnfNo, String lastUpdrIdnfNo, String emplId) {
+        this.deptCd = deptCd;
+        this.uppDeptCd = uppDeptCd;
+        this.deptMngrEmplNo = deptMngrEmplNo;
+        this.deptNm = deptNm;
+        this.engDeptNm = engDeptNm;
+        this.deptSortOdr = deptSortOdr;
+        this.fstRegrIdnfNo = fstRegrIdnfNo;
+        this.lastUpdrIdnfNo = lastUpdrIdnfNo;
+        this.emplId = emplId;
     }
 
     @Override
@@ -75,28 +75,28 @@ public class DeptDto {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         DeptDto deptDto = (DeptDto) o;
-        return DEPT_CD.equals(deptDto.DEPT_CD) && UPP_DEPT_CD.equals(deptDto.UPP_DEPT_CD) && DEPT_MNGR_EMPL_NO.equals(deptDto.DEPT_MNGR_EMPL_NO) && DEPT_NM.equals(deptDto.DEPT_NM) && Objects.equals(ENG_DEPT_NM, deptDto.ENG_DEPT_NM) && DEPT_SORT_ODR.equals(deptDto.DEPT_SORT_ODR) && Objects.equals(FST_REG_DTM, deptDto.FST_REG_DTM) && FST_REGR_IDNF_NO.equals(deptDto.FST_REGR_IDNF_NO) && Objects.equals(LAST_UPD_DTM, deptDto.LAST_UPD_DTM) && LAST_UPDR_IDNF_NO.equals(deptDto.LAST_UPDR_IDNF_NO);
+        return deptCd.equals(deptDto.deptCd) && uppDeptCd.equals(deptDto.uppDeptCd) && deptMngrEmplNo.equals(deptDto.deptMngrEmplNo) && deptNm.equals(deptDto.deptNm) && Objects.equals(engDeptNm, deptDto.engDeptNm) && deptSortOdr.equals(deptDto.deptSortOdr) && Objects.equals(fstRegDtm, deptDto.fstRegDtm) && fstRegrIdnfNo.equals(deptDto.fstRegrIdnfNo) && Objects.equals(lastUpdDtm, deptDto.lastUpdDtm) && lastUpdrIdnfNo.equals(deptDto.lastUpdrIdnfNo);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(DEPT_CD, UPP_DEPT_CD, DEPT_MNGR_EMPL_NO, DEPT_NM, ENG_DEPT_NM, DEPT_SORT_ODR, FST_REG_DTM, FST_REGR_IDNF_NO, LAST_UPD_DTM, LAST_UPDR_IDNF_NO);
+        return Objects.hash(deptCd, uppDeptCd, deptMngrEmplNo, deptNm, engDeptNm, deptSortOdr, fstRegDtm, fstRegrIdnfNo, lastUpdDtm, lastUpdrIdnfNo);
     }
 
     @Override
     public String toString() {
         return "DeptDto{" +
-                "DEPT_CD='" + DEPT_CD + '\'' +
-                ", UPP_DEPT_CD='" + UPP_DEPT_CD + '\'' +
-                ", DEPT_MNGR_EMPL_NO='" + DEPT_MNGR_EMPL_NO + '\'' +
-                ", DEPT_NM='" + DEPT_NM + '\'' +
-                ", ENG_DEPT_NM='" + ENG_DEPT_NM + '\'' +
-                ", DEPT_SORT_ODR=" + DEPT_SORT_ODR +
-                ", FST_REG_DTM=" + FST_REG_DTM +
-                ", FST_REGR_IDNF_NO='" + FST_REGR_IDNF_NO + '\'' +
-                ", LAST_UPD_DTM=" + LAST_UPD_DTM +
-                ", LAST_UPDR_IDNF_NO='" + LAST_UPDR_IDNF_NO + '\'' +
-                ", EMPL_ID='" + EMPL_ID + '\'' +
+                "deptCd='" + deptCd + '\'' +
+                ", uppDeptCd='" + uppDeptCd + '\'' +
+                ", deptMngrEmplNo='" + deptMngrEmplNo + '\'' +
+                ", deptNm='" + deptNm + '\'' +
+                ", engDeptNm='" + engDeptNm + '\'' +
+                ", deptSortOdr=" + deptSortOdr +
+                ", FST_REG_DTM=" + fstRegDtm +
+                ", fstRegrIdnfNo='" + fstRegrIdnfNo + '\'' +
+                ", LAST_UPD_DTM=" + lastUpdDtm +
+                ", lastUpdrIdnfNo='" + lastUpdrIdnfNo + '\'' +
+                ", emplId='" + emplId + '\'' +
                 '}';
     }
 }

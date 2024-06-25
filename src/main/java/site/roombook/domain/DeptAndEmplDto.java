@@ -4,169 +4,169 @@ import java.util.Date;
 import java.util.Objects;
 
 public class DeptAndEmplDto {
-    private String DEPT_CD;
-    private String DEPT_NM;
-    private String ENG_DEPT_NM;
-    private String EMPL_ID;
-    private String PRF_PHOTO_PATH;
-    private String RNM;
-    private String ENG_NM;
-    private String EMPNO;
-    private String EMAIL;
-    private int CDR_DEPT_CNT;
-    private Date FST_REG_DTM;
-    private String FST_REGR_IDNF_NO;
-    private Date LAST_UPD_DTM;
-    private String LAST_UPDR_IDNF_NO;
+    private String deptCd;
+    private String deptNm;
+    private String engDeptNm;
+    private String emplId;
+    private String prfPhotoPath;
+    private String rnm;
+    private String engNm;
+    private String empno;
+    private String email;
+    private int cdrDeptCnt;
+    private Date fstRegDtm;
+    private String fstRegrIdnfNo;
+    private Date lastUpdDtm;
+    private String lastUpdrIdnfNo;
 
     public DeptAndEmplDto(){}
 
-    public DeptAndEmplDto(String DEPT_CD, String DEPT_NM, String ENG_DEPT_NM, String EMPL_ID, String PRF_PHOTO_PATH, String RNM, String ENG_NM, String EMPNO, String EMAIL, int CDR_DEPT_CNT, Date FST_REG_DTM, String FST_REGR_IDNF_NO, Date LAST_UPD_DTM, String LAST_UPDR_IDNF_NO) {
-        this.DEPT_CD = DEPT_CD;
-        this.DEPT_NM = DEPT_NM;
-        this.ENG_DEPT_NM = ENG_DEPT_NM;
-        this.EMPL_ID = EMPL_ID;
-        this.PRF_PHOTO_PATH = PRF_PHOTO_PATH;
-        this.RNM = RNM;
-        this.ENG_NM = ENG_NM;
-        this.EMPNO = EMPNO;
-        this.EMAIL = EMAIL;
-        this.CDR_DEPT_CNT = CDR_DEPT_CNT;
-        this.FST_REG_DTM = FST_REG_DTM;
-        this.FST_REGR_IDNF_NO = FST_REGR_IDNF_NO;
-        this.LAST_UPD_DTM = LAST_UPD_DTM;
-        this.LAST_UPDR_IDNF_NO = LAST_UPDR_IDNF_NO;
+    public DeptAndEmplDto(String deptCd, String deptNm, String engDeptNm, String emplId, String prfPhotoPath, String rnm, String engNm, String empno, String email, int cdrDeptCnt, Date fstRegDtm, String fstRegrIdnfNo, Date lastUpdDtm, String lastUpdrIdnfNo) {
+        this.deptCd = deptCd;
+        this.deptNm = deptNm;
+        this.engDeptNm = engDeptNm;
+        this.emplId = emplId;
+        this.prfPhotoPath = prfPhotoPath;
+        this.rnm = rnm;
+        this.engNm = engNm;
+        this.empno = empno;
+        this.email = email;
+        this.cdrDeptCnt = cdrDeptCnt;
+        this.fstRegDtm = fstRegDtm;
+        this.fstRegrIdnfNo = fstRegrIdnfNo;
+        this.lastUpdDtm = lastUpdDtm;
+        this.lastUpdrIdnfNo = lastUpdrIdnfNo;
     }
 
-    public String getDEPT_CD() {
-        return DEPT_CD;
+    public String getDeptCd() {
+        return deptCd;
     }
 
-    public void setDEPT_CD(String DEPT_CD) {
-        this.DEPT_CD = DEPT_CD;
+    public void setDeptCd(String deptCd) {
+        this.deptCd = deptCd;
     }
 
-    public String getDEPT_NM() {
-        return DEPT_NM;
+    public String getDeptNm() {
+        return deptNm;
     }
 
-    public void setDEPT_NM(String DEPT_NM) {
-        this.DEPT_NM = DEPT_NM;
+    public void setDeptNm(String deptNm) {
+        this.deptNm = deptNm;
     }
 
-    public String getENG_DEPT_NM() {
-        return ENG_DEPT_NM;
+    public String getEngDeptNm() {
+        return engDeptNm;
     }
 
-    public void setENG_DEPT_NM(String ENG_DEPT_NM) {
-        this.ENG_DEPT_NM = ENG_DEPT_NM;
+    public void setEngDeptNm(String engDeptNm) {
+        this.engDeptNm = engDeptNm;
     }
 
-    public String getEMPL_ID() {
-        return EMPL_ID;
+    public String getEmplId() {
+        return emplId;
     }
 
-    public void setEMPL_ID(String EMPL_ID) {
-        this.EMPL_ID = EMPL_ID;
+    public void setEmplId(String emplId) {
+        this.emplId = emplId;
     }
 
-    public String getPRF_PHOTO_PATH() {
-        return PRF_PHOTO_PATH;
+    public String getPrfPhotoPath() {
+        return prfPhotoPath;
     }
 
-    public void setPRF_PHOTO_PATH(String PRF_PHOTO_PATH) {
-        this.PRF_PHOTO_PATH = PRF_PHOTO_PATH;
+    public void setPrfPhotoPath(String prfPhotoPath) {
+        this.prfPhotoPath = prfPhotoPath;
     }
 
-    public String getRNM() {
-        return RNM;
+    public String getRnm() {
+        return rnm;
     }
 
-    public void setRNM(String RNM) {
-        this.RNM = RNM;
+    public void setRnm(String rnm) {
+        this.rnm = rnm;
     }
 
-    public String getENG_NM() {
-        return ENG_NM;
+    public String getEngNm() {
+        return engNm;
     }
 
-    public void setENG_NM(String ENG_NM) {
-        this.ENG_NM = ENG_NM;
+    public void setEngNm(String engNm) {
+        this.engNm = engNm;
     }
 
-    public String getEMPNO() {
-        return EMPNO;
+    public String getEmpno() {
+        return empno;
     }
 
-    public void setEMPNO(String EMPNO) {
-        this.EMPNO = EMPNO;
+    public void setEmpno(String empno) {
+        this.empno = empno;
     }
 
-    public String getEMAIL() {
-        return EMAIL;
+    public String getEmail() {
+        return email;
     }
 
-    public void setEMAIL(String EMAIL) {
-        this.EMAIL = EMAIL;
+    public void setEmail(String email) {
+        this.email = email;
     }
 
-    public int getCDR_DEPT_CNT() {
-        return CDR_DEPT_CNT;
+    public int getCdrDeptCnt() {
+        return cdrDeptCnt;
     }
 
-    public Date getFST_REG_DTM() {
-        return FST_REG_DTM;
+    public Date getFstRegDtm() {
+        return fstRegDtm;
     }
 
-    public void setFST_REG_DTM(Date FST_REG_DTM) {
-        this.FST_REG_DTM = FST_REG_DTM;
+    public void setFstRegDtm(Date fstRegDtm) {
+        this.fstRegDtm = fstRegDtm;
     }
 
-    public String getFST_REGR_IDNF_NO() {
-        return FST_REGR_IDNF_NO;
+    public String getFstRegrIdnfNo() {
+        return fstRegrIdnfNo;
     }
 
-    public void setFST_REGR_IDNF_NO(String FST_REGR_IDNF_NO) {
-        this.FST_REGR_IDNF_NO = FST_REGR_IDNF_NO;
+    public void setFstRegrIdnfNo(String fstRegrIdnfNo) {
+        this.fstRegrIdnfNo = fstRegrIdnfNo;
     }
 
-    public Date getLAST_UPD_DTM() {
-        return LAST_UPD_DTM;
+    public Date getLastUpdDtm() {
+        return lastUpdDtm;
     }
 
-    public void setLAST_UPD_DTM(Date LAST_UPD_DTM) {
-        this.LAST_UPD_DTM = LAST_UPD_DTM;
+    public void setLastUpdDtm(Date lastUpdDtm) {
+        this.lastUpdDtm = lastUpdDtm;
     }
 
-    public String getLAST_UPDR_IDNF_NO() {
-        return LAST_UPDR_IDNF_NO;
+    public String getLastUpdrIdnfNo() {
+        return lastUpdrIdnfNo;
     }
 
-    public void setLAST_UPDR_IDNF_NO(String LAST_UPDR_IDNF_NO) {
-        this.LAST_UPDR_IDNF_NO = LAST_UPDR_IDNF_NO;
+    public void setLastUpdrIdnfNo(String lastUpdrIdnfNo) {
+        this.lastUpdrIdnfNo = lastUpdrIdnfNo;
     }
 
-    public void setCDR_DEPT_CNT(int CDR_DEPT_CNT) {
-        this.CDR_DEPT_CNT = CDR_DEPT_CNT;
+    public void setCdrDeptCnt(int cdrDeptCnt) {
+        this.cdrDeptCnt = cdrDeptCnt;
     }
 
     @Override
     public String toString() {
         return "DeptAndEmplDto{" +
-                "DEPT_CD='" + DEPT_CD + '\'' +
-                ", DEPT_NM='" + DEPT_NM + '\'' +
-                ", ENG_DEPT_NM='" + ENG_DEPT_NM + '\'' +
-                ", EMPL_ID='" + EMPL_ID + '\'' +
-                ", PRF_PHOTO_PATH='" + PRF_PHOTO_PATH + '\'' +
-                ", RNM='" + RNM + '\'' +
-                ", ENG_NM='" + ENG_NM + '\'' +
-                ", EMPNO='" + EMPNO + '\'' +
-                ", EMAIL='" + EMAIL + '\'' +
-                ", CDR_DEPT_CNT=" + CDR_DEPT_CNT +
-                ", FST_REG_DTM=" + FST_REG_DTM +
-                ", FST_REGR_IDNF_NO='" + FST_REGR_IDNF_NO + '\'' +
-                ", LAST_UPD_DTM=" + LAST_UPD_DTM +
-                ", LAST_UPDR_IDNF_NO='" + LAST_UPDR_IDNF_NO + '\'' +
+                "deptCd='" + deptCd + '\'' +
+                ", deptNm='" + deptNm + '\'' +
+                ", engDeptNm='" + engDeptNm + '\'' +
+                ", emplId='" + emplId + '\'' +
+                ", prfPhotoPath='" + prfPhotoPath + '\'' +
+                ", rnm='" + rnm + '\'' +
+                ", engNm='" + engNm + '\'' +
+                ", empno='" + empno + '\'' +
+                ", email='" + email + '\'' +
+                ", cdrDeptCnt=" + cdrDeptCnt +
+                ", fstRegDtm=" + fstRegDtm +
+                ", fstRegrIdnfNo='" + fstRegrIdnfNo + '\'' +
+                ", lastUpdDtm=" + lastUpdDtm +
+                ", lastUpdrIdnfNo='" + lastUpdrIdnfNo + '\'' +
                 '}';
     }
 
@@ -175,11 +175,11 @@ public class DeptAndEmplDto {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         DeptAndEmplDto that = (DeptAndEmplDto) o;
-        return CDR_DEPT_CNT == that.CDR_DEPT_CNT && DEPT_CD.equals(that.DEPT_CD) && DEPT_NM.equals(that.DEPT_NM) && Objects.equals(ENG_DEPT_NM, that.ENG_DEPT_NM) && EMPL_ID.equals(that.EMPL_ID) && Objects.equals(PRF_PHOTO_PATH, that.PRF_PHOTO_PATH) && RNM.equals(that.RNM) && Objects.equals(ENG_NM, that.ENG_NM) && Objects.equals(EMPNO, that.EMPNO) && EMAIL.equals(that.EMAIL) && Objects.equals(FST_REG_DTM, that.FST_REG_DTM) && Objects.equals(FST_REGR_IDNF_NO, that.FST_REGR_IDNF_NO) && Objects.equals(LAST_UPD_DTM, that.LAST_UPD_DTM) && Objects.equals(LAST_UPDR_IDNF_NO, that.LAST_UPDR_IDNF_NO);
+        return cdrDeptCnt == that.cdrDeptCnt && deptCd.equals(that.deptCd) && deptNm.equals(that.deptNm) && Objects.equals(engDeptNm, that.engDeptNm) && emplId.equals(that.emplId) && Objects.equals(prfPhotoPath, that.prfPhotoPath) && rnm.equals(that.rnm) && Objects.equals(engNm, that.engNm) && Objects.equals(empno, that.empno) && email.equals(that.email) && Objects.equals(fstRegDtm, that.fstRegDtm) && Objects.equals(fstRegrIdnfNo, that.fstRegrIdnfNo) && Objects.equals(lastUpdDtm, that.lastUpdDtm) && Objects.equals(lastUpdrIdnfNo, that.lastUpdrIdnfNo);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(DEPT_CD, DEPT_NM, ENG_DEPT_NM, EMPL_ID, PRF_PHOTO_PATH, RNM, ENG_NM, EMPNO, EMAIL, CDR_DEPT_CNT, FST_REG_DTM, FST_REGR_IDNF_NO, LAST_UPD_DTM, LAST_UPDR_IDNF_NO);
+        return Objects.hash(deptCd, deptNm, engDeptNm, emplId, prfPhotoPath, rnm, engNm, empno, email, cdrDeptCnt, fstRegDtm, fstRegrIdnfNo, lastUpdDtm, lastUpdrIdnfNo);
     }
 }

@@ -47,14 +47,14 @@
                 <select name="parent" id="parent">
                     <option value="#">최상위 부서</option>
                     <c:forEach var="dept" items="${CdAndNm}">
-                        <option value="${dept.DEPT_CD}" ${dept.DEPT_NM==param.parent ? 'selected' : null}>${dept.DEPT_NM}</option>
+                        <option value="${dept.deptCd}" ${dept.deptNm==param.parent ? 'selected' : null}>${dept.deptNm}</option>
                     </c:forEach>
                 </select>
                 </label>
             </div>
             <div>
                 <div>관리자 직원</div>
-                <input type="hidden" name="mngrId" id="mngrId" value="${mngr.EMPL_ID}">
+                <input type="hidden" name="mngrId" id="mngrId" value="${mngr.emplId}">
                 <div id="searchMngr" class="hide">
                     <label>
                         <input id="searchInput" type="text" placeholder="이름 또는 이메일을 입력하세요"/>
@@ -64,11 +64,11 @@
                 <div id="mngrProfile" class="mngrProfile hide">
                     <span id="closeBtn" class="closeBtn">&times;</span>
                     <div>
-                        <img src="${mngr.PRF_PHOTO_PATH}" class="profilePhoto" alt="프로필 사진"/>
+                        <img src="${mngr.prfPhotoPath}" class="profilePhoto" alt="프로필 사진"/>
                     </div>
                     <div>
-                        <p class='profileNm'><span class='nm'>${mngr.RNM}</span><span class='engNm'>${mngr.ENG_NM?mngr.ENG_NM:''}</span></p>
-                        <p class='profileEmail'>${mngr.EMAIL}</p>
+                        <p class='profileNm'><span class='nm'>${mngr.rnm}</span><span class='engNm'>${mngr.engNm?mngr.engNm:''}</span></p>
+                        <p class='profileEmail'>${mngr.email}</p>
                     </div>
                 </div>
             </div>

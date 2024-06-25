@@ -27,26 +27,26 @@
   <c:set var="lastFile" value=""/>
   <c:forEach var="place" items="${list}" varStatus="status">
     <c:choose>
-      <c:when test="${placeNo ne place.SPACE_NO && status.first}"><!--새로운 공간 && 맨 처음 공간-->
-        <c:set var="placeNo" value="${place.SPACE_NO}"/>
-        <c:set var="lastFile" value="${place.FILE_NM}"/>
+      <c:when test="${placeNo ne place.spaceNo && status.first}"><!--새로운 공간 && 맨 처음 공간-->
+        <c:set var="placeNo" value="${place.spaceNo}"/>
+        <c:set var="lastFile" value="${place.fileNm}"/>
         <il>
         <div>
         <div>
-          <a href="<c:url value="/spaces/${placeNo}"/>"><span>${place.SPACE_NM}</span></a><br/>
-          <span>${place.SPACE_MAX_PSON_CNT}명</span><br/>
-          <span>${place.SPACE_LOC_DESC}</span><br/>
-          <span>${place.SPACE_ADTN_DESC}</span><br/>
-          <span>${place.SPACE_MAX_RSVD_TMS}</span><br/>
-          <span>${place.SPACE_USG_POSBL_BGN_TM}</span><br/>
-          <span>${place.SPACE_USG_POSBL_END_TM}</span><br/>
-          <span>${place.SPACE_WKEND_USG_POSBL_YN}</span><br/>
+          <a href="<c:url value="/spaces/${placeNo}"/>"><span>${place.spaceNm}</span></a><br/>
+          <span>${place.spaceMaxPsonCnt}명</span><br/>
+          <span>${place.spaceLocDesc}</span><br/>
+          <span>${place.spaceAdtnDesc}</span><br/>
+          <span>${place.spaceMaxRsvdTms}</span><br/>
+          <span>${place.spaceUsgPosblBgnTm}</span><br/>
+          <span>${place.spaceUsgPosblEndTm}</span><br/>
+          <span>${place.spaceWkendUsgPosblYn}</span><br/>
         </div>
         <div>
-        <span>${place.RESC_NM}</span>
+        <span>${place.rescNm}</span>
       </c:when>
-      <c:when test="${placeNo ne place.SPACE_NO}"> <!--새로운 공간 & 맨 처음 공간이 아님-->
-        <c:set var="placeNo" value="${place.SPACE_NO}"/>
+      <c:when test="${placeNo ne place.spaceNo}"> <!--새로운 공간 & 맨 처음 공간이 아님-->
+        <c:set var="placeNo" value="${place.spaceNo}"/>
         </div>
         </div>
         <div>
@@ -54,54 +54,54 @@
         </div>
         </il>
         <il>
-        <c:set var="lastFile" value="${place.FILE_NM}"/>
+        <c:set var="lastFile" value="${place.fileNm}"/>
         <div>
         <div>
-          <a href="<c:url value="/spaces/${placeNo}"/>"><span>${place.SPACE_NM}</span></a><br/>
-          <span>${place.SPACE_MAX_PSON_CNT}명</span><br/>
-          <span>${place.SPACE_LOC_DESC}</span><br/>
-          <span>${place.SPACE_ADTN_DESC}</span><br/>
-          <span>${place.SPACE_MAX_RSVD_TMS}</span><br/>
-          <span>${place.SPACE_USG_POSBL_BGN_TM}</span><br/>
-          <span>${place.SPACE_USG_POSBL_END_TM}</span><br/>
-          <span>${place.SPACE_WKEND_USG_POSBL_YN}</span><br/>
+          <a href="<c:url value="/spaces/${placeNo}"/>"><span>${place.spaceNm}</span></a><br/>
+          <span>${place.spaceMaxPsonCnt}명</span><br/>
+          <span>${place.spaceLocDesc}</span><br/>
+          <span>${place.spaceAdtnDesc}</span><br/>
+          <span>${place.spaceMaxRsvdTms}</span><br/>
+          <span>${place.spaceUsgPosblBgnTm}</span><br/>
+          <span>${place.spaceUsgPosblEndTm}</span><br/>
+          <span>${place.spaceWkendUsgPosblYn}</span><br/>
         </div>
         <div>
-        <span>${place.RESC_NM}</span>
+        <span>${place.rescNm}</span>
       </c:when>
-      <c:when test="${placeNo ne place.SPACE_NO && status.last}"> <!-- 새로운 공간 $$ 마지막 공간 -->
+      <c:when test="${placeNo ne place.spaceNo && status.last}"> <!-- 새로운 공간 $$ 마지막 공간 -->
         <il>
           <div>
             <div>
-              <a href="<c:url value="/spaces/${placeNo}"/>"><span>${place.SPACE_NM}</span></a><br/>
-              <span>${place.SPACE_MAX_PSON_CNT}명</span><br/>
-              <span>${place.SPACE_LOC_DESC}</span><br/>
-              <span>${place.SPACE_ADTN_DESC}</span><br/>
-              <span>${place.SPACE_MAX_RSVD_TMS}</span><br/>
-              <span>${place.SPACE_USG_POSBL_BGN_TM}</span><br/>
-              <span>${place.SPACE_USG_POSBL_END_TM}</span><br/>
-              <span>${place.SPACE_WKEND_USG_POSBL_YN}</span><br/>
+              <a href="<c:url value="/spaces/${placeNo}"/>"><span>${place.spaceNm}</span></a><br/>
+              <span>${place.spaceMaxPsonCnt}명</span><br/>
+              <span>${place.spaceLocDesc}</span><br/>
+              <span>${place.spaceAdtnDesc}</span><br/>
+              <span>${place.spaceMaxRsvdTms}</span><br/>
+              <span>${place.spaceUsgPosblBgnTm}</span><br/>
+              <span>${place.spaceUsgPosblEndTm}</span><br/>
+              <span>${place.spaceWkendUsgPosblYn}</span><br/>
             </div>
             <div>
-              <span>${place.RESC_NM}</span>
+              <span>${place.rescNm}</span>
             </div>
           </div>
           <div>
-            <img class="thumbnailImg" alt="공간 대표사진" src="${thumbnailPath}/${place.FILE_NM}">
+            <img class="thumbnailImg" alt="공간 대표사진" src="${thumbnailPath}/${place.fileNm}">
           </div>
         </il>
       </c:when>
-      <c:when test="${placeNo eq place.SPACE_NO && status.last}"> <!-- 새로운 공간 아님 & 마지막 하나 -->
-            <span>${place.RESC_NM}</span>
+      <c:when test="${placeNo eq place.spaceNo && status.last}"> <!-- 새로운 공간 아님 & 마지막 하나 -->
+            <span>${place.rescNm}</span>
           </div>
         </div>
         <div>
-          <img class="thumbnailImg" alt="공간 대표사진" src="${thumbnailPath}/${place.FILE_NM}">
+          <img class="thumbnailImg" alt="공간 대표사진" src="${thumbnailPath}/${place.fileNm}">
         </div>
         </il>
       </c:when>
-      <c:when test="${placeNo eq place.SPACE_NO}"> <!-- rescs -->
-        <span>${place.RESC_NM}</span>
+      <c:when test="${placeNo eq place.spaceNo}"> <!-- rescs -->
+        <span>${place.rescNm}</span>
       </c:when>
     </c:choose>
   </c:forEach>

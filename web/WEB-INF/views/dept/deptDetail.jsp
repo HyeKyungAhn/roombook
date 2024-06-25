@@ -16,7 +16,7 @@
 <body>
 <div>
     <h1>부서 상세페이지</h1>
-    <a class="" href="<c:url value='/dept/mod?deptCd=${deptAndMngrData.DEPT_CD}'/>">
+    <a class="" href="<c:url value='/dept/mod?deptCd=${deptAndMngrData.deptCd}'/>">
         <span>부서 수정</span>
     </a>
     <button id="deptDelBtn">
@@ -26,41 +26,41 @@
         <h2>부서 정보</h2>
         <div>
             <span>부서명</span>
-            <span>${deptAndMngrData.DEPT_NM}</span>
+            <span>${deptAndMngrData.deptNm}</span>
         </div>
 
         <div>
             <span>부서 영문명</span>
-            <span>${deptAndMngrData.ENG_DEPT_NM}</span>
+            <span>${deptAndMngrData.engDeptNm}</span>
         </div>
 
         <div>
             <p>관리자 직원</p>
             <c:choose>
-            <c:when test="${deptAndMngrData.EMPL_ID ne null}">
+            <c:when test="${deptAndMngrData.emplId ne null}">
             <div>
                 <span>직원 아이디</span>
-                <span>${deptAndMngrData.EMPL_ID}</span>
+                <span>${deptAndMngrData.emplId}</span>
             </div>
             <div>
                 <span>사진</span>
-                <span>${deptAndMngrData.PRF_PHOTO_PATH}</span>
+                <span>${deptAndMngrData.prfPhotoPath}</span>
             </div>
             <div>
                 <span>이름</span>
-                <span>${deptAndMngrData.RNM}</span>
+                <span>${deptAndMngrData.rnm}</span>
             </div>
             <div>
                 <span>영문명</span>
-                <span>${deptAndMngrData.ENG_NM}</span>
+                <span>${deptAndMngrData.engNm}</span>
             </div>
             <div>
                 <span>사원번호</span>
-                <span>${deptAndMngrData.EMPNO}</span>
+                <span>${deptAndMngrData.empno}</span>
             </div>
             <div>
                 <span>이메일</span>
-                <span>${deptAndMngrData.EMAIL}</span>
+                <span>${deptAndMngrData.email}</span>
             </div>
             </c:when>
             <c:otherwise>
@@ -71,7 +71,7 @@
 
         <div>
             <h2>구성원</h2>
-            <a href="<c:url value='/dept/mem?deptCd=${deptAndMngrData.DEPT_CD}'/>">
+            <a href="<c:url value='/dept/mem?deptCd=${deptAndMngrData.deptCd}'/>">
                 <span>추가/수정</span>
             </a>
             <div>
@@ -79,27 +79,27 @@
                 <div>
                     <div>
                         <span>직원 아이디</span>
-                        <span>${mem.EMPL_ID}</span>
+                        <span>${mem.emplId}</span>
                     </div>
                     <div>
                         <span>사진</span>
-                        <span>${mem.PRF_PHOTO_PATH}</span>
+                        <span>${mem.prfPhotoPath}</span>
                     </div>
                     <div>
                         <span>이름</span>
-                        <span>${mem.RNM}</span>
+                        <span>${mem.rnm}</span>
                     </div>
                     <div>
                         <span>영문명</span>
-                        <span>${mem.ENG_NM}</span>
+                        <span>${mem.engNm}</span>
                     </div>
                     <div>
                         <span>사원번호</span>
-                        <span>${mem.EMPNO}</span>
+                        <span>${mem.empno}</span>
                     </div>
                     <div>
                         <span>이메일</span>
-                        <span>${mem.EMAIL}</span>
+                        <span>${mem.email}</span>
                     </div>
                 </div>
                 </c:forEach>
@@ -123,7 +123,7 @@
     }
 
     document.getElementById("deptDelBtn").onclick = function(){
-        const hasChildren = ${deptAndMngrData.CDR_DEPT_CNT eq 0 ? false : true};
+        const hasChildren = ${deptAndMngrData.cdrDeptCnt eq 0 ? false : true};
         if(hasChildren){
             alert("하위 부서가 있는 부서는 삭제할 수 없습니다\n하위 부서를 이동한 후 다시 시도하세요.");
             return false;
@@ -132,7 +132,7 @@
         fetch('/dept/del', {
             method : 'POST',
             headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify(${deptAndMngrData.DEPT_CD})
+            body: JSON.stringify(${deptAndMngrData.deptCd})
         }).then(response => {
             return response.text();
         }).then(msg => {

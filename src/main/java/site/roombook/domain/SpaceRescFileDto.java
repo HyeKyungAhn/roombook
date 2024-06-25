@@ -3,7 +3,6 @@ package site.roombook.domain;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -16,59 +15,59 @@ import java.time.LocalTime;
 public class SpaceRescFileDto {
     //space
     @JsonIgnore
-    private Integer SPACE_NO;
+    private Integer spaceNo;
     @JsonProperty("spaceNm")
-    private String SPACE_NM;
+    private String spaceNm;
     @JsonProperty("maxCapacity")
-    private Integer SPACE_MAX_PSON_CNT;
+    private Integer spaceMaxPsonCnt;
     @JsonProperty("spaceLoc")
-    private String SPACE_LOC_DESC;
+    private String spaceLocDesc;
     @JsonProperty("spaceDesc")
-    private String SPACE_ADTN_DESC;
+    private String spaceAdtnDesc;
     @JsonProperty("maxRsvsTm")
-    private Integer SPACE_MAX_RSVD_TMS;
+    private Integer spaceMaxRsvdTms;
     @JsonProperty("startTm")
-    private LocalTime SPACE_USG_POSBL_BGN_TM;
+    private LocalTime spaceUsgPosblBgnTm;
     @JsonProperty("finishTm")
-    private LocalTime SPACE_USG_POSBL_END_TM;
+    private LocalTime spaceUsgPosblEndTm;
     @JsonProperty("weekend")
-    private Character SPACE_WKEND_USG_POSBL_YN = 'N';
+    private Character spaceWkendUsgPosblYn = 'N';
     @JsonProperty("hide")
-    private Character SPACE_HIDE_YN = 'N';
+    private Character spaceHideYn = 'N';
     //resc
     @JsonProperty("id")
-    private Integer RESC_NO;
+    private Integer rescNo;
     @JsonProperty("value")
-    private String RESC_NM;
+    private String rescNm;
     //file
     @JsonProperty("no")
-    private Integer FILE_NO;
+    private Integer fileNo;
     @JsonProperty("loc_no")
-    private Integer ATCH_LOC_NO;
+    private Integer atchLocNo;
     @JsonProperty("loc_cd")
-    private String ATCH_LOC_CD;
+    private String atchLocCd;
     @JsonProperty("rename")
-    private String FILE_NM;
+    private String fileNm;
     @JsonProperty("name")
-    private String FILE_ORGL_NM;
+    private String fileOrglNm;
     @JsonProperty("typ")
-    private String FILE_TYP_NM;
+    private String fileTypNm;
     @JsonProperty("size")
-    private Long FILE_SIZE;
+    private Long fileSize;
     //common
     @JsonIgnore
-    private LocalDateTime FST_REG_DTM;
+    private LocalDateTime fstRegDtm;
     @JsonIgnore
-    private String FST_REGR_IDNF_NO;
+    private String fstRegrIdnfNo;
     @JsonIgnore
-    private LocalDateTime LAST_UPD_DTM;
+    private LocalDateTime lastUpdDtm;
     @JsonIgnore
-    private String LAST_UPDR_IDNF_NO;
+    private String lastUpdrIdnfNo;
 
-    public static SpaceRescFileDtoBuilder builder(Integer SPACE_NO){
-        if (SPACE_NO == null) {
+    public static SpaceRescFileDtoBuilder builder(Integer spaceNo){
+        if (spaceNo == null) {
             throw new IllegalArgumentException("필수 파라미터 누락: SPACE_NO");
         }
-        return SpaceRescFileDtoBuilder().SPACE_NO(SPACE_NO);
+        return SpaceRescFileDtoBuilder().spaceNo(spaceNo);
     }
 }

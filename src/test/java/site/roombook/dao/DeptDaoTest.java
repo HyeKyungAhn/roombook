@@ -39,12 +39,12 @@ class DeptDaoTest {
         EmplDto emplDto = new EmplDto("11111111", "jy123", "1234", "jy123@gmail.com", 0, "김지영", "darwin", "2024-01-01", "2002-01-01", "123123", 11111, null, null, 'Y', 'Y', 'Y', 'N');
         assertEquals(1, emplDao.insertEmpl(emplDto));
 
-        DeptDto deptDto = new DeptDto("1234", "#", null, "인사부2", "HR", 0, "asdf", "asdf", emplDto.getEMPL_ID());
+        DeptDto deptDto = new DeptDto("1234", "#", null, "인사부2", "HR", 0, "asdf", "asdf", emplDto.getEmplId());
         int rowCnt = deptDao.insertDept(deptDto);
         assertEquals(1, rowCnt);
 
-        DeptDto selectedDept = deptDao.selectDept(deptDto.getDEPT_CD());
-        assertEquals(emplDto.getEMPL_NO(), selectedDept.getDEPT_MNGR_EMPL_NO());
+        DeptDto selectedDept = deptDao.selectDept(deptDto.getDeptCd());
+        assertEquals(emplDto.getEmplNo(), selectedDept.getDeptMngrEmplNo());
     }
 
     @Test
@@ -57,10 +57,10 @@ class DeptDaoTest {
         EmplDto emplDto = new EmplDto("11111111", "jy123", "1234", "jy123@gmail.com", 0, "김지영", "darwin", "2024-01-01", "2002-01-01", "123123", 11111, null, null, 'Y', 'Y', 'Y', 'N');
         assertEquals(1, emplDao.insertEmpl(emplDto));
 
-        DeptDto deptDto = new DeptDto("1234", "#", null, "인사팀", "HR", 0, "asdf", "asdf", emplDto.getEMPL_ID());
+        DeptDto deptDto = new DeptDto("1234", "#", null, "인사팀", "HR", 0, "asdf", "asdf", emplDto.getEmplId());
         assertEquals(1, deptDao.insertDept(deptDto));
 
-        DeptDto duplicatedDeptDto = new DeptDto("1234", "#", null, "AA", "AA", 0, "asdf", "asdf", emplDto.getEMPL_ID());
+        DeptDto duplicatedDeptDto = new DeptDto("1234", "#", null, "AA", "AA", 0, "asdf", "asdf", emplDto.getEmplId());
         int result = 0;
         try {
             result = deptDao.insertDept(duplicatedDeptDto);
@@ -80,10 +80,10 @@ class DeptDaoTest {
         EmplDto emplDto = new EmplDto("11111111", "jy123", "1234", "jy123@gmail.com", 0, "김지영", "darwin", "2024-01-01", "2002-01-01", "123123", 11111, null, null, 'Y', 'Y', 'Y', 'N');
         assertEquals(1, emplDao.insertEmpl(emplDto));
 
-        DeptDto deptDto = new DeptDto("1234", "#", null, "HR", "eng", 0, "admin", "admin", emplDto.getEMPL_ID());
+        DeptDto deptDto = new DeptDto("1234", "#", null, "HR", "eng", 0, "admin", "admin", emplDto.getEmplId());
         deptDao.insertDept(deptDto);
 
-        DeptDto duplicatedDeptDto = new DeptDto("5678", "#", "asdf", "HR", "eng", 0, "admin", "admin", emplDto.getEMPL_ID());
+        DeptDto duplicatedDeptDto = new DeptDto("5678", "#", "asdf", "HR", "eng", 0, "admin", "admin", emplDto.getEmplId());
         int result = 0;
 
         try {
@@ -113,7 +113,7 @@ class DeptDaoTest {
         deptDao.deleteAll();
 
         DeptDto deptDto = new DeptDto();
-        deptDto.setDEPT_CD("11111112");
+        deptDto.setDeptCd("11111112");
 
         int rowCnt = 0;
         try {
@@ -132,7 +132,7 @@ class DeptDaoTest {
         int rowCnt = deptDao.insertDept(deptDto);
 
         assertEquals(1, rowCnt);
-        assertEquals(deptDto.getENG_DEPT_NM(), deptDao.selectDept(deptDto.getDEPT_CD()).getENG_DEPT_NM());
+        assertEquals(deptDto.getEngDeptNm(), deptDao.selectDept(deptDto.getDeptCd()).getEngDeptNm());
     }
 
     @Test
@@ -142,7 +142,7 @@ class DeptDaoTest {
         DeptDto deptDto = new DeptDto("1111", "#", null, "인사부", "HR", 0, "admin", "admin");
         assertEquals(1, deptDao.insertDept(deptDto));
 
-        assertEquals(1, deptDao.selectDeptCntWithNm(deptDto.getDEPT_NM()));
+        assertEquals(1, deptDao.selectDeptCntWithNm(deptDto.getDeptNm()));
     }
 
     @Test
@@ -153,16 +153,16 @@ class DeptDaoTest {
         DeptDto deptDto = new DeptDto("1111", "", null, "HR", "eng", 0, "asdf", "asdf");
         assertEquals(1, deptDao.insertDept(deptDto));
 
-        DeptDto deptDto1 = deptDao.selectDept(deptDto.getDEPT_CD());
+        DeptDto deptDto1 = deptDao.selectDept(deptDto.getDeptCd());
         assertNotNull(deptDto1);
 
         Map<String, String> map = new HashMap<>();
         map.put("manager", "1111");
         map.put("empId", "bbbb");
-        map.put("deptCd", deptDto.getDEPT_CD());
+        map.put("deptCd", deptDto.getDeptCd());
         assertEquals(1, deptDao.updateManager(map));
 
-        DeptDto deptDto2 = deptDao.selectDept(deptDto.getDEPT_CD());
+        DeptDto deptDto2 = deptDao.selectDept(deptDto.getDeptCd());
         assertNotNull(deptDto2);
     }
 
@@ -236,13 +236,13 @@ class DeptDaoTest {
         List<DeptDto> list = deptDao.selectAllDept();
         assertEquals(5, list.size());
 
-        deptDto3.setUPP_DEPT_CD("11112222");
-        deptDto3.setDEPT_SORT_ODR(0);
-        deptDto3.setLAST_UPDR_IDNF_NO("aaaa");
-        deptDto4.setUPP_DEPT_CD("11112222");
-        deptDto4.setDEPT_SORT_ODR(0);
-        deptDto4.setLAST_UPDR_IDNF_NO("aaaa");
-        deptDto5.setDEPT_SORT_ODR(1);
+        deptDto3.setUppDeptCd("11112222");
+        deptDto3.setDeptSortOdr(0);
+        deptDto3.setLastUpdrIdnfNo("aaaa");
+        deptDto4.setUppDeptCd("11112222");
+        deptDto4.setDeptSortOdr(0);
+        deptDto4.setLastUpdrIdnfNo("aaaa");
+        deptDto5.setDeptSortOdr(1);
 
         List<DeptDto> modifiedList = new ArrayList<>();
         modifiedList.add(deptDto3);
@@ -287,8 +287,8 @@ class DeptDaoTest {
 
         for (DeptDto deptDto : selectedList) {
             for (DeptDto oldDeptDto : list) {
-                if (deptDto.getDEPT_CD().equals(oldDeptDto.getDEPT_CD())) {
-                    assertEquals(deptDto.getDEPT_NM(), oldDeptDto.getDEPT_NM());
+                if (deptDto.getDeptCd().equals(oldDeptDto.getDeptCd())) {
+                    assertEquals(deptDto.getDeptNm(), oldDeptDto.getDeptNm());
                 }
             }
         }
@@ -325,9 +325,9 @@ class DeptDaoTest {
 
         for (DeptDto inputDept : oldList) {
             for(DeptDto selectedDept : selectedList){
-                if(selectedDept.getDEPT_CD().equals(inputDept.getDEPT_CD())){
-                    assertNull(selectedDept.getDEPT_MNGR_EMPL_NO());
-                    assertNull(selectedDept.getENG_DEPT_NM());
+                if(selectedDept.getDeptCd().equals(inputDept.getDeptCd())){
+                    assertNull(selectedDept.getDeptMngrEmplNo());
+                    assertNull(selectedDept.getEngDeptNm());
                 }
             }
         }
@@ -424,17 +424,17 @@ class DeptDaoTest {
         assertEquals(1, deptDao.insertDept(deptDto2));
 
         Map<String, String> map = new HashMap<>();
-        map.put("EMPL_ID", emplDto1.getEMPL_ID());
-        map.put("DEPT_NM", "바뀐이름");
-        map.put("ENG_DEPT_NM", "changedName");
-        map.put("LAST_UPDR_IDNF_NO", "modifierID");
-        map.put("DEPT_CD", deptDto1.getDEPT_CD());
+        map.put("emplId", emplDto1.getEmplId());
+        map.put("deptNm", "바뀐이름");
+        map.put("engDeptNm", "changedName");
+        map.put("lastUpdrIdnfNo", "modifierID");
+        map.put("deptCd", deptDto1.getDeptCd());
 
         assertEquals(1, deptDao.updateDept(map));
 
-        DeptDto selectedDeptDto = deptDao.selectDept(map.get("DEPT_CD"));
-        assertEquals(map.get("DEPT_NM"), selectedDeptDto.getDEPT_NM());
-        assertEquals(emplDto1.getEMPL_NO(), selectedDeptDto.getDEPT_MNGR_EMPL_NO());
+        DeptDto selectedDeptDto = deptDao.selectDept(map.get("deptCd"));
+        assertEquals(map.get("deptNm"), selectedDeptDto.getDeptNm());
+        assertEquals(emplDto1.getEmplNo(), selectedDeptDto.getDeptMngrEmplNo());
     }
 
     @Test
@@ -455,17 +455,17 @@ class DeptDaoTest {
         assertEquals(1, deptDao.insertDept(deptDto1));
 
         Map<String, String> map = new HashMap<>();
-        map.put("EMPL_ID", "33333333");
-        map.put("DEPT_NM", "바뀐이름");
-        map.put("ENG_DEPT_NM", "changedName");
-        map.put("LAST_UPDR_IDNF_NO", "modifierID");
-        map.put("DEPT_CD", deptDto1.getDEPT_CD());
+        map.put("emplId", "33333333");
+        map.put("deptNm", "바뀐이름");
+        map.put("engDeptNm", "changedName");
+        map.put("lastUpdrIdnfNo", "modifierID");
+        map.put("deptCd", deptDto1.getDeptCd());
 
         assertEquals(1, deptDao.updateDept(map));
 
-        DeptDto selectedDeptDto = deptDao.selectDept(map.get("DEPT_CD"));
-        assertEquals(map.get("DEPT_NM"), selectedDeptDto.getDEPT_NM());
-        assertEquals(deptDto1.getDEPT_MNGR_EMPL_NO(), selectedDeptDto.getDEPT_MNGR_EMPL_NO()); //관리자 번호는 업데이트 되지 않음
+        DeptDto selectedDeptDto = deptDao.selectDept(map.get("deptCd"));
+        assertEquals(map.get("deptNm"), selectedDeptDto.getDeptNm());
+        assertEquals(deptDto1.getDeptMngrEmplNo(), selectedDeptDto.getDeptMngrEmplNo()); //관리자 번호는 업데이트 되지 않음
     }
 
     @Test
@@ -478,21 +478,21 @@ class DeptDaoTest {
         EmplDto emplDto1 = new EmplDto("11111111", "jy123", "1234", "jy123@gmail.com", 0, "김지영", "darwin", "2024-01-01", "2002-01-01", "123123", 11111, null, null, 'Y', 'Y', 'Y', 'N');
         assertEquals(1, emplDao.insertEmpl(emplDto1));
 
-        DeptDto deptDto1 = new DeptDto("1234", "#", null, "a", "engA", 0, "asdf", "asdf", emplDto1.getEMPL_ID()); //수정할 dept
+        DeptDto deptDto1 = new DeptDto("1234", "#", null, "a", "engA", 0, "asdf", "asdf", emplDto1.getEmplId()); //수정할 dept
 
         assertEquals(1, deptDao.insertDept(deptDto1));
 
         Map<String, String> map = new HashMap<>();
-        map.put("EMPL_ID", emplDto1.getEMPL_ID());
-        map.put("DEPT_NM", deptDto1.getDEPT_NM());
-        map.put("ENG_DEPT_NM", deptDto1.getENG_DEPT_NM());
-        map.put("LAST_UPDR_IDNF_NO", deptDto1.getLAST_UPDR_IDNF_NO());
-        map.put("DEPT_CD", deptDto1.getDEPT_CD());
+        map.put("emplId", emplDto1.getEmplId());
+        map.put("deptNm", deptDto1.getDeptNm());
+        map.put("engDeptNm", deptDto1.getEngDeptNm());
+        map.put("lastUpdrIdnfNo", deptDto1.getLastUpdrIdnfNo());
+        map.put("deptCd", deptDto1.getDeptCd());
 
         assertEquals(1, deptDao.updateDept(map));
 
-        DeptDto selectedDeptDto = deptDao.selectDept(map.get("DEPT_CD"));
-        assertEquals(map.get("DEPT_NM"), selectedDeptDto.getDEPT_NM());
+        DeptDto selectedDeptDto = deptDao.selectDept(map.get("deptCd"));
+        assertEquals(map.get("deptNm"), selectedDeptDto.getDeptNm());
     }
 
     @Test
@@ -520,9 +520,9 @@ class DeptDaoTest {
         assertEquals(1, emplDao.insertEmpl(emplDto2));
         assertEquals(1, emplDao.insertEmpl(emplDto3));
 
-        BlngDeptDto blngDeptDto1 = new BlngDeptDto(deptCd1, emplDto1.getEMPL_NO(), 'N', emplDto1.getEMPL_NO(), emplDto1.getEMPL_NO());
-        BlngDeptDto blngDeptDto2 = new BlngDeptDto(deptCd1, emplDto2.getEMPL_NO(), 'N', "admin1", "admin1");
-        BlngDeptDto blngDeptDto3 = new BlngDeptDto(deptCd2, emplDto3.getEMPL_NO(), 'N', "admin1", "admin1");
+        BlngDeptDto blngDeptDto1 = new BlngDeptDto(deptCd1, emplDto1.getEmplNo(), 'N', emplDto1.getEmplNo(), emplDto1.getEmplNo());
+        BlngDeptDto blngDeptDto2 = new BlngDeptDto(deptCd1, emplDto2.getEmplNo(), 'N', "admin1", "admin1");
+        BlngDeptDto blngDeptDto3 = new BlngDeptDto(deptCd2, emplDto3.getEmplNo(), 'N', "admin1", "admin1");
 
         assertEquals(1, blngDeptDao.insertBlngDept(blngDeptDto1));
         assertEquals(1, blngDeptDao.insertBlngDept(blngDeptDto2));
@@ -551,17 +551,17 @@ class DeptDaoTest {
         String deptCd1 = "1111";
         String deptCd2 = "2222";
 
-        DeptDto parentDept = new DeptDto(deptCd1, "#", null, "a", "eng", 0, "asdf", "asdf", emplDto1.getEMPL_ID());
-        DeptDto childDept = new DeptDto(deptCd2, parentDept.getDEPT_CD(), null, "b", "eng", 1, "asdf", "asdf", emplDto2.getEMPL_ID());
+        DeptDto parentDept = new DeptDto(deptCd1, "#", null, "a", "eng", 0, "asdf", "asdf", emplDto1.getEmplId());
+        DeptDto childDept = new DeptDto(deptCd2, parentDept.getDeptCd(), null, "b", "eng", 1, "asdf", "asdf", emplDto2.getEmplId());
 
         assertEquals(1, deptDao.insertDept(parentDept));
         assertEquals(1, deptDao.insertDept(childDept));
 
-        DeptAndEmplDto deptWithChildren = deptDao.selectOneDeptAndMngrAndCdrDeptCnt(parentDept.getDEPT_CD());
-        assertEquals(1, deptWithChildren.getCDR_DEPT_CNT());
+        DeptAndEmplDto deptWithChildren = deptDao.selectOneDeptAndMngrAndCdrDeptCnt(parentDept.getDeptCd());
+        assertEquals(1, deptWithChildren.getCdrDeptCnt());
 
-        DeptAndEmplDto deptWithNoChildren = deptDao.selectOneDeptAndMngrAndCdrDeptCnt(childDept.getDEPT_CD());
-        assertEquals(0, deptWithNoChildren.getCDR_DEPT_CNT());
+        DeptAndEmplDto deptWithNoChildren = deptDao.selectOneDeptAndMngrAndCdrDeptCnt(childDept.getDeptCd());
+        assertEquals(0, deptWithNoChildren.getCdrDeptCnt());
     }
 
     @Test
@@ -576,11 +576,11 @@ class DeptDaoTest {
 
         String deptCd1 = "1111";
 
-        DeptDto dept = new DeptDto(deptCd1, "#", null, "a", "eng", 0, "asdf", "asdf", emplDto1.getEMPL_ID());
+        DeptDto dept = new DeptDto(deptCd1, "#", null, "a", "eng", 0, "asdf", "asdf", emplDto1.getEmplId());
         assertEquals(1, deptDao.insertDept(dept));
 
-        DeptAndEmplDto deptWithNoChildren = deptDao.selectOneDeptAndMngrAndCdrDeptCnt(dept.getDEPT_CD());
-        assertEquals(0, deptWithNoChildren.getCDR_DEPT_CNT());
+        DeptAndEmplDto deptWithNoChildren = deptDao.selectOneDeptAndMngrAndCdrDeptCnt(dept.getDeptCd());
+        assertEquals(0, deptWithNoChildren.getCdrDeptCnt());
     }
 
     @Test
@@ -598,9 +598,9 @@ class DeptDaoTest {
         DeptDto dept = new DeptDto(deptCd1, "#", null, "a", "eng", 0, "asdf", "asdf");
         assertEquals(1, deptDao.insertDept(dept));
 
-        DeptAndEmplDto deptWithNoChildren = deptDao.selectOneDeptAndMngrAndCdrDeptCnt(dept.getDEPT_CD());
-        assertEquals(0, deptWithNoChildren.getCDR_DEPT_CNT());
-        assertNull(deptWithNoChildren.getEMPL_ID());
+        DeptAndEmplDto deptWithNoChildren = deptDao.selectOneDeptAndMngrAndCdrDeptCnt(dept.getDeptCd());
+        assertEquals(0, deptWithNoChildren.getCdrDeptCnt());
+        assertNull(deptWithNoChildren.getEmplId());
     }
 
     @Test
@@ -620,11 +620,11 @@ class DeptDaoTest {
         String deptCd2 = "2222";
 
         DeptDto parentDept = new DeptDto(deptCd1, "#", null, "a", "eng", 0, "asdf", "asdf");
-        DeptDto childDept = new DeptDto(deptCd2, parentDept.getDEPT_CD(), null, "b", "eng", 1, "asdf", "asdf");
+        DeptDto childDept = new DeptDto(deptCd2, parentDept.getDeptCd(), null, "b", "eng", 1, "asdf", "asdf");
 
         assertEquals(1, deptDao.insertDept(parentDept));
         assertEquals(1, deptDao.insertDept(childDept));
 
-        assertEquals(1, deptDao.selectCdrDeptCnt(parentDept.getDEPT_CD()));
+        assertEquals(1, deptDao.selectCdrDeptCnt(parentDept.getDeptCd()));
     }
 }

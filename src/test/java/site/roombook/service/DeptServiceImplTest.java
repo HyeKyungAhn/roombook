@@ -37,7 +37,7 @@ class DeptServiceImplTest {
 
         //WHEN
         boolean insertResult = deptService.saveOneDept(list, emplNo);
-        boolean selectResult = deptService.haveIdenticalDeptNm(newDeptDto.getDEPT_NM());
+        boolean selectResult = deptService.haveIdenticalDeptNm(newDeptDto.getDeptNm());
 
         //THEN
         assertTrue(insertResult);
@@ -79,7 +79,7 @@ class DeptServiceImplTest {
         deptService.saveOneDept(list, emplNo);
 
         List<DeptDto> allDept = deptService.getAllDeptTreeData();
-        String fstDeptCd = allDept.get(0).getDEPT_CD();
+        String fstDeptCd = allDept.get(0).getDeptCd();
 
 
         DeptDto scdDept = new DeptDto(DeptService.NO_DEPT_CD, "#", "jung", "b","eng", 1,"asdf","asdf");
@@ -113,7 +113,7 @@ class DeptServiceImplTest {
         deptService.saveOneDept(list, emplNo);
 
         List<DeptDto> allDept = deptService.getAllDeptTreeData();
-        String fstDeptCd = allDept.get(0).getDEPT_CD();
+        String fstDeptCd = allDept.get(0).getDeptCd();
 
 
         DeptDto scdDept = new DeptDto(DeptService.NO_DEPT_CD, "#", "jung", "b","eng", 1,"asdf","asdf");
@@ -123,13 +123,13 @@ class DeptServiceImplTest {
         List<DeptDto> allDept2 = deptService.getAllDeptTreeData();
         String scdDeptCd = "";
         for (DeptDto dept : allDept2) {
-            if (dept.getDEPT_NM().equals(scdDept.getDEPT_NM())) {
-                scdDeptCd = dept.getDEPT_CD();
-                dept.setDEPT_SORT_ODR(scdDept.getDEPT_SORT_ODR()+1);
+            if (dept.getDeptNm().equals(scdDept.getDeptNm())) {
+                scdDeptCd = dept.getDeptCd();
+                dept.setDeptSortOdr(scdDept.getDeptSortOdr()+1);
             }
         }
 
-        DeptDto newDept = new DeptDto(DeptService.NO_DEPT_CD, "#", "park", "c","eng", scdDept.getDEPT_SORT_ODR(),"asdf","asdf");
+        DeptDto newDept = new DeptDto(DeptService.NO_DEPT_CD, "#", "park", "c","eng", scdDept.getDeptSortOdr(),"asdf","asdf");
         allDept2.add(newDept);
 
         //WHEN
@@ -142,19 +142,19 @@ class DeptServiceImplTest {
         assertEquals(3, allDept3.size());
 
         for (DeptDto dept : allDept3) {
-            if (dept.getDEPT_NM().equals(newDept.getDEPT_NM())) {
-                trdDeptCd = dept.getDEPT_CD();
+            if (dept.getDeptNm().equals(newDept.getDeptNm())) {
+                trdDeptCd = dept.getDeptCd();
             }
         }
 
         for (DeptDto dept : allDept3) {
-            String deptCd = dept.getDEPT_CD();
+            String deptCd = dept.getDeptCd();
             if (deptCd.equals(fstDeptCd)) {
-                assertEquals(0, dept.getDEPT_SORT_ODR());
+                assertEquals(0, dept.getDeptSortOdr());
             } else if (deptCd.equals(scdDeptCd)) {
-                assertEquals(2, dept.getDEPT_SORT_ODR());
+                assertEquals(2, dept.getDeptSortOdr());
             } else if (deptCd.equals(trdDeptCd)) {
-                assertEquals(1, dept.getDEPT_SORT_ODR());
+                assertEquals(1, dept.getDeptSortOdr());
             } else {
                 assert false : "부서코드가 일치하지 않음";
             }

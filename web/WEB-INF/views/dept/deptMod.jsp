@@ -22,20 +22,20 @@
         <div>
             <h2>부서 정보</h2>
             <form action="<c:url value="/dept/mod"/>" method="POST" id="deptModForm">
-                <input type="hidden" name="deptCd" class="deptCdInput" value="${deptInfo.DEPT_CD}">
+                <input type="hidden" name="deptCd" class="deptCdInput" value="${deptInfo.deptCd}">
                 <div>
                     <label>부서명
-                        <input type="text" name="deptNm" id="deptNm" class="deptNmInput" value="${deptInfo.DEPT_NM}">
+                        <input type="text" name="deptNm" id="deptNm" class="deptNmInput" value="${deptInfo.deptNm}">
                     </label>
                 </div>
                 <div>
                     <label>부서 영문명
-                        <input type="text" name="engDeptNm" id="engDeptNm" class="engDeptNmInput" value="${deptInfo.ENG_DEPT_NM}">
+                        <input type="text" name="engDeptNm" id="engDeptNm" class="engDeptNmInput" value="${deptInfo.engDeptNm}">
                     </label>
                 </div>
                 <div>
                     <div>관리자 직원</div>
-                    <input id="mngrId" type="hidden" name="mngrId" value="${mngr.EMPL_ID}">
+                    <input id="mngrId" type="hidden" name="mngrId" value="${mngr.emplId}">
                     <div id="searchMngr" class="hide">
                         <label>
                             <input id="searchInput" type="text" placeholder="이름 또는 이메일을 입력하세요"/>
@@ -45,11 +45,11 @@
                     <div id="mngrProfile" class="mngrProfile hide">
                         <span id="closeBtn" class="closeBtn">&times;</span>
                         <div>
-                            <img src="${mngr.PRF_PHOTO_PATH}" class="profilePhoto" alt="프로필 사진"/>
+                            <img src="${mngr.prfPhotoPath}" class="profilePhoto" alt="프로필 사진"/>
                         </div>
                         <div>
-                            <p class='profileNm'><span class='nm'>${mngr.RNM}</span><span class='engNm'>${mngr.ENG_NM?mngr.ENG_NM:''}</span></p>
-                            <p class='profileEmail'>${mngr.EMAIL}</p>
+                            <p class='profileNm'><span class='nm'>${mngr.rnm}</span><span class='engNm'>${mngr.engNm?mngr.engNm:''}</span></p>
+                            <p class='profileEmail'>${mngr.email}</p>
                         </div>
                     </div>
                 </div>
@@ -108,10 +108,10 @@
                 }
             },
             checkNotingChanged(){
-                const oldDeptCd = '${deptInfo.DEPT_CD}';
-                const oldDeptNm = '${deptInfo.DEPT_NM}';
-                const oldEngDeptNm = '${deptInfo.ENG_DEPT_NM}';
-                const oldMngrId = '${mngr.EMPL_ID}';
+                const oldDeptCd = '${deptInfo.deptCd}';
+                const oldDeptNm = '${deptInfo.deptNm}';
+                const oldEngDeptNm = '${deptInfo.engDeptNm}';
+                const oldMngrId = '${mngr.emplId}';
 
                 const newDeptCd = document.getElementsByClassName('deptCdInput')[0].value;
                 const newDeptNm = document.getElementsByClassName('deptNmInput')[0].value;

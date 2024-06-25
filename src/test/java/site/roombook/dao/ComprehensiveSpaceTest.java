@@ -62,9 +62,9 @@ class ComprehensiveSpaceTest {
             spaces.forEach(space -> assertEquals(1, spaceDao.insertSpace(space)));
 
             //insert files
-            List<FileDto> fileOfSpace1 = createFiles(spaces.get(0).getSPACE_NO());
-            List<FileDto> fileOfSpace2 = createFiles(spaces.get(1).getSPACE_NO());
-            List<FileDto> fileOfSpace3 = createFiles(spaces.get(2).getSPACE_NO());
+            List<FileDto> fileOfSpace1 = createFiles(spaces.get(0).getSpaceNo());
+            List<FileDto> fileOfSpace2 = createFiles(spaces.get(1).getSpaceNo());
+            List<FileDto> fileOfSpace3 = createFiles(spaces.get(2).getSpaceNo());
 
             assertEquals(fileOfSpace1.size(), fileDao.insertFiles(fileOfSpace1));
             assertEquals(fileOfSpace2.size(), fileDao.insertFiles(fileOfSpace2));
@@ -89,8 +89,8 @@ class ComprehensiveSpaceTest {
 
             //insert resc
             List<RescDto> resc = createRescDtos(0);
-            List<RescDto> rescOfSpace1 = createRescDtos(spaces.get(0).getSPACE_NO());
-            List<RescDto> rescOfSpace2 = createRescDtos(spaces.get(1).getSPACE_NO());
+            List<RescDto> rescOfSpace1 = createRescDtos(spaces.get(0).getSpaceNo());
+            List<RescDto> rescOfSpace2 = createRescDtos(spaces.get(1).getSpaceNo());
 
             assertEquals(resc.size(), rescDao.insertRescs(resc));
 
@@ -126,18 +126,18 @@ class ComprehensiveSpaceTest {
             assertEquals(resc.size(), rescDao.insertRescs(resc));
 
             //insert space-resc
-            List<RescDto> rescOfSpace1 = createRescDtos(spaces.get(0).getSPACE_NO());
-            List<RescDto> rescOfSpace2 = createRescDtos(spaces.get(1).getSPACE_NO());
-            List<RescDto> rescOfSpace3 = createRescDtos(spaces.get(2).getSPACE_NO());
+            List<RescDto> rescOfSpace1 = createRescDtos(spaces.get(0).getSpaceNo());
+            List<RescDto> rescOfSpace2 = createRescDtos(spaces.get(1).getSpaceNo());
+            List<RescDto> rescOfSpace3 = createRescDtos(spaces.get(2).getSpaceNo());
 
             assertEquals(rescOfSpace1.size(), spaceRescDao.insertSpaceRescs(rescOfSpace1));
             assertEquals(rescOfSpace2.size(), spaceRescDao.insertSpaceRescs(rescOfSpace2));
             assertEquals(rescOfSpace3.size(), spaceRescDao.insertSpaceRescs(rescOfSpace3));
 
             //insert files
-            List<FileDto> fileOfSpace1 = createFiles(spaces.get(0).getSPACE_NO());
-            List<FileDto> fileOfSpace2 = createFiles(spaces.get(1).getSPACE_NO());
-            List<FileDto> fileOfSpace3 = createFiles(spaces.get(2).getSPACE_NO());
+            List<FileDto> fileOfSpace1 = createFiles(spaces.get(0).getSpaceNo());
+            List<FileDto> fileOfSpace2 = createFiles(spaces.get(1).getSpaceNo());
+            List<FileDto> fileOfSpace3 = createFiles(spaces.get(2).getSpaceNo());
 
             assertEquals(fileOfSpace1.size(), fileDao.insertFiles(fileOfSpace1));
             assertEquals(fileOfSpace2.size(), fileDao.insertFiles(fileOfSpace2));
@@ -160,7 +160,7 @@ class ComprehensiveSpaceTest {
 
         @Nested
         @DisplayName("한 공간과 관련된 물품, 파일 정보")
-        class selectOneSpaceAndRescAndFileTest {
+        class SelectOneSpaceAndRescAndFileTest {
 
             @BeforeEach
             void insertSpaceAndRescAndFiles(){
@@ -173,17 +173,17 @@ class ComprehensiveSpaceTest {
                 assertEquals(resc.size(), rescDao.insertRescs(resc));
 
                 //insert space rescs
-                List<RescDto> rescOfSpace1 = createRescDtos(spaces.get(0).getSPACE_NO());
-                List<RescDto> rescOfSpace2 = createRescDtos(spaces.get(1).getSPACE_NO());
-                List<RescDto> rescOfSpace3 = createRescDtos(spaces.get(2).getSPACE_NO());
+                List<RescDto> rescOfSpace1 = createRescDtos(spaces.get(0).getSpaceNo());
+                List<RescDto> rescOfSpace2 = createRescDtos(spaces.get(1).getSpaceNo());
+                List<RescDto> rescOfSpace3 = createRescDtos(spaces.get(2).getSpaceNo());
 
                 assertEquals(rescOfSpace1.size(), spaceRescDao.insertSpaceRescs(rescOfSpace1));
                 assertEquals(rescOfSpace2.size(), spaceRescDao.insertSpaceRescs(rescOfSpace2));
                 assertEquals(rescOfSpace3.size(), spaceRescDao.insertSpaceRescs(rescOfSpace3));
 
-                List<FileDto> fileOfSpace1 = createFiles(spaces.get(0).getSPACE_NO());
-                List<FileDto> fileOfSpace2 = createFiles(spaces.get(1).getSPACE_NO());
-                List<FileDto> fileOfSpace3 = createFiles(spaces.get(2).getSPACE_NO());
+                List<FileDto> fileOfSpace1 = createFiles(spaces.get(0).getSpaceNo());
+                List<FileDto> fileOfSpace2 = createFiles(spaces.get(1).getSpaceNo());
+                List<FileDto> fileOfSpace3 = createFiles(spaces.get(2).getSpaceNo());
 
                 assertEquals(fileOfSpace1.size(), fileDao.insertFiles(fileOfSpace1));
                 assertEquals(fileOfSpace2.size(), fileDao.insertFiles(fileOfSpace2));
@@ -195,7 +195,7 @@ class ComprehensiveSpaceTest {
             @DisplayName("숨겨진 공간 조회 성공 테스트")
             void selectHiddenPlaceSuccessTest(){
                 Map<String, Object> map = new HashMap<>();
-                map.put("spaceNo", spaces.get(0).getSPACE_NO());                //숨겨진 공간 번호
+                map.put("spaceNo", spaces.get(0).getSpaceNo());                //숨겨진 공간 번호
                 map.put("atchLocCd", CmnCode.ATCH_LOC_CD_SPACE.getCode());      //파일 첨부 위치 유형
                 map.put("isHiddenSpaceInvisible", false);                       //숨겨진 공간 비조회 여부
 
@@ -210,7 +210,7 @@ class ComprehensiveSpaceTest {
             @DisplayName("숨겨진 공간 조회 불가 테스트")
             void selectHiddenPlaceFailTest(){
                 Map<String, Object> map = new HashMap<>();
-                map.put("spaceNo", spaces.get(0).getSPACE_NO());                //숨겨진 공간 번호
+                map.put("spaceNo", spaces.get(0).getSpaceNo());                //숨겨진 공간 번호
                 map.put("atchLocCd", CmnCode.ATCH_LOC_CD_SPACE.getCode());      //파일 첨부 위치 유형
                 map.put("isHiddenSpaceInvisible", true);                       //숨겨진 공간 비조회 여부
 
@@ -220,24 +220,12 @@ class ComprehensiveSpaceTest {
             }
         }
 
-
-
-
-
-
         private int countResc(List<RescDto> list){
             return Math.min(list.size(), 3);
         }
     }
 
-    SpaceDto createSpaceDto(int spaceNo, String name) {
-        return new SpaceDto.Builder().spaceNo(spaceNo).spaceNm(name).spaceMaxPsonCnt(10).spaceLocDesc("1층 정수기 옆")
-                .spaceAdtnDesc("1").spaceMaxRsvdTms(5).spaceUsgPosblBgnTm(LocalTime.of(9,30))
-                .spaceUsgPosblEndTm(LocalTime.of(12,0)).spaceWkendUsgPosblYn('N')
-                .spaceHideYn('N').fstRegDtm(LocalDateTime.now()).fstRegrIdnfNo("admin").build();
-    }
-
-    List<SpaceDto> createSpaceList(){ //TODO of 메서드 공뷰
+    List<SpaceDto> createSpaceList(){
         return List.of(
                 new SpaceDto.Builder().spaceNo(1).spaceNm("회의실A").spaceMaxPsonCnt(10).spaceLocDesc("1층 정수기 옆")
                         .spaceAdtnDesc("1").spaceMaxRsvdTms(5).spaceUsgPosblBgnTm(LocalTime.of(9,30))
@@ -254,25 +242,20 @@ class ComprehensiveSpaceTest {
         );
     }
 
-    List<FileDto> createFile(int spaceNo){
-        return List.of(FileDto.builder("파일이름"+spaceNo).ATCH_LOC_NO(spaceNo).ATCH_LOC_CD(CmnCode.ATCH_LOC_CD_SPACE.getCode()).FILE_ORGL_NM("진짜이름")
-                .FILE_TYP_NM("img").FILE_SIZE(123L).FST_REG_DTM(LocalDateTime.now()).FST_REGR_IDNF_NO("admin").build());
-    }
-
     List<FileDto> createFiles(int spaceNo){
         return List.of(
-                FileDto.builder("파일이름"+spaceNo).ATCH_LOC_NO(spaceNo).ATCH_LOC_CD(CmnCode.ATCH_LOC_CD_SPACE.getCode()).FILE_ORGL_NM("진짜이름")
-                        .FILE_TYP_NM("img").FILE_SIZE(123L).FST_REG_DTM(LocalDateTime.now()).FST_REGR_IDNF_NO("admin").build(),
-                FileDto.builder("파일이름"+spaceNo).ATCH_LOC_NO(spaceNo).ATCH_LOC_CD(CmnCode.ATCH_LOC_CD_SPACE.getCode()).FILE_ORGL_NM("진짜이름")
-                        .FILE_TYP_NM("img").FILE_SIZE(123L).FST_REG_DTM(LocalDateTime.now()).FST_REGR_IDNF_NO("admin").build());
+                FileDto.builder("파일이름"+spaceNo).atchLocNo(spaceNo).atchLocCd(CmnCode.ATCH_LOC_CD_SPACE.getCode()).fileOrglNm("진짜이름")
+                        .fileTypNm("img").fileSize(123L).fstRegDtm(LocalDateTime.now()).fstRegrIdnfNo("admin").build(),
+                FileDto.builder("파일이름"+spaceNo).atchLocNo(spaceNo).atchLocCd(CmnCode.ATCH_LOC_CD_SPACE.getCode()).fileOrglNm("진짜이름")
+                        .fileTypNm("img").fileSize(123L).fstRegDtm(LocalDateTime.now()).fstRegrIdnfNo("admin").build());
     }
 
     List<RescDto> createRescDtos(int spaceNo){
         return List.of(
-                RescDto.builder("wifi").SPACE_NO(spaceNo).FST_REGR_IDNF_NO("admin").LAST_UPDR_IDNF_NO("admin").build(),
-                RescDto.builder("에어컨").SPACE_NO(spaceNo).FST_REGR_IDNF_NO("admin").LAST_UPDR_IDNF_NO("admin").build(),
-                RescDto.builder("화이트보드").SPACE_NO(spaceNo).FST_REGR_IDNF_NO("admin").LAST_UPDR_IDNF_NO("admin").build(),
-                RescDto.builder("모니터").SPACE_NO(spaceNo).FST_REGR_IDNF_NO("admin").LAST_UPDR_IDNF_NO("admin").build()
+                RescDto.builder("wifi").spaceNo(spaceNo).fstRegrIdnfNo("admin").lastUpdrIdnfNo("admin").build(),
+                RescDto.builder("에어컨").spaceNo(spaceNo).fstRegrIdnfNo("admin").lastUpdrIdnfNo("admin").build(),
+                RescDto.builder("화이트보드").spaceNo(spaceNo).fstRegrIdnfNo("admin").lastUpdrIdnfNo("admin").build(),
+                RescDto.builder("모니터").spaceNo(spaceNo).fstRegrIdnfNo("admin").lastUpdrIdnfNo("admin").build()
         );
     }
 }

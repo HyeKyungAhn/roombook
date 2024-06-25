@@ -92,9 +92,9 @@ class BlngDeptImplTest {
         assertEquals(1, emplDao.insertEmpl(emplDto2));
         assertEquals(1, emplDao.insertEmpl(emplDto3));
 
-        BlngDeptDto blngDeptDto1 = new BlngDeptDto("1234", emplDto1.getEMPL_NO(), 'N', "admin", "admin");
-        BlngDeptDto blngDeptDto2 = new BlngDeptDto("1234", emplDto2.getEMPL_NO(), 'N', "admin", "admin");
-        BlngDeptDto blngDeptDto3 = new BlngDeptDto("1234", emplDto3.getEMPL_NO(), 'N', "admin", "admin");
+        BlngDeptDto blngDeptDto1 = new BlngDeptDto("1234", emplDto1.getEmplNo(), 'N', "admin", "admin");
+        BlngDeptDto blngDeptDto2 = new BlngDeptDto("1234", emplDto2.getEmplNo(), 'N', "admin", "admin");
+        BlngDeptDto blngDeptDto3 = new BlngDeptDto("1234", emplDto3.getEmplNo(), 'N', "admin", "admin");
 
         blngDeptDao.insertBlngDept(blngDeptDto1);
         blngDeptDao.insertBlngDept(blngDeptDto2);
@@ -103,8 +103,8 @@ class BlngDeptImplTest {
         assertEquals(3, blngDeptDao.selectAllBlngDept().size());
 
         Map<String, Object> deleteDeptData = new HashMap<>();
-        String[] emplIDs = {emplDto1.getEMPL_ID(), emplDto2.getEMPL_ID()};
-        deleteDeptData.put("BLNG_DEPT_CD", blngDeptDto1.getBLNG_DEPT_CD());
+        String[] emplIDs = {emplDto1.getEmplId(), emplDto2.getEmplId()};
+        deleteDeptData.put("blngDeptCd", blngDeptDto1.getBlngDeptCd());
         deleteDeptData.put("emplIDs", emplIDs);
 
         int rowCnt;
@@ -141,9 +141,9 @@ class BlngDeptImplTest {
         assertEquals(1, emplDao.insertEmpl(emplDto2));
         assertEquals(1, emplDao.insertEmpl(emplDto3));
 
-        BlngDeptDto blngDeptDto1 = new BlngDeptDto("1234", emplDto1.getEMPL_NO(), 'N', "admin", "admin");
-        BlngDeptDto blngDeptDto2 = new BlngDeptDto("1234", emplDto2.getEMPL_NO(), 'N', "admin", "admin");
-        BlngDeptDto blngDeptDto3 = new BlngDeptDto("1111", emplDto3.getEMPL_NO(), 'N', "admin", "admin");
+        BlngDeptDto blngDeptDto1 = new BlngDeptDto("1234", emplDto1.getEmplNo(), 'N', "admin", "admin");
+        BlngDeptDto blngDeptDto2 = new BlngDeptDto("1234", emplDto2.getEmplNo(), 'N', "admin", "admin");
+        BlngDeptDto blngDeptDto3 = new BlngDeptDto("1111", emplDto3.getEmplNo(), 'N', "admin", "admin");
 
         blngDeptDao.insertBlngDept(blngDeptDto1);
         blngDeptDao.insertBlngDept(blngDeptDto2);
@@ -152,8 +152,8 @@ class BlngDeptImplTest {
         assertEquals(3, blngDeptDao.selectAllBlngDept().size());
 
         Map<String, Object> deleteDeptData = new HashMap<>();
-        String[] emplIDs = {emplDto1.getEMPL_ID(), emplDto3.getEMPL_ID()}; //부서코드가 다른 소속 부서 삭제
-        deleteDeptData.put("BLNG_DEPT_CD", blngDeptDto1.getBLNG_DEPT_CD());
+        String[] emplIDs = {emplDto1.getEmplId(), emplDto3.getEmplId()}; //부서코드가 다른 소속 부서 삭제
+        deleteDeptData.put("blngDeptCd", blngDeptDto1.getBlngDeptCd());
         deleteDeptData.put("emplIDs", emplIDs);
 
         int rowCnt;
@@ -210,8 +210,8 @@ class BlngDeptImplTest {
         calendar.set(Calendar.MILLISECOND, 0);
         Date date = calendar.getTime();
 
-        BlngDeptAndEmplIdDto blngDeptDto1 = new BlngDeptAndEmplIdDto("1234", emplDto1.getEMPL_ID(), "admin","admin");
-        BlngDeptAndEmplIdDto blngDeptDto2 = new BlngDeptAndEmplIdDto("1234", emplDto2.getEMPL_ID(),  "admin","admin");
+        BlngDeptAndEmplIdDto blngDeptDto1 = new BlngDeptAndEmplIdDto("1234", emplDto1.getEmplId(), "admin","admin");
+        BlngDeptAndEmplIdDto blngDeptDto2 = new BlngDeptAndEmplIdDto("1234", emplDto2.getEmplId(),  "admin","admin");
 
         blngDeptDao.insertOneBlngDept(blngDeptDto1);
         blngDeptDao.insertOneBlngDept(blngDeptDto2);
@@ -220,10 +220,10 @@ class BlngDeptImplTest {
 
         List<BlngDeptAndEmplIdDto> list = new ArrayList<>();
 
-        BlngDeptAndEmplIdDto blngDeptDto3 = new BlngDeptAndEmplIdDto("1234", emplDto3.getEMPL_ID(), "admin", "admin");
-        BlngDeptAndEmplIdDto blngDeptDto4 = new BlngDeptAndEmplIdDto("1111", emplDto4.getEMPL_ID(), "admin", "admin");
-        BlngDeptAndEmplIdDto blngDeptDto5 = new BlngDeptAndEmplIdDto("1111", emplDto5.getEMPL_ID(), "admin", "admin");
-        BlngDeptAndEmplIdDto blngDeptDto6 = new BlngDeptAndEmplIdDto("2222", emplDto6.getEMPL_ID(), "admin", "admin");
+        BlngDeptAndEmplIdDto blngDeptDto3 = new BlngDeptAndEmplIdDto("1234", emplDto3.getEmplId(), "admin", "admin");
+        BlngDeptAndEmplIdDto blngDeptDto4 = new BlngDeptAndEmplIdDto("1111", emplDto4.getEmplId(), "admin", "admin");
+        BlngDeptAndEmplIdDto blngDeptDto5 = new BlngDeptAndEmplIdDto("1111", emplDto5.getEmplId(), "admin", "admin");
+        BlngDeptAndEmplIdDto blngDeptDto6 = new BlngDeptAndEmplIdDto("2222", emplDto6.getEmplId(), "admin", "admin");
 
         list.add(blngDeptDto3);
         list.add(blngDeptDto4);
@@ -261,7 +261,7 @@ class BlngDeptImplTest {
         calendar.set(Calendar.MILLISECOND, 0);
         Date date = calendar.getTime();
 
-        BlngDeptAndEmplIdDto bded = new BlngDeptAndEmplIdDto("1234", emplDto.getEMPL_ID(), 'N', date, "admin", date, "admin");
+        BlngDeptAndEmplIdDto bded = new BlngDeptAndEmplIdDto("1234", emplDto.getEmplId(), 'N', date, "admin", date, "admin");
         int rowCnt = 0;
         try{
              rowCnt = blngDeptDao.insertOneBlngDept(bded);

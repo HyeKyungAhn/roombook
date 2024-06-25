@@ -19,25 +19,25 @@ import java.util.Objects;
 @Builder(builderMethodName = "RescDtoBuilder")
 public class RescDto {
     @JsonProperty("rescNo")
-    private Integer RESC_NO;
+    private Integer rescNo;
     @JsonProperty("value")
-    private String RESC_NM;
+    private String rescNm;
     @JsonIgnore
-    private Integer SPACE_NO;
+    private Integer spaceNo;
     @JsonIgnore
-    private Date FST_REG_DTM;
+    private Date fstRegDtm;
     @JsonIgnore
-    private String FST_REGR_IDNF_NO;
+    private String fstRegrIdnfNo;
     @JsonIgnore
-    private Date LAST_UPD_DTM;
+    private Date lastUpdDtm;
     @JsonIgnore
-    private String LAST_UPDR_IDNF_NO;
+    private String lastUpdrIdnfNo;
 
-    public static RescDtoBuilder builder(String RESC_NM) {
-        if (RESC_NM == null) {
-            throw new IllegalArgumentException("파라미터 누락: RESC_NM");
+    public static RescDtoBuilder builder(String rescNm) {
+        if (rescNm == null) {
+            throw new IllegalArgumentException("물품 번호 누락");
         }
-        return RescDtoBuilder().RESC_NM(RESC_NM);
+        return RescDtoBuilder().rescNm(rescNm);
     }
 
     @Override
@@ -45,11 +45,11 @@ public class RescDto {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         RescDto rescDto = (RescDto) o;
-        return Objects.equals(RESC_NO, rescDto.RESC_NO) && RESC_NM.equals(rescDto.RESC_NM) && SPACE_NO.equals(rescDto.SPACE_NO) && Objects.equals(FST_REG_DTM, rescDto.FST_REG_DTM) && Objects.equals(FST_REGR_IDNF_NO, rescDto.FST_REGR_IDNF_NO) && Objects.equals(LAST_UPD_DTM, rescDto.LAST_UPD_DTM) && Objects.equals(LAST_UPDR_IDNF_NO, rescDto.LAST_UPDR_IDNF_NO);
+        return Objects.equals(rescNo, rescDto.rescNo) && rescNm.equals(rescDto.rescNm) && spaceNo.equals(rescDto.spaceNo) && Objects.equals(fstRegDtm, rescDto.fstRegDtm) && Objects.equals(fstRegrIdnfNo, rescDto.fstRegrIdnfNo) && Objects.equals(lastUpdDtm, rescDto.lastUpdDtm) && Objects.equals(lastUpdrIdnfNo, rescDto.lastUpdrIdnfNo);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(RESC_NO, RESC_NM, SPACE_NO, FST_REG_DTM, FST_REGR_IDNF_NO, LAST_UPD_DTM, LAST_UPDR_IDNF_NO);
+        return Objects.hash(rescNo, rescNm, spaceNo, fstRegDtm, fstRegrIdnfNo, lastUpdDtm, lastUpdrIdnfNo);
     }
 }

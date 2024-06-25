@@ -23,23 +23,23 @@
 </head>
 <body>
     <h1>공간 정보 수정</h1>
-    <form action="/admin-spaces/${space.SPACE_NO}" method="post" id="spaceForm">
+    <form action="/admin-spaces/${space.spaceNo}" method="post" id="spaceForm">
         <div>
             <label>
                 공간명
-                <input type="text" name="spaceNm" id="nameInputElement" value="${space.SPACE_NM}">
+                <input type="text" name="spaceNm" id="nameInputElement" value="${space.spaceNm}">
             </label>
         </div>
         <div>
             <label>
                 위치(20자 이내)
-                <input type="text" name="spaceLoc" id="locationInputElement" value="${space.SPACE_LOC_DESC}">
+                <input type="text" name="spaceLoc" id="locationInputElement" value="${space.spaceLocDesc}">
             </label>
         </div>
         <div>
             <label>
                 공간 설명(100자)
-                <textarea name="spaceDesc" id="descriptionInputElement">${space.SPACE_ADTN_DESC}</textarea>
+                <textarea name="spaceDesc" id="descriptionInputElement">${space.spaceAdtnDesc}</textarea>
             </label>
         </div>
         <div id="dropzone">
@@ -56,27 +56,27 @@
         <div>
             <label>
                 최대 연속 예약 가능 시간(시간 단위)
-                <input type="number" name="maxRsvsTms" id="maxTimeInputElement" value="${space.SPACE_MAX_RSVD_TMS}">
+                <input type="number" name="maxRsvsTms" id="maxTimeInputElement" value="${space.spaceMaxRsvdTms}">
             </label>
         </div>
         <div>
             <label>
                 <label for="weekendInputElement">공간 주말 이용 가능 여부</label>
-                <input type="checkbox" name="weekend" id="weekendInputElement" ${space.SPACE_WKEND_USG_POSBL_YN.toString()=='Y'?'checked':''}>
+                <input type="checkbox" name="weekend" id="weekendInputElement" ${space.spaceWkendUsgPosblYn.toString()=='Y'?'checked':''}>
             </label>
         </div>
         <div>
             <label>
                 이용시간
-                <input type="time" name="startTm" id="startTmInputElement" placeholder="시작시간" value="${space.SPACE_USG_POSBL_BGN_TM}">
+                <input type="time" name="startTm" id="startTmInputElement" placeholder="시작시간" value="${space.spaceUsgPosblBgnTm}">
                 <span>-</span>
-                <input type="time" name="finishTm" id="finishTmInputElement" placeholder="종료시간" value="${space.SPACE_USG_POSBL_END_TM}">
+                <input type="time" name="finishTm" id="finishTmInputElement" placeholder="종료시간" value="${space.spaceUsgPosblEndTm}">
             </label>
         </div>
         <div>
             <label>
                 최대 수용인원
-                <input type="number" name="maxCapacity" id="maxCapacityInputElement" value="${space.SPACE_MAX_PSON_CNT}">
+                <input type="number" name="maxCapacity" id="maxCapacityInputElement" value="${space.spaceMaxPsonCnt}">
             </label>
         </div>
         <div>
@@ -86,7 +86,7 @@
         <div>
             <label>
                 <label for="hideInputElement">목록 숨김 여부</label>
-                <input type="checkbox" name="hide" id="hideInputElement" ${space.SPACE_HIDE_YN.toString()=='Y'?'checked':''}>
+                <input type="checkbox" name="hide" id="hideInputElement" ${space.spaceHideYn.toString()=='Y'?'checked':''}>
             </label>
         </div>
         <div>

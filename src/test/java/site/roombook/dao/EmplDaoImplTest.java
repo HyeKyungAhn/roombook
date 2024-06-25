@@ -33,7 +33,7 @@ class EmplDaoImplTest {
         emplDao.insertEmpl(emplDto1);
         EmplDto emplDto = emplDao.selectOneEmpl(emplNo);
         assertNotNull(emplDto);
-        assertEquals("01123123", emplDto.getWNCOM_TELNO());
+        assertEquals("01123123", emplDto.getWncomTelno());
     }
 
     @Test
@@ -52,14 +52,14 @@ class EmplDaoImplTest {
 
         assertNotNull(newEmplDto);
 
-        assertNull(newEmplDto.getEMPL_NO());
+        assertNull(newEmplDto.getEmplNo());
 
-        assertEquals(oldEmplDto.getEMPL_ID(), newEmplDto.getEMPL_ID());
-        assertNull(newEmplDto.getPRF_PHOTO_PATH());
-        assertEquals(oldEmplDto.getRNM(), newEmplDto.getRNM());
-        assertEquals(oldEmplDto.getENG_NM(), newEmplDto.getENG_NM());
-        assertEquals(oldEmplDto.getEMPNO(), newEmplDto.getEMPNO());
-        assertEquals(oldEmplDto.getEMAIL(), newEmplDto.getEMAIL());
+        assertEquals(oldEmplDto.getEmplId(), newEmplDto.getEmplId());
+        assertNull(newEmplDto.getPrfPhotoPath());
+        assertEquals(oldEmplDto.getRnm(), newEmplDto.getRnm());
+        assertEquals(oldEmplDto.getEngNm(), newEmplDto.getEngNm());
+        assertEquals(oldEmplDto.getEmpno(), newEmplDto.getEmpno());
+        assertEquals(oldEmplDto.getEmail(), newEmplDto.getEmail());
     }
 
     @Test

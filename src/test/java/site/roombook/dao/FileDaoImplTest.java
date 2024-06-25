@@ -33,10 +33,10 @@ class FileDaoImplTest {
     void insertFilesTest(){
         fileDao.deleteAll();
 
-        FileDto fileDto1 = FileDto.builder("파일이름1").ATCH_LOC_NO(1).ATCH_LOC_CD("asdf").FILE_ORGL_NM("진짜이름")
-                .FILE_TYP_NM("img").FILE_SIZE(123L).FST_REG_DTM(LocalDateTime.now()).FST_REGR_IDNF_NO("admin").build();
-        FileDto fileDto2 = FileDto.builder("파일이름2").ATCH_LOC_NO(1).ATCH_LOC_CD("asdf").FILE_ORGL_NM("진짜이름")
-                .FILE_TYP_NM("img").FILE_SIZE(123L).FST_REG_DTM(LocalDateTime.now()).FST_REGR_IDNF_NO("admin").build();
+        FileDto fileDto1 = FileDto.builder("파일이름1").atchLocNo(1).atchLocCd("asdf").fileOrglNm("진짜이름")
+                .fileTypNm("img").fileSize(123L).fstRegDtm(LocalDateTime.now()).fstRegrIdnfNo("admin").build();
+        FileDto fileDto2 = FileDto.builder("파일이름2").atchLocNo(1).atchLocCd("asdf").fileOrglNm("진짜이름")
+                .fileTypNm("img").fileSize(123L).fstRegDtm(LocalDateTime.now()).fstRegrIdnfNo("admin").build();
 
         List<FileDto> list = new ArrayList<>();
         list.add(fileDto1);
@@ -74,10 +74,10 @@ class FileDaoImplTest {
     void selectAllFilesCntTest(){
         fileDao.deleteAll();
 
-        FileDto fileDto1 = FileDto.builder("파일이름1").ATCH_LOC_NO(1).ATCH_LOC_CD("asdf").FILE_ORGL_NM("진짜이름")
-                .FILE_TYP_NM("img").FILE_SIZE(123L).FST_REG_DTM(LocalDateTime.now()).FST_REGR_IDNF_NO("admin").build();
-        FileDto fileDto2 = FileDto.builder("파일이름2").ATCH_LOC_NO(1).ATCH_LOC_CD("asdf").FILE_ORGL_NM("진짜이름")
-                .FILE_TYP_NM("img").FILE_SIZE(123L).FST_REG_DTM(LocalDateTime.now()).FST_REGR_IDNF_NO("admin").build();
+        FileDto fileDto1 = FileDto.builder("파일이름1").atchLocNo(1).atchLocCd("asdf").fileOrglNm("진짜이름")
+                .fileTypNm("img").fileSize(123L).fstRegDtm(LocalDateTime.now()).fstRegrIdnfNo("admin").build();
+        FileDto fileDto2 = FileDto.builder("파일이름2").atchLocNo(1).atchLocCd("asdf").fileOrglNm("진짜이름")
+                .fileTypNm("img").fileSize(123L).fstRegDtm(LocalDateTime.now()).fstRegrIdnfNo("admin").build();
 
         List<FileDto> list = new ArrayList<>();
         list.add(fileDto1);
@@ -93,10 +93,10 @@ class FileDaoImplTest {
     void selectAllTest(){
         fileDao.deleteAll();
 
-        FileDto fileDto1 = FileDto.builder("파일이름1").ATCH_LOC_NO(1).ATCH_LOC_CD("asdf").FILE_ORGL_NM("진짜이름")
-                .FILE_TYP_NM("img").FILE_SIZE(123L).FST_REG_DTM(LocalDateTime.now()).FST_REGR_IDNF_NO("admin").build();
-        FileDto fileDto2 = FileDto.builder("파일이름2").ATCH_LOC_NO(1).ATCH_LOC_CD("asdf").FILE_ORGL_NM("진짜이름")
-                .FILE_TYP_NM("img").FILE_SIZE(123L).FST_REG_DTM(LocalDateTime.now()).FST_REGR_IDNF_NO("admin").build();
+        FileDto fileDto1 = FileDto.builder("파일이름1").atchLocNo(1).atchLocCd("asdf").fileOrglNm("진짜이름")
+                .fileTypNm("img").fileSize(123L).fstRegDtm(LocalDateTime.now()).fstRegrIdnfNo("admin").build();
+        FileDto fileDto2 = FileDto.builder("파일이름2").atchLocNo(1).atchLocCd("asdf").fileOrglNm("진짜이름")
+                .fileTypNm("img").fileSize(123L).fstRegDtm(LocalDateTime.now()).fstRegrIdnfNo("admin").build();
 
         List<FileDto> list = new ArrayList<>();
         list.add(fileDto1);
@@ -112,10 +112,10 @@ class FileDaoImplTest {
     void selectFilesWithSpaceDataTest(){
         fileDao.deleteAll();
 
-        FileDto fileDto1 = FileDto.builder("파일이름1").ATCH_LOC_NO(1).ATCH_LOC_CD(CmnCode.ATCH_LOC_CD_SPACE.getCode())
-                .FILE_ORGL_NM("진짜이름").FILE_TYP_NM("img").FILE_SIZE(123L).FST_REG_DTM(LocalDateTime.now()).FST_REGR_IDNF_NO("admin").build();
-        FileDto fileDto2 = FileDto.builder("파일이름2").ATCH_LOC_NO(1).ATCH_LOC_CD(CmnCode.ATCH_LOC_CD_SPACE.getCode())
-                .FILE_ORGL_NM("진짜이름").FILE_TYP_NM("img").FILE_SIZE(123L).FST_REG_DTM(LocalDateTime.now()).FST_REGR_IDNF_NO("admin").build();
+        FileDto fileDto1 = FileDto.builder("파일이름1").atchLocNo(1).atchLocCd(CmnCode.ATCH_LOC_CD_SPACE.getCode()).fileOrglNm("진짜이름")
+                .fileTypNm("img").fileSize(123L).fstRegDtm(LocalDateTime.now()).fstRegrIdnfNo("admin").build();
+        FileDto fileDto2 = FileDto.builder("파일이름2").atchLocNo(1).atchLocCd(CmnCode.ATCH_LOC_CD_SPACE.getCode()).fileOrglNm("진짜이름")
+                .fileTypNm("img").fileSize(123L).fstRegDtm(LocalDateTime.now()).fstRegrIdnfNo("admin").build();
 
         List<FileDto> list = new ArrayList<>();
         list.add(fileDto1);
@@ -124,8 +124,8 @@ class FileDaoImplTest {
         assertEquals(2, fileDao.insertFiles(list));
 
         Map<String, Object> spaceData = new HashMap<>();
-        spaceData.put("ATCH_LOC_CD", CmnCode.ATCH_LOC_CD_SPACE.getCode());
-        spaceData.put("ATCH_LOC_NO", 1);
+        spaceData.put("atchLocCd", CmnCode.ATCH_LOC_CD_SPACE.getCode());
+        spaceData.put("atchLocNo", 1);
 
         List<FileDto> list2 = fileDao.selectFilesWithSpaceData(spaceData);
         assertEquals(2, list2.size());
@@ -137,12 +137,12 @@ class FileDaoImplTest {
     void selectOneRepresentFileTest(){
         fileDao.deleteAll();
 
-        FileDto fileDto1 = FileDto.builder("파일이름1").ATCH_LOC_NO(1).ATCH_LOC_CD(CmnCode.ATCH_LOC_CD_SPACE.getCode())
-                .FILE_ORGL_NM("진짜이름1").FILE_TYP_NM("img").FILE_SIZE(123L).FST_REG_DTM(LocalDateTime.now()).FST_REGR_IDNF_NO("admin").build();
-        FileDto fileDto2 = FileDto.builder("파일이름2").ATCH_LOC_NO(1).ATCH_LOC_CD(CmnCode.ATCH_LOC_CD_SPACE.getCode())
-                .FILE_ORGL_NM("진짜이름2").FILE_TYP_NM("img").FILE_SIZE(123L).FST_REG_DTM(LocalDateTime.now()).FST_REGR_IDNF_NO("admin").build();
-        FileDto fileDto3 = FileDto.builder("파일이름3").ATCH_LOC_NO(1).ATCH_LOC_CD(CmnCode.ATCH_LOC_CD_SPACE.getCode())
-                .FILE_ORGL_NM("진짜이름3").FILE_TYP_NM("img").FILE_SIZE(123L).FST_REG_DTM(LocalDateTime.now()).FST_REGR_IDNF_NO("admin").build();
+        FileDto fileDto1 = FileDto.builder("파일이름1").atchLocNo(1).atchLocCd(CmnCode.ATCH_LOC_CD_SPACE.getCode())
+                .fileOrglNm("진짜이름1").fileTypNm("img").fileSize(123L).fstRegDtm(LocalDateTime.now()).fstRegrIdnfNo("admin").build();
+        FileDto fileDto2 = FileDto.builder("파일이름2").atchLocNo(1).atchLocCd(CmnCode.ATCH_LOC_CD_SPACE.getCode())
+                .fileOrglNm("진짜이름2").fileTypNm("img").fileSize(123L).fstRegDtm(LocalDateTime.now()).fstRegrIdnfNo("admin").build();
+        FileDto fileDto3 = FileDto.builder("파일이름3").atchLocNo(1).atchLocCd(CmnCode.ATCH_LOC_CD_SPACE.getCode())
+                .fileOrglNm("진짜이름3").fileTypNm("img").fileSize(123L).fstRegDtm(LocalDateTime.now()).fstRegrIdnfNo("admin").build();
 
         List<FileDto> list = new ArrayList<>();
         list.add(fileDto1);
@@ -152,10 +152,10 @@ class FileDaoImplTest {
         assertEquals(3, fileDao.insertFiles(list));
 
         Map<String, Object> spaceData = new HashMap<>();
-        spaceData.put("ATCH_LOC_CD", CmnCode.ATCH_LOC_CD_SPACE.getCode());
-        spaceData.put("ATCH_LOC_NO", fileDto1.getATCH_LOC_NO());
+        spaceData.put("atchLocCd", CmnCode.ATCH_LOC_CD_SPACE.getCode());
+        spaceData.put("atchLocNo", fileDto1.getAtchLocNo());
 
-        assertEquals(fileDto1.getFILE_NM(),fileDao.selectOneFileWithSpaceData(spaceData).getFILE_NM());
+        assertEquals(fileDto1.getFileNm(),fileDao.selectOneFileWithSpaceData(spaceData).getFileNm());
     }
 
     @Test
@@ -165,8 +165,8 @@ class FileDaoImplTest {
         fileDao.deleteAll();
 
         Map<String, Object> spaceData = new HashMap<>();
-        spaceData.put("ATCH_LOC_CD", CmnCode.ATCH_LOC_CD_SPACE.getCode());
-        spaceData.put("ATCH_LOC_NO", 12);
+        spaceData.put("atchLocCd", CmnCode.ATCH_LOC_CD_SPACE.getCode());
+        spaceData.put("atchLocNo", 12);
 
         assertNull(fileDao.selectOneFileWithSpaceData(spaceData));
     }
@@ -177,10 +177,10 @@ class FileDaoImplTest {
     void deleteWithNamesTest(){
         fileDao.deleteAll();
 
-        FileDto fileDto1 = FileDto.builder("파일이름1").ATCH_LOC_NO(1).ATCH_LOC_CD(CmnCode.ATCH_LOC_CD_SPACE.getCode())
-                .FILE_ORGL_NM("진짜이름").FILE_TYP_NM("img").FILE_SIZE(123L).FST_REG_DTM(LocalDateTime.now()).FST_REGR_IDNF_NO("admin").build();
-        FileDto fileDto2 = FileDto.builder("파일이름2").ATCH_LOC_NO(1).ATCH_LOC_CD(CmnCode.ATCH_LOC_CD_SPACE.getCode())
-                .FILE_ORGL_NM("진짜이름").FILE_TYP_NM("img").FILE_SIZE(123L).FST_REG_DTM(LocalDateTime.now()).FST_REGR_IDNF_NO("admin").build();
+        FileDto fileDto1 = FileDto.builder("파일이름1").atchLocNo(1).atchLocCd(CmnCode.ATCH_LOC_CD_SPACE.getCode()).fileOrglNm("진짜이름")
+                .fileTypNm("img").fileSize(123L).fstRegDtm(LocalDateTime.now()).fstRegrIdnfNo("admin").build();
+        FileDto fileDto2 = FileDto.builder("파일이름2").atchLocNo(1).atchLocCd(CmnCode.ATCH_LOC_CD_SPACE.getCode()).fileOrglNm("진짜이름")
+                .fileTypNm("img").fileSize(123L).fstRegDtm(LocalDateTime.now()).fstRegrIdnfNo("admin").build();
 
         List<FileDto> list = new ArrayList<>();
         list.add(fileDto1);
@@ -189,8 +189,8 @@ class FileDaoImplTest {
         assertEquals(2, fileDao.insertFiles(list));
 
         List<String> names = new ArrayList<>();
-        names.add(fileDto1.getFILE_NM());
-        names.add(fileDto2.getFILE_NM());
+        names.add(fileDto1.getFileNm());
+        names.add(fileDto2.getFileNm());
 
         assertEquals(2, fileDao.deleteWithNames(names));
         assertEquals(0, fileDao.selectALlFilesCnt());
@@ -202,10 +202,10 @@ class FileDaoImplTest {
     void checkMaxFileCntTest(){
         fileDao.deleteAll();
 
-        FileDto fileDto1 = FileDto.builder("파일이름1").ATCH_LOC_NO(1).ATCH_LOC_CD(CmnCode.ATCH_LOC_CD_SPACE.getCode())
-                .FILE_ORGL_NM("진짜이름").FILE_TYP_NM("img").FILE_SIZE(123L).FST_REG_DTM(LocalDateTime.now()).FST_REGR_IDNF_NO("admin").build();
-        FileDto fileDto2 = FileDto.builder("파일이름2").ATCH_LOC_NO(1).ATCH_LOC_CD(CmnCode.ATCH_LOC_CD_SPACE.getCode())
-                .FILE_ORGL_NM("진짜이름").FILE_TYP_NM("img").FILE_SIZE(123L).FST_REG_DTM(LocalDateTime.now()).FST_REGR_IDNF_NO("admin").build();
+        FileDto fileDto1 = FileDto.builder("파일이름1").atchLocNo(1).atchLocCd(CmnCode.ATCH_LOC_CD_SPACE.getCode()).fileOrglNm("진짜이름")
+                .fileTypNm("img").fileSize(123L).fstRegDtm(LocalDateTime.now()).fstRegrIdnfNo("admin").build();
+        FileDto fileDto2 = FileDto.builder("파일이름2").atchLocNo(1).atchLocCd(CmnCode.ATCH_LOC_CD_SPACE.getCode()).fileOrglNm("진짜이름")
+                .fileTypNm("img").fileSize(123L).fstRegDtm(LocalDateTime.now()).fstRegrIdnfNo("admin").build();
 
         List<FileDto> list = new ArrayList<>();
         list.add(fileDto1);
@@ -213,7 +213,7 @@ class FileDaoImplTest {
 
         assertEquals(2, fileDao.insertFiles(list));
 
-        FileDto fileDto3 = FileDto.builder("").ATCH_LOC_NO(1).ATCH_LOC_CD(CmnCode.ATCH_LOC_CD_SPACE.getCode()).maxFileCnt(5).build();
+        FileDto fileDto3 = FileDto.builder("").atchLocNo(1).atchLocCd(CmnCode.ATCH_LOC_CD_SPACE.getCode()).maxFileCnt(5).build();
 
         int result = fileDao.checkExceedingMaxFileCnt(fileDto3);
         assertEquals(1, result);

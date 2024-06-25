@@ -33,8 +33,8 @@ class SpaceRescDaoImplTest {
         spaceRescDao.deleteAll();
         rescDao.deleteAll();
 
-        RescDto rescDto1 = RescDto.builder("wifi").SPACE_NO(12).FST_REGR_IDNF_NO("admin").LAST_UPDR_IDNF_NO("admin").build();
-        RescDto rescDto2 = RescDto.builder("에어컨").SPACE_NO(12).FST_REGR_IDNF_NO("admin").LAST_UPDR_IDNF_NO("admin").build();
+        RescDto rescDto1 = RescDto.builder("wifi").spaceNo(12).fstRegrIdnfNo("admin").lastUpdrIdnfNo("admin").build();
+        RescDto rescDto2 = RescDto.builder("에어컨").spaceNo(12).fstRegrIdnfNo("admin").lastUpdrIdnfNo("admin").build();
 
         List<RescDto> list = new ArrayList<>();
         list.add(rescDto1);
@@ -52,9 +52,9 @@ class SpaceRescDaoImplTest {
         spaceRescDao.deleteAll();
         rescDao.deleteAll();
 
-        RescDto rescDto1 = RescDto.builder("wifi").SPACE_NO(12).FST_REGR_IDNF_NO("admin").LAST_UPDR_IDNF_NO("admin").build();
-        RescDto rescDto2 = RescDto.builder("에어컨").SPACE_NO(12).FST_REGR_IDNF_NO("admin").LAST_UPDR_IDNF_NO("admin").build();
-        RescDto newRescDto = RescDto.builder("빗자루").SPACE_NO(12).FST_REGR_IDNF_NO("admin").LAST_UPDR_IDNF_NO("admin").build();
+        RescDto rescDto1 = RescDto.builder("wifi").spaceNo(12).fstRegrIdnfNo("admin").lastUpdrIdnfNo("admin").build();
+        RescDto rescDto2 = RescDto.builder("에어컨").spaceNo(12).fstRegrIdnfNo("admin").lastUpdrIdnfNo("admin").build();
+        RescDto newRescDto = RescDto.builder("빗자루").spaceNo(12).fstRegrIdnfNo("admin").lastUpdrIdnfNo("admin").build();
 
         List<RescDto> list = new ArrayList<>();
         list.add(rescDto1);
@@ -82,10 +82,10 @@ class SpaceRescDaoImplTest {
         spaceRescDao.deleteAll();
         rescDao.deleteAll();
 
-        RescDto rescDto1 = RescDto.builder("wifi").SPACE_NO(12).FST_REGR_IDNF_NO("admin").LAST_UPDR_IDNF_NO("admin").build();
-        RescDto rescDto2 = RescDto.builder("에어컨").SPACE_NO(12).FST_REGR_IDNF_NO("admin").LAST_UPDR_IDNF_NO("admin").build();
-        RescDto rescDto3 = RescDto.builder("화분").SPACE_NO(12).FST_REGR_IDNF_NO("admin").LAST_UPDR_IDNF_NO("admin").build();
-        RescDto rescDto4 = RescDto.builder("화이트보드").SPACE_NO(12).FST_REGR_IDNF_NO("admin").LAST_UPDR_IDNF_NO("admin").build();
+        RescDto rescDto1 = RescDto.builder("wifi").spaceNo(12).fstRegrIdnfNo("admin").lastUpdrIdnfNo("admin").build();
+        RescDto rescDto2 = RescDto.builder("에어컨").spaceNo(12).fstRegrIdnfNo("admin").lastUpdrIdnfNo("admin").build();
+        RescDto rescDto3 = RescDto.builder("화분").spaceNo(12).fstRegrIdnfNo("admin").lastUpdrIdnfNo("admin").build();
+        RescDto rescDto4 = RescDto.builder("화이트보드").spaceNo(12).fstRegrIdnfNo("admin").lastUpdrIdnfNo("admin").build();
 
         List<RescDto> rescs = new ArrayList<>();
         rescs.add(rescDto1);
@@ -115,10 +115,10 @@ class SpaceRescDaoImplTest {
         spaceRescDao.deleteAll();
         rescDao.deleteAll();
 
-        RescDto rescDto1 = RescDto.builder("wifi").SPACE_NO(12).FST_REGR_IDNF_NO("admin").LAST_UPDR_IDNF_NO("admin").build();
-        RescDto rescDto2 = RescDto.builder("에어컨").SPACE_NO(12).FST_REGR_IDNF_NO("admin").LAST_UPDR_IDNF_NO("admin").build();
-        RescDto rescDto3 = RescDto.builder("화분").SPACE_NO(12).FST_REGR_IDNF_NO("admin").LAST_UPDR_IDNF_NO("admin").build();
-        RescDto rescDto4 = RescDto.builder("화이트보드").SPACE_NO(12).FST_REGR_IDNF_NO("admin").LAST_UPDR_IDNF_NO("admin").build();
+        RescDto rescDto1 = RescDto.builder("wifi").spaceNo(12).fstRegrIdnfNo("admin").lastUpdrIdnfNo("admin").build();
+        RescDto rescDto2 = RescDto.builder("에어컨").spaceNo(12).fstRegrIdnfNo("admin").lastUpdrIdnfNo("admin").build();
+        RescDto rescDto3 = RescDto.builder("화분").spaceNo(12).fstRegrIdnfNo("admin").lastUpdrIdnfNo("admin").build();
+        RescDto rescDto4 = RescDto.builder("화이트보드").spaceNo(12).fstRegrIdnfNo("admin").lastUpdrIdnfNo("admin").build();
 
         List<RescDto> rescs = new ArrayList<>();
         rescs.add(rescDto1);
@@ -143,10 +143,10 @@ class SpaceRescDaoImplTest {
         spaceRescDao.deleteAll();
         rescDao.deleteAll();
 
-        RescDto rescDto1 = RescDto.builder("wifi").SPACE_NO(12).FST_REGR_IDNF_NO("admin").LAST_UPDR_IDNF_NO("admin").build();
-        RescDto rescDto2 = RescDto.builder("에어컨").SPACE_NO(12).FST_REGR_IDNF_NO("admin").LAST_UPDR_IDNF_NO("admin").build();
-        RescDto rescDto3 = RescDto.builder("화분").SPACE_NO(12).FST_REGR_IDNF_NO("admin").LAST_UPDR_IDNF_NO("admin").build();
-        RescDto rescDto4 = RescDto.builder("화이트보드").SPACE_NO(12).FST_REGR_IDNF_NO("admin").LAST_UPDR_IDNF_NO("admin").build();
+        RescDto rescDto1 = RescDto.builder("wifi").spaceNo(12).fstRegrIdnfNo("admin").lastUpdrIdnfNo("admin").build();
+        RescDto rescDto2 = RescDto.builder("에어컨").spaceNo(12).fstRegrIdnfNo("admin").lastUpdrIdnfNo("admin").build();
+        RescDto rescDto3 = RescDto.builder("화분").spaceNo(12).fstRegrIdnfNo("admin").lastUpdrIdnfNo("admin").build();
+        RescDto rescDto4 = RescDto.builder("화이트보드").spaceNo(12).fstRegrIdnfNo("admin").lastUpdrIdnfNo("admin").build();
 
         List<RescDto> rescs = new ArrayList<>();
         rescs.add(rescDto1);
@@ -176,9 +176,9 @@ class SpaceRescDaoImplTest {
         spaceRescDao.deleteAll();
         rescDao.deleteAll();
 
-        RescDto rescDto1 = RescDto.builder("wifi").SPACE_NO(12).FST_REGR_IDNF_NO("admin").LAST_UPDR_IDNF_NO("admin").build();
-        RescDto rescDto2 = RescDto.builder("에어컨").SPACE_NO(12).FST_REGR_IDNF_NO("admin").LAST_UPDR_IDNF_NO("admin").build();
-        RescDto rescDto3 = RescDto.builder("화분").SPACE_NO(12).FST_REGR_IDNF_NO("admin").LAST_UPDR_IDNF_NO("admin").build();
+        RescDto rescDto1 = RescDto.builder("wifi").spaceNo(12).fstRegrIdnfNo("admin").lastUpdrIdnfNo("admin").build();
+        RescDto rescDto2 = RescDto.builder("에어컨").spaceNo(12).fstRegrIdnfNo("admin").lastUpdrIdnfNo("admin").build();
+        RescDto rescDto3 = RescDto.builder("화분").spaceNo(12).fstRegrIdnfNo("admin").lastUpdrIdnfNo("admin").build();
 
         List<RescDto> rescs = new ArrayList<>();
         rescs.add(rescDto1);
@@ -188,7 +188,7 @@ class SpaceRescDaoImplTest {
         assertEquals(3, rescDao.insertRescs(rescs));
         assertEquals(3, spaceRescDao.insertSpaceRescs(rescs));
 
-        RescDto rescDto4 = RescDto.builder("화이트보드").SPACE_NO(12).FST_REGR_IDNF_NO("admin").LAST_UPDR_IDNF_NO("admin").build();
+        RescDto rescDto4 = RescDto.builder("화이트보드").spaceNo(12).fstRegrIdnfNo("admin").lastUpdrIdnfNo("admin").build();
 
         List<RescDto> updatedRescs = new ArrayList<>();
         updatedRescs.add(rescDto1);
@@ -199,7 +199,7 @@ class SpaceRescDaoImplTest {
         assertEquals(1, spaceRescDao.insertSpaceRescs(updatedRescs));
 
         Map<String, Object> map = new HashMap<>();
-        map.put("spaceNo", rescDto1.getSPACE_NO());
+        map.put("spaceNo", rescDto1.getSpaceNo());
         map.put("rescs", updatedRescs);
 
         assertEquals(1, spaceRescDao.deleteSpaceRescs(map));

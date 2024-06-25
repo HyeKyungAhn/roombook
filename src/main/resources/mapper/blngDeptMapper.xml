@@ -4,7 +4,7 @@
 <mapper namespace="site.roombook.dao.blngDeptMapper">
     <insert id="insertDeptMember">
         INSERT INTO blng_dept(BLNG_DEPT_CD, BLNG_EMPL_NO, REP_DEPT_YN, FST_REGR_IDNF_NO, LAST_UPDR_IDNF_NO)
-        VALUES (#{BLNG_DEPT_CD}, #{BLNG_EMPL_NO}, #{REP_DEPT_YN}, #{FST_REGR_IDNF_NO}, #{LAST_UPDR_IDNF_NO})
+        VALUES (#{blngDeptCd}, #{blngEmplNo}, #{repDeptYn}, #{fstRegrIdnfNo}, #{lastUpdrIdnfNo})
     </insert>
 
     <select id="selectAllBlngDept" resultType="BlngDeptDto">
@@ -21,7 +21,7 @@
 
     <delete id="deleteBlngDepts" parameterType="Map">
         DELETE FROM blng_dept
-        WHERE BLNG_DEPT_CD = #{BLNG_DEPT_CD}
+        WHERE BLNG_DEPT_CD = #{blngDeptCd}
         AND BLNG_EMPL_NO IN
         <foreach item="item" collection="emplIDs"
                  open="(" separator="," close=")">
@@ -33,13 +33,13 @@
         INSERT INTO blng_dept(BLNG_DEPT_CD, BLNG_EMPL_NO, FST_REGR_IDNF_NO, LAST_UPDR_IDNF_NO)
         VALUES
         <foreach item="item" collection="list" separator=",">
-            (#{item.BLNG_DEPT_CD}, (SELECT EMPL_NO from empl where EMPL_ID = #{item.EMPL_ID}), #{item.FST_REGR_IDNF_NO}, #{item.LAST_UPDR_IDNF_NO})
+            (#{item.blngDeptCd}, (SELECT EMPL_NO from empl where EMPL_ID = #{item.emplId}), #{item.fstRegrIdnfNo}, #{item.lastUpdrIdnfNo})
         </foreach>
     </insert>
 
     <insert id="insertOneBlngDept" parameterType="BlngDeptAndEmplIdDto">
         INSERT INTO blng_dept(BLNG_DEPT_CD, BLNG_EMPL_NO, FST_REGR_IDNF_NO, LAST_UPDR_IDNF_NO)
-        VALUES (#{BLNG_DEPT_CD}, (SELECT EMPL_NO from empl where EMPL_ID = #{EMPL_ID}), #{FST_REGR_IDNF_NO}, #{LAST_UPDR_IDNF_NO})
+        VALUES (#{blngDeptCd}, (SELECT EMPL_NO from empl where EMPL_ID = #{emplId}), #{fstRegrIdnfNo}, #{lastUpdrIdnfNo})
 
     </insert>
 </mapper>

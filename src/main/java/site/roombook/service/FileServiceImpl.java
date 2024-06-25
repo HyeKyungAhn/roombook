@@ -45,7 +45,6 @@ public class FileServiceImpl implements FileService{
     private static final int MAX_FILE_CNT = 5;
     private static final List<String> IMAGE_TYPES = Arrays.asList("jpeg", "jpg", "png");
     private static final Logger logger = LogManager.getLogger(FileServiceImpl.class);
-    private static final String ATCH_LOC_CD = "ATCH_LOC_CD";
     private static final List<String> ALLOWED_IMAGE_TYPES = Arrays.asList("image/jpeg", "image/png");
 
 
@@ -63,8 +62,8 @@ public class FileServiceImpl implements FileService{
         List<FileDto> fileDtoList = new ArrayList<>();
 
         FileDto fileData = FileDto.builder("")
-                .ATCH_LOC_CD(CmnCode.ATCH_LOC_CD_SPACE.getCode())
-                .ATCH_LOC_NO(atchLocNum)
+                .atchLocCd(CmnCode.ATCH_LOC_CD_SPACE.getCode())
+                .atchLocNo(atchLocNum)
                 .maxFileCnt(MAX_FILE_CNT).build();
 
         result.setFileCntExceeded(fileDao.checkExceedingMaxFileCnt(fileData));
@@ -89,12 +88,12 @@ public class FileServiceImpl implements FileService{
             if (!isSaveSuccess) continue;
 
             FileDto fileDto = FileDto.builder(uniqueFileName)
-                        .ATCH_LOC_NO(atchLocNum)
-                        .ATCH_LOC_CD(CmnCode.ATCH_LOC_CD_SPACE.getCode())
-                        .FILE_ORGL_NM(file.getOriginalFilename())
-                        .FILE_TYP_NM(file.getContentType())
-                        .FILE_SIZE(file.getSize())
-                        .FST_REGR_IDNF_NO(regrEmplNo)
+                        .atchLocNo(atchLocNum)
+                        .atchLocCd(CmnCode.ATCH_LOC_CD_SPACE.getCode())
+                        .fileOrglNm(file.getOriginalFilename())
+                        .fileTypNm(file.getContentType())
+                        .fileSize(file.getSize())
+                        .fstRegrIdnfNo(regrEmplNo)
                         .build();
 
             fileDtoList.add(fileDto);
@@ -158,8 +157,8 @@ public class FileServiceImpl implements FileService{
         Map<String, Object> spaceData = new HashMap<>();
 
         switch (locCode) {
-            case ATCH_LOC_CD_SPACE -> spaceData.put(ATCH_LOC_CD, CmnCode.ATCH_LOC_CD_SPACE.getCode());
-            case ATCH_LOC_CD_NOTICE -> spaceData.put(ATCH_LOC_CD, CmnCode.ATCH_LOC_CD_NOTICE.getCode());
+            case ATCH_LOC_CD_SPACE -> spaceData.put("atchLocCd", CmnCode.ATCH_LOC_CD_SPACE.getCode());
+            case ATCH_LOC_CD_NOTICE -> spaceData.put("atchLocCd", CmnCode.ATCH_LOC_CD_NOTICE.getCode());
         }
 
         spaceData.put("ATCH_LOC_NO", spaceNo);
@@ -169,8 +168,8 @@ public class FileServiceImpl implements FileService{
     @Override
     public FileDto getFile(int ATCH_LOC_NO, CmnCode atchLocCd) {
         Map<String, Object> spaceData = new HashMap<>();
-        spaceData.put(ATCH_LOC_CD, CmnCode.ATCH_LOC_CD_SPACE.getCode());
-        spaceData.put("ATCH_LOC_NO", ATCH_LOC_NO);
+        spaceData.put("atchLocCd", CmnCode.ATCH_LOC_CD_SPACE.getCode());
+        spaceData.put("atchLocNo", ATCH_LOC_NO);
         //TODO 존재하지 않는 공간 정보일 때 예외 처리
         return fileDao.selectOneFileWithSpaceData(spaceData);
     }

@@ -23,7 +23,7 @@
     <insert id="insertRescs" parameterType="RescDto">
         INSERT IGNORE INTO resc(RESC_NM, FST_REGR_IDNF_NO, LAST_UPDR_IDNF_NO)
         VALUES <foreach item="item" collection="list" separator=",">
-                    (#{item.RESC_NM}, #{item.FST_REGR_IDNF_NO}, #{item.FST_REGR_IDNF_NO})
+                    (#{item.rescNm}, #{item.fstRegrIdnfNo}, #{item.fstRegrIdnfNo})
                 </foreach>
     </insert>
     <delete id="deleteAll">

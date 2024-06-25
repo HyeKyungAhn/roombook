@@ -30,10 +30,10 @@ public class RescServiceImpl implements RescService{
 
         for(RescDto resc : rescs){
             rescsWithSpaceNoAndIdnfNo.add(RescDto
-                    .builder(resc.getRESC_NM())
-                    .RESC_NO(resc.getRESC_NO()) // TODO 없으면?
-                    .FST_REGR_IDNF_NO(fstRegrIdnfNo)
-                    .SPACE_NO(spaceNo).build());
+                    .builder(resc.getRescNm())
+                    .rescNo(resc.getRescNo()) // TODO 없으면?
+                    .fstRegrIdnfNo(fstRegrIdnfNo)
+                    .spaceNo(spaceNo).build());
         }
 
         rescDao.insertRescs(rescsWithSpaceNoAndIdnfNo);
@@ -52,9 +52,9 @@ public class RescServiceImpl implements RescService{
 
         for (RescDto resc : rescs) {
             rescsWithSpaceData.add(RescDto
-                    .builder(resc.getRESC_NM())
-                    .SPACE_NO(spaceNo)
-                    .FST_REGR_IDNF_NO(idnfNo).build());
+                    .builder(resc.getRescNm())
+                    .spaceNo(spaceNo)
+                    .fstRegrIdnfNo(idnfNo).build());
         }
 
         rescDao.insertRescs(rescsWithSpaceData);

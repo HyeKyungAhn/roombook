@@ -24,15 +24,15 @@ public class SpaceServiceImpl implements SpaceService {
     @Transactional(propagation = Propagation.REQUIRED, rollbackFor = DuplicateKeyException.class)
     public boolean saveSpace(SpaceDto spaceDto, int spaceNo, String fstRegrIdnfNo) {
         SpaceDto space = new SpaceDto.Builder().spaceNo(spaceNo)
-                .spaceNm(spaceDto.getSPACE_NM())
-                .spaceMaxPsonCnt(spaceDto.getSPACE_MAX_PSON_CNT())
-                .spaceLocDesc(spaceDto.getSPACE_LOC_DESC())
-                .spaceAdtnDesc(spaceDto.getSPACE_ADTN_DESC())
-                .spaceMaxRsvdTms(spaceDto.getSPACE_MAX_RSVD_TMS())
-                .spaceUsgPosblBgnTm(spaceDto.getSPACE_USG_POSBL_BGN_TM())
-                .spaceUsgPosblEndTm(spaceDto.getSPACE_USG_POSBL_END_TM())
-                .spaceWkendUsgPosblYn(spaceDto.getSPACE_WKEND_USG_POSBL_YN())
-                .spaceHideYn(spaceDto.getSPACE_HIDE_YN())
+                .spaceNm(spaceDto.getSpaceNm())
+                .spaceMaxPsonCnt(spaceDto.getSpaceMaxPsonCnt())
+                .spaceLocDesc(spaceDto.getSpaceLocDesc())
+                .spaceAdtnDesc(spaceDto.getSpaceAdtnDesc())
+                .spaceMaxRsvdTms(spaceDto.getSpaceMaxRsvdTms())
+                .spaceUsgPosblBgnTm(spaceDto.getSpaceUsgPosblBgnTm())
+                .spaceUsgPosblEndTm(spaceDto.getSpaceUsgPosblEndTm())
+                .spaceWkendUsgPosblYn(spaceDto.getSpaceWkendUsgPosblYn())
+                .spaceHideYn(spaceDto.getSpaceHideYn())
                 .fstRegrIdnfNo(fstRegrIdnfNo).build();
 
         return spaceDao.insertSpace(space)==1;
@@ -47,15 +47,15 @@ public class SpaceServiceImpl implements SpaceService {
     @Transactional(propagation = Propagation.REQUIRED)
     public boolean updateSpace(int spaceNo, String lastUpdrIdnfNo, SpaceDto spaceDto){
         SpaceDto space = new SpaceDto.Builder().spaceNo(spaceNo)
-                .spaceNm(spaceDto.getSPACE_NM())
-                .spaceMaxPsonCnt(spaceDto.getSPACE_MAX_PSON_CNT())
-                .spaceLocDesc(spaceDto.getSPACE_LOC_DESC())
-                .spaceAdtnDesc(spaceDto.getSPACE_ADTN_DESC())
-                .spaceMaxRsvdTms(spaceDto.getSPACE_MAX_RSVD_TMS())
-                .spaceUsgPosblBgnTm(spaceDto.getSPACE_USG_POSBL_BGN_TM())
-                .spaceUsgPosblEndTm(spaceDto.getSPACE_USG_POSBL_END_TM())
-                .spaceWkendUsgPosblYn(spaceDto.getSPACE_WKEND_USG_POSBL_YN())
-                .spaceHideYn(spaceDto.getSPACE_HIDE_YN())
+                .spaceNm(spaceDto.getSpaceNm())
+                .spaceMaxPsonCnt(spaceDto.getSpaceMaxPsonCnt())
+                .spaceLocDesc(spaceDto.getSpaceLocDesc())
+                .spaceAdtnDesc(spaceDto.getSpaceAdtnDesc())
+                .spaceMaxRsvdTms(spaceDto.getSpaceMaxRsvdTms())
+                .spaceUsgPosblBgnTm(spaceDto.getSpaceUsgPosblBgnTm())
+                .spaceUsgPosblEndTm(spaceDto.getSpaceUsgPosblEndTm())
+                .spaceWkendUsgPosblYn(spaceDto.getSpaceWkendUsgPosblYn())
+                .spaceHideYn(spaceDto.getSpaceHideYn())
                 .lastUpdrIdnfNo(lastUpdrIdnfNo).build();
 
         return spaceDao.update(space) == 1;
@@ -96,8 +96,8 @@ public class SpaceServiceImpl implements SpaceService {
         List<RescDto> rescs = new ArrayList<>();
 
         for (SpaceRescFileDto detail : spaceDetails) {
-            fileNmSet.add(detail.getFILE_NM());
-            rescNoSet.add(detail.getRESC_NO());
+            fileNmSet.add(detail.getFileNm());
+            rescNoSet.add(detail.getRescNo());
         }
 
         filterFileData(fileNmSet, files, spaceDetails);
@@ -120,9 +120,9 @@ public class SpaceServiceImpl implements SpaceService {
             Integer rescNo = rescIterator.next();
 
             for (SpaceRescFileDto detail : spaceDetails) {
-                if (detail.getRESC_NO().equals(rescNo)) {
-                    RescDto resc = RescDto.builder(detail.getRESC_NM()).
-                            RESC_NO(detail.getRESC_NO()).build();
+                if (detail.getRescNo().equals(rescNo)) {
+                    RescDto resc = RescDto.builder(detail.getRescNm()).
+                            rescNo(detail.getRescNo()).build();
                     rescs.add(resc);
                     break;
                 }
@@ -140,11 +140,11 @@ public class SpaceServiceImpl implements SpaceService {
             String fileNm = fileIterator.next();
 
             for (SpaceRescFileDto detail : spaceDetails) {
-                if (detail.getFILE_NM().equals(fileNm)) {
+                if (detail.getFileNm().equals(fileNm)) {
                     FileDto file = FileDto.builder(fileNm).
-                            FILE_ORGL_NM(detail.getFILE_ORGL_NM()).
-                            FILE_TYP_NM(detail.getFILE_TYP_NM()).
-                            FILE_SIZE(detail.getFILE_SIZE()).build();
+                            fileOrglNm(detail.getFileOrglNm()).
+                            fileTypNm(detail.getFileTypNm()).
+                            fileSize(detail.getFileSize()).build();
                     files.add(file);
                     break;
                 }
@@ -155,18 +155,18 @@ public class SpaceServiceImpl implements SpaceService {
     private SpaceDto setSpaceData(SpaceRescFileDto spaceInfo, int spaceNo, boolean isHiddenSpaceInvisible) {
         SpaceDto.Builder build = new SpaceDto.Builder()
                 .spaceNo(spaceNo)
-                .spaceNm(spaceInfo.getSPACE_NM())
-                .spaceMaxPsonCnt(spaceInfo.getSPACE_MAX_PSON_CNT())
-                .spaceLocDesc(spaceInfo.getSPACE_LOC_DESC())
-                .spaceAdtnDesc(spaceInfo.getSPACE_ADTN_DESC())
-                .spaceMaxRsvdTms(spaceInfo.getSPACE_MAX_RSVD_TMS())
-                .spaceUsgPosblBgnTm(spaceInfo.getSPACE_USG_POSBL_BGN_TM())
-                .spaceUsgPosblEndTm(spaceInfo.getSPACE_USG_POSBL_END_TM())
-                .spaceWkendUsgPosblYn(spaceInfo.getSPACE_WKEND_USG_POSBL_YN())
-                .spaceHideYn(spaceInfo.getSPACE_HIDE_YN());
+                .spaceNm(spaceInfo.getSpaceNm())
+                .spaceMaxPsonCnt(spaceInfo.getSpaceMaxPsonCnt())
+                .spaceLocDesc(spaceInfo.getSpaceLocDesc())
+                .spaceAdtnDesc(spaceInfo.getSpaceAdtnDesc())
+                .spaceMaxRsvdTms(spaceInfo.getSpaceMaxRsvdTms())
+                .spaceUsgPosblBgnTm(spaceInfo.getSpaceUsgPosblBgnTm())
+                .spaceUsgPosblEndTm(spaceInfo.getSpaceUsgPosblEndTm())
+                .spaceWkendUsgPosblYn(spaceInfo.getSpaceWkendUsgPosblYn())
+                .spaceHideYn(spaceInfo.getSpaceHideYn());
 
         if(!isHiddenSpaceInvisible){
-            build.spaceHideYn(spaceInfo.getSPACE_HIDE_YN());
+            build.spaceHideYn(spaceInfo.getSpaceHideYn());
         }
 
         return build.build();

@@ -5,12 +5,12 @@
     <insert id="insertSpaceResc" parameterType="RescDto">
         INSERT ignore INTO space_resc(SPACE_NO, RESC_NO, FST_REGR_IDNF_NO, LAST_UPDR_IDNF_NO)
         VALUES <foreach item="item" collection="list" separator=",">
-                    (#{item.SPACE_NO},
+                    (#{item.spaceNo},
                     (SELECT RESC_NO
                         FROM resc
-                        WHERE RESC_NM = #{item.RESC_NM}),
-                    #{item.FST_REGR_IDNF_NO},
-                    #{item.FST_REGR_IDNF_NO})
+                        WHERE RESC_NM = #{item.rescNm}),
+                    #{item.fstRegrIdnfNo},
+                    #{item.fstRegrIdnfNo})
                 </foreach>
     </insert>
     <select id="selectAll" resultType="SpaceRescDto">
@@ -25,7 +25,7 @@
           <if test="rescs != null">
           AND RESC_NO NOT IN
             <foreach item="item" collection="rescs" open="(" close=")" separator=",">
-                (SELECT RESC_NO FROM resc WHERE RESC_NM = #{item.RESC_NM})
+                (SELECT RESC_NO FROM resc WHERE RESC_NM = #{item.rescNm})
             </foreach>
           </if>
     </delete>

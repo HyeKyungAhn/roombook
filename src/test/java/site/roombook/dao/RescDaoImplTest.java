@@ -27,10 +27,10 @@ class RescDaoImplTest {
     @DisplayName("복수개 물품 삽입 테스트")
     void insertRescsTest(){
         rescDao.deleteAll();
-        RescDto rescDto1 = RescDto.builder("wifi").SPACE_NO(1).FST_REGR_IDNF_NO("admin").LAST_UPDR_IDNF_NO("admin").build();
-        RescDto rescDto2 = RescDto.builder("에어컨").SPACE_NO(1).FST_REGR_IDNF_NO("admin").LAST_UPDR_IDNF_NO("admin").build();
-        RescDto rescDto3 = RescDto.builder("화이트보드").SPACE_NO(1).FST_REGR_IDNF_NO("admin").LAST_UPDR_IDNF_NO("admin").build();
-        RescDto rescDto4 = RescDto.builder("모니터").SPACE_NO(1).FST_REGR_IDNF_NO("admin").LAST_UPDR_IDNF_NO("admin").build();
+        RescDto rescDto1 = RescDto.builder("wifi").spaceNo(1).fstRegrIdnfNo("admin").lastUpdrIdnfNo("admin").build();
+        RescDto rescDto2 = RescDto.builder("에어컨").spaceNo(1).fstRegrIdnfNo("admin").lastUpdrIdnfNo("admin").build();
+        RescDto rescDto3 = RescDto.builder("화이트보드").spaceNo(1).fstRegrIdnfNo("admin").lastUpdrIdnfNo("admin").build();
+        RescDto rescDto4 = RescDto.builder("모니터").spaceNo(1).fstRegrIdnfNo("admin").lastUpdrIdnfNo("admin").build();
 
         List<RescDto> list = new ArrayList<>();
         list.add(rescDto1);
@@ -48,10 +48,10 @@ class RescDaoImplTest {
         rescDao.deleteAll();
         assertEquals(0, rescDao.selectAllRescCnt());
 
-        RescDto rescDto1 = RescDto.builder("wifi").SPACE_NO(1).FST_REGR_IDNF_NO("admin").LAST_UPDR_IDNF_NO("admin").build();
-        RescDto rescDto2 = RescDto.builder("에어컨").SPACE_NO(1).FST_REGR_IDNF_NO("admin").LAST_UPDR_IDNF_NO("admin").build();
-        RescDto rescDto3 = RescDto.builder("화이트보드").SPACE_NO(1).FST_REGR_IDNF_NO("admin").LAST_UPDR_IDNF_NO("admin").build();
-        RescDto rescDto4 = RescDto.builder("모니터").SPACE_NO(1).FST_REGR_IDNF_NO("admin").LAST_UPDR_IDNF_NO("admin").build();
+        RescDto rescDto1 = RescDto.builder("wifi").spaceNo(1).fstRegrIdnfNo("admin").lastUpdrIdnfNo("admin").build();
+        RescDto rescDto2 = RescDto.builder("에어컨").spaceNo(1).fstRegrIdnfNo("admin").lastUpdrIdnfNo("admin").build();
+        RescDto rescDto3 = RescDto.builder("화이트보드").spaceNo(1).fstRegrIdnfNo("admin").lastUpdrIdnfNo("admin").build();
+        RescDto rescDto4 = RescDto.builder("모니터").spaceNo(1).fstRegrIdnfNo("admin").lastUpdrIdnfNo("admin").build();
 
         List<RescDto> list = new ArrayList<>();
         list.add(rescDto1);
@@ -71,10 +71,10 @@ class RescDaoImplTest {
         rescDao.deleteAll();
         assertEquals(0, rescDao.selectAllRescCnt());
 
-        RescDto rescDto1 = RescDto.builder("wifi").SPACE_NO(1).FST_REGR_IDNF_NO("admin").LAST_UPDR_IDNF_NO("admin").build();
-        RescDto rescDto2 = RescDto.builder("에어컨").SPACE_NO(1).FST_REGR_IDNF_NO("admin").LAST_UPDR_IDNF_NO("admin").build();
-        RescDto rescDto3 = RescDto.builder("화이트보드").SPACE_NO(1).FST_REGR_IDNF_NO("admin").LAST_UPDR_IDNF_NO("admin").build();
-        RescDto rescDto4 = RescDto.builder("모니터").SPACE_NO(1).FST_REGR_IDNF_NO("admin").LAST_UPDR_IDNF_NO("admin").build();
+        RescDto rescDto1 = RescDto.builder("wifi").spaceNo(1).fstRegrIdnfNo("admin").lastUpdrIdnfNo("admin").build();
+        RescDto rescDto2 = RescDto.builder("에어컨").spaceNo(1).fstRegrIdnfNo("admin").lastUpdrIdnfNo("admin").build();
+        RescDto rescDto3 = RescDto.builder("화이트보드").spaceNo(1).fstRegrIdnfNo("admin").lastUpdrIdnfNo("admin").build();
+        RescDto rescDto4 = RescDto.builder("모니터").spaceNo(1).fstRegrIdnfNo("admin").lastUpdrIdnfNo("admin").build();
 
         List<RescDto> list = new ArrayList<>();
         list.add(rescDto1);
@@ -93,10 +93,10 @@ class RescDaoImplTest {
         rescDao.deleteAll();
         assertEquals(0, rescDao.selectAllRescCnt());
 
-        RescDto rescDto1 = RescDto.builder("wifi").SPACE_NO(1).FST_REGR_IDNF_NO("admin").LAST_UPDR_IDNF_NO("admin").build();
-        RescDto rescDto2 = RescDto.builder("에어컨").SPACE_NO(1).FST_REGR_IDNF_NO("admin").LAST_UPDR_IDNF_NO("admin").build();
-        RescDto rescDto3 = RescDto.builder("화이트보드").SPACE_NO(1).FST_REGR_IDNF_NO("admin").LAST_UPDR_IDNF_NO("admin").build();
-        RescDto rescDto4 = RescDto.builder("모니터").SPACE_NO(1).FST_REGR_IDNF_NO("admin").LAST_UPDR_IDNF_NO("admin").build();
+        RescDto rescDto1 = RescDto.builder("wifi").spaceNo(1).fstRegrIdnfNo("admin").lastUpdrIdnfNo("admin").build();
+        RescDto rescDto2 = RescDto.builder("에어컨").spaceNo(1).fstRegrIdnfNo("admin").lastUpdrIdnfNo("admin").build();
+        RescDto rescDto3 = RescDto.builder("화이트보드").spaceNo(1).fstRegrIdnfNo("admin").lastUpdrIdnfNo("admin").build();
+        RescDto rescDto4 = RescDto.builder("모니터").spaceNo(1).fstRegrIdnfNo("admin").lastUpdrIdnfNo("admin").build();
 
         List<RescDto> list = new ArrayList<>();
         list.add(rescDto1);
@@ -114,10 +114,10 @@ class RescDaoImplTest {
     void selectRescsWithKeywordTest(){
         rescDao.deleteAll();
 
-        RescDto rescDto1 = RescDto.builder("wifi").FST_REGR_IDNF_NO("admin").LAST_UPDR_IDNF_NO("admin").build();
-        RescDto rescDto2 = RescDto.builder("에어컨").FST_REGR_IDNF_NO("admin").LAST_UPDR_IDNF_NO("admin").build();
-        RescDto rescDto3 = RescDto.builder("화이트보드").FST_REGR_IDNF_NO("admin").LAST_UPDR_IDNF_NO("admin").build();
-        RescDto rescDto4 = RescDto.builder("모니터").FST_REGR_IDNF_NO("admin").LAST_UPDR_IDNF_NO("admin").build();
+        RescDto rescDto1 = RescDto.builder("wifi").fstRegrIdnfNo("admin").lastUpdrIdnfNo("admin").build();
+        RescDto rescDto2 = RescDto.builder("에어컨").fstRegrIdnfNo("admin").lastUpdrIdnfNo("admin").build();
+        RescDto rescDto3 = RescDto.builder("화이트보드").fstRegrIdnfNo("admin").lastUpdrIdnfNo("admin").build();
+        RescDto rescDto4 = RescDto.builder("모니터").fstRegrIdnfNo("admin").lastUpdrIdnfNo("admin").build();
 
         List<RescDto> list = new ArrayList<>();
         list.add(rescDto1);
@@ -126,8 +126,8 @@ class RescDaoImplTest {
         list.add(rescDto4);
 
         assertEquals(4,rescDao.insertRescs(list));
-        assertEquals("wifi", rescDao.selectRescsWithKeyword("wi").get(0).getRESC_NM());
-        assertEquals("화이트보드", rescDao.selectRescsWithKeyword("보").get(0).getRESC_NM());
+        assertEquals("wifi", rescDao.selectRescsWithKeyword("wi").get(0).getRescNm());
+        assertEquals("화이트보드", rescDao.selectRescsWithKeyword("보").get(0).getRescNm());
     }
 
     @Test
@@ -136,10 +136,10 @@ class RescDaoImplTest {
     void selectSpaceRescTest(){
         rescDao.deleteAll();
 
-        RescDto rescDto1 = RescDto.builder("wifi").SPACE_NO(12).FST_REGR_IDNF_NO("admin").LAST_UPDR_IDNF_NO("admin").build();
-        RescDto rescDto2 = RescDto.builder("에어컨").SPACE_NO(12).FST_REGR_IDNF_NO("admin").LAST_UPDR_IDNF_NO("admin").build();
-        RescDto rescDto3 = RescDto.builder("화이트보드").SPACE_NO(12).FST_REGR_IDNF_NO("admin").LAST_UPDR_IDNF_NO("admin").build();
-        RescDto rescDto4 = RescDto.builder("모니터").SPACE_NO(12).FST_REGR_IDNF_NO("admin").LAST_UPDR_IDNF_NO("admin").build();
+        RescDto rescDto1 = RescDto.builder("wifi").spaceNo(12).fstRegrIdnfNo("admin").lastUpdrIdnfNo("admin").build();
+        RescDto rescDto2 = RescDto.builder("에어컨").spaceNo(12).fstRegrIdnfNo("admin").lastUpdrIdnfNo("admin").build();
+        RescDto rescDto3 = RescDto.builder("화이트보드").spaceNo(12).fstRegrIdnfNo("admin").lastUpdrIdnfNo("admin").build();
+        RescDto rescDto4 = RescDto.builder("모니터").spaceNo(12).fstRegrIdnfNo("admin").lastUpdrIdnfNo("admin").build();
 
         List<RescDto> list = new ArrayList<>();
         list.add(rescDto1);
@@ -149,6 +149,6 @@ class RescDaoImplTest {
 
         assertEquals(4,rescDao.insertRescs(list));
         assertEquals(4,spaceRescDao.insertSpaceRescs(list));
-        assertEquals(4,rescDao.selectSpaceResc(rescDto1.getSPACE_NO()).size());
+        assertEquals(4,rescDao.selectSpaceResc(rescDto1.getSpaceNo()).size());
     }
 }
