@@ -36,5 +36,12 @@ public class EmplDaoImpl implements EmplDao{
     public int selectAllEmplCnt() { return session.selectOne(namespace + "selectAllEmplCnt"); }
 
     @Override
+    public EmplDto selectEmplById(String emplId) { return session.selectOne(namespace + "selectEmplById", emplId); }
+
+    @Override
+    public int selectEmplByEmail(String email) {
+        return session.selectOne(namespace + "selectEmplByEmail", email); }
+
+    @Override
     public int deleteAll() { return session.delete(namespace + "deleteAll"); }
 }

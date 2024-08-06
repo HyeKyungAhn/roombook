@@ -19,5 +19,9 @@ public interface EmplDao {
 
     int selectAllEmplCnt();
 
+    EmplDto selectEmplById(String emplId);
+
+    int selectEmplByEmail(String email);
+
     int deleteAll();
 }

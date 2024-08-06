@@ -42,6 +42,14 @@
         SELECT count(*) FROM empl
     </select>
 
+    <select id="selectEmplById" resultType="emplDto">
+        SELECT * FROM empl WHERE EMPL_ID = #{emplId};
+    </select>
+
+    <select id="selectEmplByEmail" parameterType="String" resultType="int">
+        SELECT COUNT(*) FROM empl WHERE EMAIL = #{email}
+    </select>
+
     <delete id="deleteAll">
         DELETE FROM empl
     </delete>

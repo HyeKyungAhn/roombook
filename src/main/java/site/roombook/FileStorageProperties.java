@@ -14,9 +14,6 @@ public class FileStorageProperties {
     @Value("${file.original.path}")
     private String originalUploadPath;
 
-    @Value("${tinify.key}")
-    private String compressorKey;
-
     public String getUploadDir() {
         return uploadDir;
     }
@@ -24,6 +21,4 @@ public class FileStorageProperties {
     public String getThumbnailUploadPath() { return thumbnailUploadPath; }
 
     public String getOriginalUploadPath() { return originalUploadPath; }
-
-    public String getCompKey(){ return compressorKey; }
 }

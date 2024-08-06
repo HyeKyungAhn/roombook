@@ -19,5 +19,6 @@
         <typeAlias alias="FileDto" type="site.roombook.domain.FileDto"/>
         <typeAlias alias="SpaceRescDto" type="site.roombook.domain.SpaceRescDto"/>
         <typeAlias alias="SpaceRescFileDto" type="site.roombook.domain.SpaceRescFileDto"/>
+        <typeAlias alias="EmailVerfDto" type="site.roombook.domain.EmailVerfDto"/>
     </typeAliases>
 </configuration>
