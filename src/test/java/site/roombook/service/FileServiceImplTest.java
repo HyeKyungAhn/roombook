@@ -10,7 +10,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.*;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.web.multipart.MultipartException;
 import org.springframework.web.multipart.MultipartFile;
@@ -25,7 +24,6 @@ import static org.mockito.Mockito.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 @ExtendWith({MockitoExtension.class})
-@PrepareForTest(FileService.class)
 @ContextConfiguration(locations = "file:web/WEB-INF/spring/**/testContext.xml")
 class FileServiceImplTest {
 
