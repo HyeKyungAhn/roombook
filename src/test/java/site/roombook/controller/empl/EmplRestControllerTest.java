@@ -44,6 +44,7 @@ class EmplRestControllerTest {
     ServiceResult serviceResult;
 
     @Nested
+    @DisplayName("회원가입 테스트")
     class SignupTest {
 
         @BeforeEach
@@ -55,10 +56,10 @@ class EmplRestControllerTest {
         @Test
         @DisplayName("입력값이 null일 때")
         void testNullInput() throws Exception {
-            mockMvc.perform(post("/signup").
+            mockMvc.perform(post("/api/signup").
                             content("").
                             contentType(MediaType.APPLICATION_JSON)).
-                    andExpect(status().isBadRequest()).andExpect(jsonPath("$.serverState.response", is("INVALID_INPUTS")));
+                    andExpect(status().isBadRequest()).andExpect(jsonPath("$.serverState.result", is("INVALID_INPUTS")));
         }
 
         @Test
@@ -70,10 +71,10 @@ class EmplRestControllerTest {
             when(serviceResult.getMsg()).thenReturn(null);
             when(serviceResult.isSuccessful()).thenReturn(true);
 
-            mockMvc.perform(post("/signup").
+            mockMvc.perform(post("/api/signup").
                             content(inputs).
                             contentType(MediaType.APPLICATION_JSON)).
-                    andExpect(status().isOk()).andExpect(jsonPath("$.serverState.response", is("SUCCESS")));
+                    andExpect(status().isOk()).andExpect(jsonPath("$.serverState.result", is("SUCCESS")));
         }
 
         @ParameterizedTest
@@ -82,10 +83,10 @@ class EmplRestControllerTest {
         void testInvalidId(String idInput) throws Exception {
             String inputs = "{\"name\":\"관리자\","+idInput+"\"pwd\":\"djfudnsqlalfqjsgh\",\"email\":\"fear.wise.01@gmail.com\",\"verificationCode\":\"160466\",\"emplno\":\"123123\"}";
 
-            mockMvc.perform(post("/signup").
+            mockMvc.perform(post("/api/signup").
                             content(inputs).
                             contentType(MediaType.APPLICATION_JSON)).
-                    andExpect(status().isBadRequest()).andExpect(jsonPath("$.serverState.response", is("INVALID_INPUTS")));
+                    andExpect(status().isBadRequest()).andExpect(jsonPath("$.serverState.result", is("INVALID_INPUTS")));
         }
 
 
@@ -94,10 +95,10 @@ class EmplRestControllerTest {
         void testInputWithoutName() throws Exception {
             String inputs = "{\"id\":\"admin\",\"pwd\":\"djfudnsqlalfqjsgh\",\"email\":\"fear.wise.01@gmail.com\",\"verificationCode\":\"160466\",\"emplno\":\"123123\"}";
 
-            mockMvc.perform(post("/signup").
+            mockMvc.perform(post("/api/signup").
                             content(inputs).
                             contentType(MediaType.APPLICATION_JSON)).
-                    andExpect(status().isBadRequest()).andExpect(jsonPath("$.serverState.response", is("INVALID_INPUTS")));
+                    andExpect(status().isBadRequest()).andExpect(jsonPath("$.serverState.result", is("INVALID_INPUTS")));
 
         }
 
@@ -107,10 +108,10 @@ class EmplRestControllerTest {
         void testInvalidName(String nameInput) throws Exception {
             String inputs = "{"+nameInput+"\"id\":\"admin\",\"pwd\":\"djfudnsqlalfqjsgh\",\"email\":\"fear.wise.01@gmail.com\",\"verificationCode\":\"160466\",\"emplno\":\"123123\"}";
 
-            mockMvc.perform(post("/signup").
+            mockMvc.perform(post("/api/signup").
                             content(inputs).
                             contentType(MediaType.APPLICATION_JSON)).
-                    andExpect(status().isBadRequest()).andExpect(jsonPath("$.serverState.response", is("INVALID_INPUTS")));
+                    andExpect(status().isBadRequest()).andExpect(jsonPath("$.serverState.result", is("INVALID_INPUTS")));
         }
 
         @Test
@@ -118,10 +119,10 @@ class EmplRestControllerTest {
         void testNullName() throws Exception {
             String inputs = "{\"name\":,\"id\":\"admin\",\"pwd\":\"djfudnsqlalfqjsgh\",\"email\":\"fear.wise.01@gmail.com\",\"verificationCode\":\"160466\",\"emplno\":\"123123\"}";
 
-            mockMvc.perform(post("/signup").
+            mockMvc.perform(post("/api/signup").
                             content(inputs).
                             contentType(MediaType.APPLICATION_JSON)).
-                    andExpect(status().isBadRequest()).andExpect(jsonPath("$.serverState.response", is("INVALID_INPUTS")));
+                    andExpect(status().isBadRequest()).andExpect(jsonPath("$.serverState.result", is("INVALID_INPUTS")));
         }
 
         @ParameterizedTest
@@ -130,10 +131,10 @@ class EmplRestControllerTest {
         void testInvalidEmail(String emailInput) throws Exception {
             String inputs = "{\"name\":\"관리자\",\"id\":\"admin\",\"pwd\":\"djfudnsqlalfqjsgh\","+emailInput+"\"verificationCode\":\"160466\",\"emplno\":\"123123\"}";
 
-            mockMvc.perform(post("/signup").
+            mockMvc.perform(post("/api/signup").
                             content(inputs).
                             contentType(MediaType.APPLICATION_JSON)).
-                    andExpect(status().isBadRequest()).andExpect(jsonPath("$.serverState.response", is("INVALID_INPUTS")));
+                    andExpect(status().isBadRequest()).andExpect(jsonPath("$.serverState.result", is("INVALID_INPUTS")));
 
         }
 
@@ -143,11 +144,11 @@ class EmplRestControllerTest {
         void testInvalidPassword(String pwdInput) throws Exception {
             String inputs = "{\"name\":\"관리자\",\"id\":\"admin\","+pwdInput+"\"email\":\"fea.gmail.com\",\"verificationCode\":\"160466\",\"emplno\":\"123123\"}";
 
-            mockMvc.perform(post("/signup")
+            mockMvc.perform(post("/api/signup")
                             .content(inputs)
                             .contentType(MediaType.APPLICATION_JSON))
                     .andExpect(status().isBadRequest())
-                    .andExpect(jsonPath("$.serverState.response", is("INVALID_INPUTS")))
+                    .andExpect(jsonPath("$.serverState.result", is("INVALID_INPUTS")))
                     .andExpect(jsonPath("$.pwdSafe", is(false)));
         }
 
@@ -157,11 +158,11 @@ class EmplRestControllerTest {
         void testInvalidEmplno(String emplnoInput) throws Exception {
             String inputs = "{\"name\":\"관리자\",\"id\":\"admin\",\"pwd\":\"admin\",\"email\":\"fear@gmail.com\",\"verificationCode\":\"160466\""+emplnoInput+"}";
 
-            mockMvc.perform(post("/signup")
+            mockMvc.perform(post("/api/signup")
                             .content(inputs)
                             .contentType(MediaType.APPLICATION_JSON))
                     .andExpect(status().isBadRequest())
-                    .andExpect(jsonPath("$.serverState.response", is("INVALID_INPUTS")))
+                    .andExpect(jsonPath("$.serverState.result", is("INVALID_INPUTS")))
                     .andExpect(jsonPath("$.emplnoValid", is(false)));
         }
 
@@ -171,11 +172,11 @@ class EmplRestControllerTest {
         void testEmptyVerificationCode(String vCodeInput) throws Exception {
             String inputs = "{\"name\":\"관리자\",\"id\":\"admin\",\"pwd\":\"admin\",\"email\":\"fear@gmail.com\","+vCodeInput+"\"emplno\":\"123123\"}";
 
-            mockMvc.perform(post("/signup")
+            mockMvc.perform(post("/api/signup")
                             .content(inputs)
                             .contentType(MediaType.APPLICATION_JSON))
                     .andExpect(status().isBadRequest())
-                    .andExpect(jsonPath("$.serverState.response", is("INVALID_INPUTS")))
+                    .andExpect(jsonPath("$.serverState.result", is("INVALID_INPUTS")))
                     .andExpect(jsonPath("$.verificationCodeEmpty", is(true)));
         }
 
@@ -185,11 +186,11 @@ class EmplRestControllerTest {
         void testInValidId(String idInput) throws Exception {
             String inputs = "{\"name\":\"관리자\","+idInput+"\"pwd\":\"admin\",\"email\":\"fear@gmail.com\",\"verificationCode\":\"\",\"emplno\":\"123123\"}";
 
-            mockMvc.perform(post("/signup")
+            mockMvc.perform(post("/api/signup")
                             .content(inputs)
                             .contentType(MediaType.APPLICATION_JSON))
                     .andExpect(status().isBadRequest())
-                    .andExpect(jsonPath("$.serverState.response", is("INVALID_INPUTS")))
+                    .andExpect(jsonPath("$.serverState.result", is("INVALID_INPUTS")))
                     .andExpect(jsonPath("$.verificationCodeEmpty", is(true)));
         }
     }
