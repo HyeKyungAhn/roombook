@@ -19,7 +19,7 @@ public class AuthChgHistDaoImpl implements AuthChgHistDao{
     }
 
     @Override
-    public AuthChgHistDto select(String emplNo) {
-        return session.selectOne(namespace+"selectOneByEmplNo", emplNo);
+    public AuthChgHistDto selectLatestOne(String emplNo) {
+        return session.selectOne(namespace+"selectLatestOneByEmplNo", emplNo);
     }
 }

@@ -10,7 +10,9 @@
             ,(SELECT EMPL_NO FROM empl WHERE EMPL_ID = #{regrIdnfId} AND EMPL_AUTH_NM = 'ROLE_SUPER_ADMIN'))
     </insert>
 
-    <select id="selectOneByEmplNo" parameterType="String" resultType="AuthChgHistDto">
-        SELECT * FROM auth_chg_hist WHERE EMPL_NO = #{emplNo}
+    <select id="selectLatestOneByEmplNo" parameterType="String" resultType="AuthChgHistDto">
+        SELECT * FROM auth_chg_hist
+        WHERE EMPL_NO = #{emplNo}
+        ORDER BY REG_DTM DESC
     </select>
 </mapper>
