@@ -6,6 +6,8 @@ import org.springframework.stereotype.Repository;
 import site.roombook.domain.EmplDto;
 
 import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 
 @Repository
 public class EmplDaoImpl implements EmplDao{
@@ -33,14 +35,34 @@ public class EmplDaoImpl implements EmplDao{
     public List<EmplDto> selectAllEmpl() { return session.selectList(namespace+"selectAllEmpl"); }
 
     @Override
+    public List<EmplDto> selectAllForAuthAdmin() { return session.selectList(namespace+"selectAllForAuthAdmin"); }
+
+    @Override
     public int selectAllEmplCnt() { return session.selectOne(namespace + "selectAllEmplCnt"); }
 
     @Override
-    public EmplDto selectEmplById(String emplId) { return session.selectOne(namespace + "selectEmplById", emplId); }
+    public Optional<EmplDto> selectEmplById(String emplId) {
+        return Optional.ofNullable(session.selectOne(namespace + "selectEmplById", emplId));
+    }
 
     @Override
     public int selectEmplByEmail(String email) {
         return session.selectOne(namespace + "selectEmplByEmail", email); }
+
+    @Override
+    public List<EmplDto> selectLimitedEmplList(Map<String, Object> map) {
+        return session.selectList(namespace+"selectLimitedEmplList", map);
+    }
+
+    @Override
+    public int selectSearchedEmplsCnt(Map<String, String> map) {
+        return session.selectOne(namespace+"selectLimitedEmplListCnt", map);
+    }
+
+    @Override
+    public int updateAuthName(EmplDto emplDto) {
+        return session.update(namespace+"updateEmplAuthNm", emplDto);
+    }
 
     @Override
     public int deleteAll() { return session.delete(namespace + "deleteAll"); }

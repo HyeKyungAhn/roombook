@@ -3,6 +3,8 @@ package site.roombook.dao;
 import site.roombook.domain.EmplDto;
 
 import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 
 public interface EmplDao {
     List<EmplDto> selectDeptMembers(String deptCd);
@@ -17,11 +19,19 @@ public interface EmplDao {
 
     List<EmplDto> selectAllEmpl();
 
+    List<EmplDto> selectAllForAuthAdmin();
+
     int selectAllEmplCnt();
 
-    EmplDto selectEmplById(String emplId);
+    Optional<EmplDto> selectEmplById(String emplId);
 
     int selectEmplByEmail(String email);
+
+    List<EmplDto> selectLimitedEmplList(Map<String, Object> map);
+
+    int selectSearchedEmplsCnt(Map<String, String> map);
+
+    int updateAuthName(EmplDto emplDto);
 
     int deleteAll();
 }

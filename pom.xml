@@ -279,6 +279,13 @@
             <version>2.16.1</version>
         </dependency>
 
+        <!-- https://mvnrepository.com/artifact/commons-fileupload/commons-fileupload -->
+        <dependency>
+            <groupId>commons-fileupload</groupId>
+            <artifactId>commons-fileupload</artifactId>
+            <version>1.5</version>
+        </dependency>
+
         <!-- https://mvnrepository.com/artifact/com.fasterxml.jackson.datatype/jackson-datatype-jsr310 -->
         <dependency>
             <groupId>com.fasterxml.jackson.datatype</groupId>
@@ -313,6 +320,28 @@
             <groupId>org.springframework.security</groupId>
             <artifactId>spring-security-config</artifactId>
             <version>5.8.9</version>
+        </dependency>
+
+        <!-- https://mvnrepository.com/artifact/org.springframework.security/spring-security-test -->
+        <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-test</artifactId>
+            <version>5.8.9</version>
+            <scope>test</scope>
+        </dependency>
+
+<!--        &lt;!&ndash; https://mvnrepository.com/artifact/io.jsonwebtoken/jjwt-api &ndash;&gt;-->
+<!--        <dependency>-->
+<!--            <groupId>io.jsonwebtoken</groupId>-->
+<!--            <artifactId>jjwt-api</artifactId>-->
+<!--            <version>0.11.2</version>-->
+<!--        </dependency>-->
+
+        <!-- https://mvnrepository.com/artifact/com.auth0/java-jwt -->
+        <dependency>
+            <groupId>com.auth0</groupId>
+            <artifactId>java-jwt</artifactId>
+            <version>4.3.0</version>
         </dependency>
 
         <dependency>

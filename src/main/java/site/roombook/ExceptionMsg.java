@@ -15,7 +15,11 @@ public enum ExceptionMsg {
     SIGNUP_REDIS_CONNECTION_FAIL("108", "죄송합니다. 예상치 못한 문제가 발생했습니다. 관리자에게 문의해주세요."),
 
     EMAIL_INVALID_EMAIL("201", "인증 코드 전송에 실패했습니다. 유효한 이메일 주소가 아닙니다."),
-    EMAIL_SENDING_AUTH_CODE_FAIL("202", "인증 코드 전송에 실패했습니다. 다시 시도해주세요.");
+    EMAIL_SENDING_AUTH_CODE_FAIL("202", "인증 코드 전송에 실패했습니다. 다시 시도해주세요."),
+
+    EMPL_AUTH_UNEXPECTED_PROBLEM("301", "예상치 못한 문제가 발생했습니다.\n새로고침 후 다시 시도해주세요."),
+    EMPL_AUTH_INVALID_AUTH_NAME("302", "유효하지 않은 않은 값입니다."),
+    EMPL_AUTH_UPDATE_FAIL("303", "업데이트에 실패했습니다. 다시 시도해주세요.");
 
     private final String code;
     private final String content;

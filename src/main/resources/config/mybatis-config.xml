@@ -20,5 +20,7 @@
         <typeAlias alias="SpaceRescDto" type="site.roombook.domain.SpaceRescDto"/>
         <typeAlias alias="SpaceRescFileDto" type="site.roombook.domain.SpaceRescFileDto"/>
         <typeAlias alias="EmailVerfDto" type="site.roombook.domain.EmailVerfDto"/>
+        <typeAlias alias="JwtDto" type="site.roombook.domain.JwtDto"/>
+        <typeAlias alias="AuthChgHistDto" type="site.roombook.domain.AuthChgHistDto"/>
     </typeAliases>
 </configuration>

@@ -6,8 +6,8 @@ import lombok.Getter;
 public class PageHandler {
     private final int totalCnt; // 총 게시물 갯수
     private final int pageSize; // 한 페이지 크기
-    private static final int naviSize = 5;
-    private final int offset;
+    private final int naviSize;
+    private final int offset; //네비게이션 시작
     private final int totalPage; //전체 페이지 갯수
     private final int currentPage;
 
@@ -20,13 +20,15 @@ public class PageHandler {
 
     public PageHandler(int totalCnt, int currentPage, int pageSize) {
         this.totalCnt = totalCnt;
-        this.currentPage = currentPage;
+        this.currentPage = Math.max(currentPage, 1);
         this.pageSize = pageSize;
+        this.naviSize = 5;
 
         totalPage = (int)Math.ceil((double) totalCnt/pageSize);
-        offset = (currentPage-1)*5;
-        showPrev = currentPage != 1;
-        showNext = currentPage != totalPage;
+        int tempOffset = (this.currentPage-1) * pageSize;
+        offset = totalCnt < tempOffset ? 0 : tempOffset;
+        showPrev = this.currentPage != 1;
+        showNext = this.currentPage != totalPage;
     }
 
 }

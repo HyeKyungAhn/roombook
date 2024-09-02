@@ -7,22 +7,21 @@ import org.springframework.data.redis.RedisConnectionFailureException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import site.roombook.ExceptionMsg;
+import site.roombook.dao.AuthChgHistDao;
 import site.roombook.dao.EmplDao;
-import site.roombook.domain.EmailVerfDto;
-import site.roombook.domain.EmplDto;
-import site.roombook.domain.ServiceResult;
-import site.roombook.domain.SignupInput;
+import site.roombook.domain.*;
 
 import java.time.LocalDateTime;
-import java.util.Objects;
-import java.util.Random;
-import java.util.UUID;
+import java.util.*;
 
 @Service
 public class EmplServiceImpl implements EmplService {
 
     @Autowired
     private EmplDao emplDao;
+
+    @Autowired
+    private AuthChgHistDao authChgHistDao;
 
     @Autowired
     private EmailService emailService;
@@ -43,8 +42,7 @@ public class EmplServiceImpl implements EmplService {
 
     @Override
     public boolean hasEmpl(String emplId) {
-        EmplDto emplDto = emplDao.selectEmplById(emplId);
-        return Objects.nonNull(emplDto);
+        return emplDao.selectEmplById(emplId).isPresent();
     }
 
     @Override
@@ -100,6 +98,11 @@ public class EmplServiceImpl implements EmplService {
 
     @Override
     public ServiceResult processSignup(SignupInput inputs, String ip) {
+
+        if (isEmailExisting(inputs.getEmail())) {
+            return new ServiceResult(false, ExceptionMsg.SIGNUP_EMAIL_ALREADY_EXIST);
+        }
+
         String key = generateKey(inputs.getEmail());
 
         try {
@@ -135,11 +138,66 @@ public class EmplServiceImpl implements EmplService {
 
         boolean doSaveSuccess = saveEmpl(inputs);
 
-        if (!doSaveSuccess) {
+        if (doSaveSuccess) {
+            recordService.deleteKey(key);
+        } else {
             logger.warn("회원 가입 정보 DB 저장 실패");
             return new ServiceResult(false, ExceptionMsg.SIGNUP_DATA_SAVE_FAIL);
         }
         return new ServiceResult(true);
+    }
+
+    @Override
+    public List<EmplDto> getEmplListForEmplAuthChange(String option, String optionValue, int limit, int offset) {
+
+        Map<String, Object> map = new HashMap<>();
+        map.put("option", option);
+        map.put("optionValue", optionValue);
+        map.put("limit", limit);
+        map.put("offset", offset);
+
+        return emplDao.selectLimitedEmplList(map);
+    }
+
+    @Override
+    public int getSearchedEmplsCount(String option, String optionValue) {
+        Map<String, String> searchOptionMap = new HashMap<>();
+        searchOptionMap.put("option", option);
+        searchOptionMap.put("optionValue", optionValue);
+
+        return emplDao.selectSearchedEmplsCnt(searchOptionMap);
+    }
+
+    @Override
+    public ServiceResult updateEmplAuth(String emplId, String emplAuthNm, String authAprvEmplId) {
+        ServiceResult result = new ServiceResult();
+
+        EmplDto emplDto = EmplDto.EmplDtoBuilder()
+                .emplId(emplId)
+                .emplAuthNm(emplAuthNm)
+                .lastUpdDtm(LocalDateTime.now())
+                .lastUpdrIdnfNo(authAprvEmplId)
+                .build();
+
+        boolean isUpdateSuccesful = emplDao.updateAuthName(emplDto)==1;
+        result.setSuccessful(isUpdateSuccesful);
+
+        if (isUpdateSuccesful) {
+            AuthChgHistDto authChgHistDto = AuthChgHistDto.authChgHistDto()
+                    .authChgHistId(UUID.randomUUID().toString())
+                    .emplId(emplId)
+                    .authNm(emplAuthNm)
+                    .authYn('Y')
+                    .regrIdnfId(authAprvEmplId)
+                    .regDtm(LocalDateTime.now())
+                    .build();
+
+            authChgHistDao.insert(authChgHistDto);
+        } else {
+            result.setMsg(ExceptionMsg.EMPL_AUTH_UPDATE_FAIL);
+        }
+
+        return result;
     }
 
     private boolean isEmailExisting(String email) {
@@ -149,8 +207,26 @@ public class EmplServiceImpl implements EmplService {
     private boolean saveEmpl(SignupInput inputs) {
         String encodedPwd = passwordEncoder.encode(inputs.getPwd());
 
-        EmplDto empl = new EmplDto(String.valueOf(UUID.randomUUID()), inputs.getId(), encodedPwd, inputs.getEmail(), 0, inputs.getName(), null
-                , null, null, null, Integer.parseInt(inputs.getEmplno()), null, null, 'Y', 'Y', 'Y', 'N');
+        EmplDto empl = EmplDto.EmplDtoBuilder()
+                .emplNo(String.valueOf(UUID.randomUUID()))
+                .emplId(inputs.getId())
+                .pwd(encodedPwd)
+                .email(inputs.getEmail())
+                .pwdErrTms(0)
+                .rnm(inputs.getName())
+                .engNm(null)
+                .entDt(null)
+                .emplAuthNm("ROLE_USER")
+                .brdt(null)
+                .wncomTelno(null)
+                .empno(Integer.parseInt(inputs.getEmplno()))
+                .msgrId(null)
+                .prfPhotoPath(null)
+                .subsCertiYn('Y')
+                .termsAgreYn('Y')
+                .subsAprvYn('Y')
+                .secsnYn('N')
+                .build();
 
         return emplDao.insertEmpl(empl) == 1;
     }
@@ -176,7 +252,10 @@ public class EmplServiceImpl implements EmplService {
     private void updateAuthCodeRequestCnt(EmailVerfDto authRequestRecord, String ip){
         Integer authRequestCnt = authRequestRecord.getAuthRequestCnt();
 
-        EmailVerfDto emailVerfDto = copyEmailVerfDtoBuilder(authRequestRecord).authRequestCnt(++authRequestCnt).ip(ip).build();
+        EmailVerfDto emailVerfDto = copyEmailVerfDtoBuilder(authRequestRecord)
+                .authRequestCnt(++authRequestCnt)
+                .ip(ip)
+                .build();
 
         recordService.storeTempValue(generateKey(emailVerfDto.getEmail()), emailVerfDto);
     }
@@ -184,7 +263,12 @@ public class EmplServiceImpl implements EmplService {
     private void updateAuthAttemptsCnt(EmailVerfDto authRequestRecord, String ip) {
         Integer authAttemptsCount = authRequestRecord.getAuthAttemptsCnt();
 
-        EmailVerfDto emailVerfDto = copyEmailVerfDtoBuilder(authRequestRecord).authRequestCnt(++authAttemptsCount).ip(ip).build();
+        EmailVerfDto emailVerfDto = copyEmailVerfDtoBuilder(authRequestRecord)
+                .authRequestCnt(++authAttemptsCount)
+                .creDtm(LocalDateTime.now())
+                .expiDtm(LocalDateTime.now().plusMinutes(EmplServiceImpl.AUTH_TIMEOUT))
+                .ip(ip)
+                .build();
 
         recordService.storeTempValue(generateKey(emailVerfDto.getEmail()), emailVerfDto);
     }
@@ -219,7 +303,7 @@ public class EmplServiceImpl implements EmplService {
                 email(authRequestRecord.getEmail()).
                 ip(authRequestRecord.getIp()).
                 verificationCode(authRequestRecord.getVerificationCode()).
-                creDtm(LocalDateTime.now()).
+                creDtm(authRequestRecord.getCreDtm()).
                 expiDtm(authRequestRecord.getExpiDtm()).
                 authRequestCnt(authRequestRecord.getAuthRequestCnt()).
                 maxAuthRequestCnt(authRequestRecord.getMaxAuthRequestCnt()).

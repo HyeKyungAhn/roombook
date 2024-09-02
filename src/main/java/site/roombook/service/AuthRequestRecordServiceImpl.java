@@ -23,4 +23,9 @@ public class AuthRequestRecordServiceImpl implements AuthRequestRecordService{
     public EmailVerfDto getTempValue(String key) throws RedisConnectionFailureException {
         return redisTemplate.opsForValue().get(key);
     }
+
+    @Override
+    public boolean deleteKey(String key) {
+        return Boolean.TRUE.equals(redisTemplate.delete(key));
+    }
 }

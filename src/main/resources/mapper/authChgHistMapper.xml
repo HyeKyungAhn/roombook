@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="site.roombook.dao.authChgHistMapper">
+    <insert id="insert" parameterType="AuthChgHistDto">
+        INSERT INTO auth_chg_hist
+        VALUES (#{authChgHistId}
+            , (SELECT EMPL_NO FROM empl WHERE EMPL_ID = #{emplId})
+            , #{authNm}, #{authYn}, #{regDtm}
+            ,(SELECT EMPL_NO FROM empl WHERE EMPL_ID = #{regrIdnfId} AND EMPL_AUTH_NM = 'ROLE_SUPER_ADMIN'))
+    </insert>
+
+    <select id="selectOneByEmplNo" parameterType="String" resultType="AuthChgHistDto">
+        SELECT * FROM auth_chg_hist WHERE EMPL_NO = #{emplNo}
+    </select>
+</mapper>

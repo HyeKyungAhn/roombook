@@ -5,7 +5,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import site.roombook.ExceptionMsg;
-import site.roombook.config.MailConfig;
+import site.roombook.global.config.MailConfig;
 import site.roombook.domain.ServiceResult;
 
 import javax.mail.*;

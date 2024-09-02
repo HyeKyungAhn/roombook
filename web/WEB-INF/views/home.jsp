@@ -1,17 +1,17 @@
 <%--
   Created by IntelliJ IDEA.
   User: hka
-  Date: 2024-03-18
-  Time: 오후 5:33
+  Date: 2024-08-12
+  Time: 오후 4:56
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" %>
 <!DOCTYPE>
 <html lang="kr">
 <head>
-    <title>Title</title>
+    <title>roombook</title>
 </head>
 <body>
-잘못된 입력입니다.
+홈페이지입니다.
 </body>
 </html>

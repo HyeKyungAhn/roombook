@@ -79,5 +79,6 @@
     </bean>
 
     <bean id="passwordEncoderTest" class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder"/>
-
+    <bean id="mvcHandlerMappingIntrospector" class="org.springframework.web.servlet.handler.HandlerMappingIntrospector"/>
+    <bean id="requestMappingHandlerMapping" class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping"/>
 </beans>

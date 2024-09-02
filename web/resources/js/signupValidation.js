@@ -25,6 +25,13 @@ function init() {
     idDupCheckBtn.disabled = appState.idDubCheckBtnDisabled;
     emailVerificationBtn.disabled = appState.verificationBtnDisabled;
     signupBtn.disabled = appState.signupBtnDisabled;
+
+    nameInputEl.value = '';
+    idInputEl.value = '';
+    pwdInputEl.value = '';
+    emailInputEl.value = '';
+    verificationCodeInputEl.value = '';
+    emplnoInputEl.value = '';
 }
 
 function toggleVerificationCodeInputBox(){
@@ -221,8 +228,19 @@ function validateVerificationCode() {
 
 //////////// Event Listeners ////////////
 
+window.addEventListener('pageshow', function (e) {
+    if(e.persisted){
+        getAppStates();
+        init();
+    }
+});
+
 document.addEventListener('DOMContentLoaded', function(){
-    fetch('/signup/appstate', {
+    getAppStates();
+});
+
+function getAppStates () {
+    fetch('/api/signup/appstate', {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',
@@ -237,7 +255,7 @@ document.addEventListener('DOMContentLoaded', function(){
             return true;
         })
         .catch(error => console.error('Error:', error));
-});
+}
 
 nameInputEl.addEventListener('input', validateName);
 idInputEl.addEventListener('input', validateId);
@@ -269,19 +287,20 @@ idDupCheckBtn.addEventListener('click', function(){
                     idMsgEl.innerText = appState.validationMessages.usableId;
                     appState.idUnique = true;
                 }
+
+                checkSignUpEligibility();
+
                 return true;
             })
             .catch(error => console.error('Error:', error));
     }
 
-    checkSignUpEligibility();
 });
 
-emailInputEl.addEventListener('keydown', function(e) {
+emailInputEl.addEventListener('keydown', function() {
     clearTimeout(timeout);
 
     timeout = setTimeout(function() {
-        console.log(e.target.value);
         validateEmail();
     }, 200); // 100ms 동안 대기
 });
@@ -309,7 +328,8 @@ emailVerificationBtn.addEventListener('click', function(){
                 checkSignUpEligibility();
             } else if(jsonResponse.result === "SIGNUP_UNABLE") {
                 alert(jsonResponse.errorMessage);
-                location.href = appState.links.find((element) => element.rel === 'error').href;
+            } else if(jsonResponse.result === "EMAIL_EXIST"){
+                emailMsgEl.innerText = jsonResponse.errorMessage;
             } else {
                 validateEmail();
             }
@@ -347,7 +367,6 @@ signupBtn.addEventListener('click', function(){
             }else if(jsonResponse.serverState.result === "SUCCESS") {
                 location.href = appState.links.find((element) => element.rel === 'signupSuccess').href;
             }
-            console.log(jsonResponse);
         })
         .catch(error => console.error('Error:', error));
 });

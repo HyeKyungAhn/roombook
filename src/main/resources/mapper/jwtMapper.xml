@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="site.roombook.dao.jwtMapper">
+    <select id="selectByToken" parameterType="String" resultType="JwtDto">
+        SELECT * FROM jwt WHERE TKN = #{token}
+    </select>
+
+    <select id="selectUnexpiredTokenByToken" parameterType="String" resultType="JwtDto">
+        SELECT jwt.TKN_ID, jwt.TKN, jwt.CRE_EMPL_NO, jwt.CRE_DTM, jwt.EXPI_DTM, empl.EMPL_ID AS 'CRE_EMPL_ID'
+        FROM jwt INNER JOIN empl
+        ON jwt.CRE_EMPL_NO = empl.EMPL_NO
+        WHERE jwt.TKN = #{token}
+          AND jwt.EXPI_DTM <![CDATA[>]]> NOW()
+    </select>
+
+    <select id="selectUnexpiredTokenAndAuthority" parameterType="String" resultType="JwtDto">
+        SELECT jwt.TKN_ID, jwt.TKN, jwt.CRE_EMPL_NO, jwt.CRE_DTM, jwt.EXPI_DTM, empl.EMPL_ID AS 'CRE_EMPL_ID', empl.EMPL_AUTH_NM
+        FROM jwt INNER JOIN empl
+                            ON jwt.CRE_EMPL_NO = empl.EMPL_NO
+        WHERE jwt.TKN = #{token}
+          AND jwt.EXPI_DTM <![CDATA[>]]> NOW()
+    </select>
+
+    <insert id="insertToken" parameterType="JwtDto">
+        INSERT INTO jwt(TKN_ID, TKN, CRE_EMPL_NO, CRE_DTM, EXPI_DTM)
+        VALUES (#{tknId}, #{tkn}, (SELECT EMPL_NO FROM empl WHERE EMPL_ID = #{creEmplId}), #{creDtm}, #{expiDtm})
+    </insert>
+
+    <update id="expireTokenByToken" parameterType="String">
+        UPDATE jwt SET EXPI_DTM = CURRENT_TIMESTAMP
+        WHERE TKN = #{tkn}
+            AND EXPI_DTM <![CDATA[>]]> NOW()
+        ORDER BY EXPI_DTM DESC
+        LIMIT 1
+    </update>
+
+    <update id="expireTokenByEmplId" parameterType="String">
+        UPDATE jwt
+        SET EXPI_DTM = CURRENT_TIMESTAMP
+        WHERE CRE_EMPL_NO =
+              (SELECT EMPL_NO FROM empl WHERE EMPL_ID = #{emplId})
+            AND EXPI_DTM <![CDATA[>]]> NOW()
+        ORDER BY EXPI_DTM DESC
+        LIMIT 1
+    </update>
+
+    <delete id="deleteAll">
+        DELETE FROM jwt
+    </delete>
+</mapper>

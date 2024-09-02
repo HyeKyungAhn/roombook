@@ -26,29 +26,83 @@
     </select>
 
     <insert id="insertEmpl" parameterType="EmplDto">
-        INSERT INTO empl(EMPL_NO, EMPL_ID, PWD, EMAIL, PWD_ERR_TMS, RNM, ENG_NM, ENT_DT, BRDT, WNCOM_TELNO, EMPNO,
+        INSERT INTO empl(EMPL_NO, EMPL_ID, PWD, EMAIL, PWD_ERR_TMS, RNM, ENG_NM, ENT_DT, EMPL_AUTH_NM, BRDT, WNCOM_TELNO, EMPNO,
         MSGR_ID, PRF_PHOTO_PATH, SUBS_CERTI_YN, TERMS_AGRE_YN, SUBS_APRV_YN, SECSN_YN,
         FST_REGR_IDNF_NO, LAST_UPDR_IDNF_NO)
-        VALUES (#{emplNo}, #{emplId}, #{pwd}, #{email}, #{pwdErrTms}, #{rnm}, #{engNm}, #{entDt}, #{brdt}, #{wncomTelno}, #{empno},
+        VALUES (#{emplNo}, #{emplId}, #{pwd}, #{email}, #{pwdErrTms}, #{rnm}, #{engNm}, #{entDt}, #{emplAuthNm}, #{brdt}, #{wncomTelno}, #{empno},
         #{msgrId}, #{prfPhotoPath}, #{subsCertiYn}, #{termsAgreYn}, #{subsAprvYn}, #{secsnYn},
         #{emplNo}, #{emplNo})
     </insert>
 
-    <select id="selectAllEmpl" resultType="List">
+    <select id="selectAllEmpl" resultType="EmplDto">
         SELECT * FROM empl
+    </select>
+
+    <select id="selectAllForAuthAdmin" resultType="EmplDto">
+        SELECT EMPL_ID, EMAIL, RNM, EMPNO, EMPL_AUTH_NM FROM empl
     </select>
 
     <select id="selectAllEmplCnt" resultType="int">
         SELECT count(*) FROM empl
     </select>
 
-    <select id="selectEmplById" resultType="emplDto">
-        SELECT * FROM empl WHERE EMPL_ID = #{emplId};
+    <select id="selectEmplById" resultType="EmplDto">
+        SELECT * FROM empl WHERE EMPL_ID = #{emplId}
     </select>
 
     <select id="selectEmplByEmail" parameterType="String" resultType="int">
         SELECT COUNT(*) FROM empl WHERE EMAIL = #{email}
     </select>
+
+    <select id="selectLimitedEmplList" parameterType="Map" resultType="EmplDto">
+        SELECT RNM, EMAIL, EMPL_ID, EMPNO, EMPL_AUTH_NM FROM empl
+        WHERE true
+        <choose>
+            <when test="option eq 'name'">
+                AND RNM = #{optionValue}
+            </when>
+            <when test="option eq 'email'">
+                AND EMAIL = #{optionValue}
+            </when>
+            <when test="option eq 'id'">
+                AND EMPL_ID = #{optionValue}
+            </when>
+            <when test="option eq 'emplno'">
+                AND EMPNO = #{optionValue}
+            </when>
+            <when test="option eq 'authName'">
+                AND EMPL_AUTH_NM LIKE CONCAT('%',#{optionValue},'%')
+            </when>
+        </choose>
+        ORDER BY FST_REG_DTM DESC
+        LIMIT #{limit} OFFSET #{offset}
+    </select>
+
+    <select id="selectLimitedEmplListCnt" parameterType="Map" resultType="int">
+        SELECT COUNT(*) FROM empl
+        WHERE true
+        <choose>
+            <when test="option eq 'name'">
+                AND RNM = #{optionValue}
+            </when>
+            <when test="option eq 'email'">
+                AND EMAIL = #{optionValue}
+            </when>
+            <when test="option eq 'id'">
+                AND EMPL_ID = #{optionValue}
+            </when>
+            <when test="option eq 'emplno'">
+                AND EMPNO = #{optionValue}
+            </when>
+            <when test="option eq 'authName'">
+                AND EMPL_AUTH_NM LIKE CONCAT('%',#{optionValue},'%')
+            </when>
+        </choose>
+    </select>
+
+    <update id="updateEmplAuthNm" parameterType="EmplDto">
+        UPDATE empl SET EMPL_AUTH_NM = #{emplAuthNm}, LAST_UPD_DTM = #{lastUpdDtm}, LAST_UPDR_IDNF_NO = #{lastUpdrIdnfNo} WHERE EMPL_ID = #{emplId}
+    </update>
 
     <delete id="deleteAll">
         DELETE FROM empl

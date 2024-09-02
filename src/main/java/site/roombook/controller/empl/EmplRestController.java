@@ -13,10 +13,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.annotation.*;
 import site.roombook.ExceptionMsg;
-import site.roombook.domain.ServerState;
-import site.roombook.domain.ServiceResult;
-import site.roombook.domain.SignupInput;
-import site.roombook.domain.SignupState;
+import site.roombook.controller.HomeController;
+import site.roombook.domain.*;
 import site.roombook.service.EmailService;
 import site.roombook.service.EmplService;
 
@@ -29,6 +27,7 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 @RestController
+@RequestMapping("/api")
 public class EmplRestController {
     @Autowired
     EmailService emailService;
@@ -39,9 +38,10 @@ public class EmplRestController {
     private static final String SUCCESS = "SUCCESS";
     private static final String FAIL = "FAIL";
     private static final String SIGNUP_UNABLE = "SIGNUP_UNABLE";
+    private static final String EMAIL_EXIST = "EMAIL_EXIST";
 
     @ExceptionHandler(HttpMessageNotReadableException.class)
-    ResponseEntity<SignupState> handler(HttpMessageNotReadableException e){
+    ResponseEntity<SignupState> errorHandler(){
         ServerState serverState = ServerState.Builder().
                 result("INVALID_INPUTS").build();
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
@@ -49,7 +49,7 @@ public class EmplRestController {
                 .body(SignupState.Builder().serverState(serverState).build());
     }
 
-    @GetMapping(value = "/empl/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/empls/{id}/dupcheck", produces = MediaType.APPLICATION_JSON_VALUE)
     public EntityModel<Map<String,Boolean>> checkIdDuplication(@PathVariable("id") String emplId){
         Map<String, Boolean> map = new HashMap<>();
         map.put("hasId", emplService.hasEmpl(emplId));
@@ -104,7 +104,7 @@ public class EmplRestController {
                 linkTo(methodOn(EmplRestController.class).checkIdDuplication(null)).withRel("idDuplicationCheck"),
                 linkTo(methodOn(EmplRestController.class).signup(null, null)).withRel("signup"),
                 linkTo(methodOn(EmplController.class).getSignupSuccessPage()).withRel("signupSuccess"),
-                linkTo(methodOn(EmplController.class).getServerErrorPage()).withRel("error"));
+                linkTo(methodOn(HomeController.class).getServerErrorPage()).withRel("error"));
     }
 
     @PostMapping(value = "/signup", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -168,6 +168,18 @@ public class EmplRestController {
                         .errorMessage(result.getMsg() != null ? result.getMsg().getContent() : "")
                         .build());
     }
+
+    @GetMapping(value = "/signin/appstate", produces = MediaType.APPLICATION_JSON_VALUE)
+    public EntityModel<Map<String,Map<String,String>>> getSignInAppState(){
+        Map<String, String> msg = Map.of("emptyId", "아이디를 입력해주세요."
+                , "emptyPassword", "비밀번호를 입력해주세요"
+                , "authFail", "아이디 또는 비밀번호가 일치하지 않습니다."
+                , "invalidAccess", "올바르지 않은 접근입니다.");
+
+        return EntityModel.of(Map.of("validationMessage", msg), linkTo(methodOn(EmplController.class).getSignupPage()).withSelfRel()
+                , linkTo(methodOn(EmplController.class).getSignupPage()).withRel("signup"));
+    }
+
 
     private SignupState validateSignupInputs(SignupInput inputs){
         SignupState.SignupStateBuilder builder = SignupState.Builder();
@@ -260,6 +272,8 @@ public class EmplRestController {
 
         if (!serviceResult.isSuccessful() && serviceResult.getMsg().equals(ExceptionMsg.SIGNUP_REDIS_CONNECTION_FAIL)) {
             resultValue = SIGNUP_UNABLE;
+        } else if (!serviceResult.isSuccessful() && serviceResult.getMsg().equals(ExceptionMsg.SIGNUP_EMAIL_ALREADY_EXIST)) {
+            resultValue = EMAIL_EXIST;
         } else if (!serviceResult.isSuccessful()) {
             resultValue = FAIL;
         } else {

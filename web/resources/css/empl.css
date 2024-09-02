@@ -1,0 +1,46 @@
+.listContainer {
+    width: 1000px;
+}
+
+.listHeader {
+    display: flex;
+}
+
+.listContent {
+    display: flex;
+    flex-direction: column;
+}
+
+.toggleBox {
+
+}
+
+.emplColumn {
+
+}
+.emplRow {
+    /*display: flex;*/
+}
+.emplRowSub {
+    display: flex;
+    flex-direction: row;
+}
+.emplName {
+    width: 17%;
+}
+
+.emplEmail {
+    width: 30%;
+}
+
+.emplId {
+    width: 17%;
+}
+
+.emplno{
+    width: 16%;
+}
+
+.emplAuthName {
+    width: 20%;
+}
