@@ -13,7 +13,6 @@
         <typeAlias alias="EmplDto" type="site.roombook.domain.EmplDto"/>
         <typeAlias alias="BlngDeptDto" type="site.roombook.domain.BlngDeptDto"/>
         <typeAlias alias="DeptAndEmplDto" type="site.roombook.domain.DeptAndEmplDto"/>
-        <typeAlias alias="BlngDeptAndEmplIdDto" type="site.roombook.domain.BlngDeptAndEmplIdDto"/>
         <typeAlias alias="RescDto" type="site.roombook.domain.RescDto"/>
         <typeAlias alias="SpaceDto" type="site.roombook.domain.SpaceDto"/>
         <typeAlias alias="FileDto" type="site.roombook.domain.FileDto"/>

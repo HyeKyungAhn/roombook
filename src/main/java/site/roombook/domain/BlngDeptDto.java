@@ -1,114 +1,26 @@
 package site.roombook.domain;
 
-import java.util.Date;
+import lombok.*;
+
+import java.time.LocalDateTime;
 import java.util.Objects;
 
+@Getter
+@ToString
+@NoArgsConstructor
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
+@Builder(builderMethodName = "BlngDeptDtoBuilder")
 public class BlngDeptDto {
     private String blngDeptCd;
     private String blngEmplNo;
+    private String blngEmplId;
     private char repDeptYn;
-    private Date fstRegDtm;
+    private LocalDateTime fstRegDtm;
     private String fstRegrIdnfNo;
-    private Date lastUpdDtm;
+    private String registerId;
+    private LocalDateTime lastUpdDtm;
     private String lastUpdrIdnfNo;
-
-    public BlngDeptDto() {}
-
-    public BlngDeptDto(String blngDeptCd, String blngEmplNo, char repDeptYn, Date fstRegDtm, String fstRegrIdnfNo, Date lastUpdDtm, String lastUpdrIdnfNo) {
-        this.blngDeptCd = blngDeptCd;
-        this.blngEmplNo = blngEmplNo;
-        this.repDeptYn = repDeptYn;
-        this.fstRegDtm = fstRegDtm;
-        this.fstRegrIdnfNo = fstRegrIdnfNo;
-        this.lastUpdDtm = lastUpdDtm;
-        this.lastUpdrIdnfNo = lastUpdrIdnfNo;
-    }
-
-    public BlngDeptDto(String blngDeptCd, String blngEmplNo, char repDeptYn, String fstRegrIdnfNo, String lastUpdrIdnfNo) {
-        this.blngDeptCd = blngDeptCd;
-        this.blngEmplNo = blngEmplNo;
-        this.repDeptYn = repDeptYn;
-        this.fstRegrIdnfNo = fstRegrIdnfNo;
-        this.lastUpdrIdnfNo = lastUpdrIdnfNo;
-    }
-
-    public BlngDeptDto(String blngDeptCd, String blngEmplNo, Date fstRegDtm, String fstRegrIdnfNo, Date lastUpdDtm, String lastUpdrIdnfNo) {
-        this.blngDeptCd = blngDeptCd;
-        this.blngEmplNo = blngEmplNo;
-        this.fstRegDtm = fstRegDtm;
-        this.fstRegrIdnfNo = fstRegrIdnfNo;
-        this.lastUpdDtm = lastUpdDtm;
-        this.lastUpdrIdnfNo = lastUpdrIdnfNo;
-    }
-
-    public String getBlngDeptCd() {
-        return blngDeptCd;
-    }
-
-    public void setBlngDeptCd(String blngDeptCd) {
-        this.blngDeptCd = blngDeptCd;
-    }
-
-    public String getBlngEmplNo() {
-        return blngEmplNo;
-    }
-
-    public void setBlngEmplNo(String blngEmplNo) {
-        this.blngEmplNo = blngEmplNo;
-    }
-
-    public char getRepDeptYn() {
-        return repDeptYn;
-    }
-
-    public void setRepDeptYn(char repDeptYn) {
-        this.repDeptYn = repDeptYn;
-    }
-
-    public Date getFstRegDtm() {
-        return fstRegDtm;
-    }
-
-    public void setFstRegDtm(Date fstRegDtm) {
-        this.fstRegDtm = fstRegDtm;
-    }
-
-    public String getFstRegrIdnfNo() {
-        return fstRegrIdnfNo;
-    }
-
-    public void setFstRegrIdnfNo(String fstRegrIdnfNo) {
-        this.fstRegrIdnfNo = fstRegrIdnfNo;
-    }
-
-    public Date getLastUpdDtm() {
-        return lastUpdDtm;
-    }
-
-    public void setLastUpdDtm(Date lastUpdDtm) {
-        this.lastUpdDtm = lastUpdDtm;
-    }
-
-    public String getLastUpdrIdnfNo() {
-        return lastUpdrIdnfNo;
-    }
-
-    public void setLastUpdrIdnfNo(String lastUpdrIdnfNo) {
-        this.lastUpdrIdnfNo = lastUpdrIdnfNo;
-    }
-
-    @Override
-    public String toString() {
-        return "BlngDeptDto{" +
-                "blngDeptCd='" + blngDeptCd + '\'' +
-                ", blngEmplNo='" + blngEmplNo + '\'' +
-                ", repDeptYn=" + repDeptYn +
-                ", fstRegDtm=" + fstRegDtm +
-                ", fstRegrIdnfNo='" + fstRegrIdnfNo + '\'' +
-                ", lastUpdDtm=" + lastUpdDtm +
-                ", lastUpdrIdnfNo='" + lastUpdrIdnfNo + '\'' +
-                '}';
-    }
+    private String modifierId;
 
     @Override
     public boolean equals(Object o) {

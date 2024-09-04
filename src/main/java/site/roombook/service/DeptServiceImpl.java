@@ -168,10 +168,15 @@ public class DeptServiceImpl implements DeptService {
         newMemIDs.removeAll(oldMemIDs);
 
         if(!newMemIDs.isEmpty()){
-            List<BlngDeptAndEmplIdDto> newMemList = new ArrayList<>();
+            List<BlngDeptDto> newMemList = new ArrayList<>();
 
-            for (String newMemID : newMemIDs) {
-                newMemList.add(new BlngDeptAndEmplIdDto(deptCd, newMemID, modifierId, modifierId));
+            for (String newMemId : newMemIDs) {
+                BlngDeptDto blngDeptDto = BlngDeptDto.BlngDeptDtoBuilder()
+                        .blngDeptCd(deptCd)
+                        .blngEmplId(newMemId)
+                        .registerId(modifierId).build();
+
+                newMemList.add(blngDeptDto);
             }
 
             blngDeptDao.insertBlngDepts(newMemList);
