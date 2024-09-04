@@ -1,6 +1,8 @@
 package site.roombook.dao;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,10 +16,12 @@ import site.roombook.domain.DeptAndEmplDto;
 import site.roombook.domain.DeptDto;
 import site.roombook.domain.EmplDto;
 
+import java.time.LocalDateTime;
 import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+@Transactional
 @ExtendWith(SpringExtension.class)
 @ContextConfiguration(locations = {"file:web/WEB-INF/spring/**/applicationContext.xml"})
 class DeptDaoTest {
@@ -30,601 +34,431 @@ class DeptDaoTest {
     @Autowired
     EmplDao emplDao;
 
-    @Test
-    @Transactional
-    void insertDeptTest(){
-        deptDao.deleteAll();
-        emplDao.deleteAll();
 
-        EmplDto emplDto = new EmplDto("11111111", "jy123", "1234", "jy123@gmail.com", 0, "김지영", "darwin", "2024-01-01", "2002-01-01", "123123", 11111, null, null, 'Y', 'Y', 'Y', 'N');
-        assertEquals(1, emplDao.insertEmpl(emplDto));
+    @Nested
+    class InsertionTest {
+        private List<DeptDto> fiveDeptList;
 
-        DeptDto deptDto = new DeptDto("1234", "#", null, "인사부2", "HR", 0, "asdf", "asdf", emplDto.getEmplId());
-        int rowCnt = deptDao.insertDept(deptDto);
-        assertEquals(1, rowCnt);
+        @BeforeEach
+        void setup(){
+            List<EmplDto> threeEmplList = getThreeEmplList();
+            fiveDeptList = getFiveDeptList();
+            deptDao.deleteAll();
+            emplDao.deleteAll();
 
-        DeptDto selectedDept = deptDao.selectDept(deptDto.getDeptCd());
-        assertEquals(emplDto.getEmplNo(), selectedDept.getDeptMngrEmplNo());
-    }
+            EmplDto emplAdmin = getEmplAdmin();
+            emplDao.insertEmpl(emplAdmin);
 
-    @Test
-    @Transactional
-    @DisplayName("중복된 부서 코드 insert 테스트")
-    void insertDuplicatedDeptTest(){
-        deptDao.deleteAll();
-        emplDao.deleteAll();
-
-        EmplDto emplDto = new EmplDto("11111111", "jy123", "1234", "jy123@gmail.com", 0, "김지영", "darwin", "2024-01-01", "2002-01-01", "123123", 11111, null, null, 'Y', 'Y', 'Y', 'N');
-        assertEquals(1, emplDao.insertEmpl(emplDto));
-
-        DeptDto deptDto = new DeptDto("1234", "#", null, "인사팀", "HR", 0, "asdf", "asdf", emplDto.getEmplId());
-        assertEquals(1, deptDao.insertDept(deptDto));
-
-        DeptDto duplicatedDeptDto = new DeptDto("1234", "#", null, "AA", "AA", 0, "asdf", "asdf", emplDto.getEmplId());
-        int result = 0;
-        try {
-            result = deptDao.insertDept(duplicatedDeptDto);
-        } catch (DuplicateKeyException e) {
-            e.printStackTrace();
-        }
-        assertEquals(0, result);
-    }
-
-    @Test
-    @Transactional
-    @DisplayName("중복된 부서 이름 insert 테스트")
-    void insertDuplicatedDeptNmTest(){
-        deptDao.deleteAll();
-        emplDao.deleteAll();
-
-        EmplDto emplDto = new EmplDto("11111111", "jy123", "1234", "jy123@gmail.com", 0, "김지영", "darwin", "2024-01-01", "2002-01-01", "123123", 11111, null, null, 'Y', 'Y', 'Y', 'N');
-        assertEquals(1, emplDao.insertEmpl(emplDto));
-
-        DeptDto deptDto = new DeptDto("1234", "#", null, "HR", "eng", 0, "admin", "admin", emplDto.getEmplId());
-        deptDao.insertDept(deptDto);
-
-        DeptDto duplicatedDeptDto = new DeptDto("5678", "#", "asdf", "HR", "eng", 0, "admin", "admin", emplDto.getEmplId());
-        int result = 0;
-
-        try {
-            result = deptDao.insertDept(duplicatedDeptDto);
-        } catch (DuplicateKeyException e) {
-            e.printStackTrace();
+            for (EmplDto emplDto : threeEmplList) {
+                emplDao.insertEmpl(emplDto);
+            }
         }
 
-        assertEquals(0, result);
-    }
 
-    @Test
-    @Transactional
-    @DisplayName("매니저 이름 없는 부서 insert 테스트")
-    void insertDeptTestWithoutMngr(){
-        deptDao.deleteAll();
-
-        DeptDto deptDto = new DeptDto("1234", "#", null, "HR", "eng", 0, "admin", "admin", null);
-
-        int rowCnt = deptDao.insertDept(deptDto);
-        assertEquals(1, rowCnt);
-    }
-
-    @Test
-    @Transactional
-    void insertDeptFailTest(){
-        deptDao.deleteAll();
-
-        DeptDto deptDto = new DeptDto();
-        deptDto.setDeptCd("11111112");
-
-        int rowCnt = 0;
-        try {
-            rowCnt = deptDao.insertDept(deptDto);
-        } catch (DataIntegrityViolationException e) {
-            e.printStackTrace();
+        @Test
+        void insertDeptTest(){
+            assertEquals(1, deptDao.insertDept(fiveDeptList.get(0)));
         }
 
-        assertEquals(0, rowCnt);
+        @Test
+        @DisplayName("중복된 부서 코드 insert 테스트")
+        void insertDuplicatedDeptTest(){
+            EmplDto emplAdmin = getEmplAdmin();
+
+            DeptDto existingDept = fiveDeptList.get(0);
+            assertEquals(1, deptDao.insertDept(existingDept));
+
+            DeptDto newDept = DeptDto.DeptDtoBuilder()
+                    .deptCd(existingDept.getDeptCd())
+                    .uppDeptCd("#")
+                    .deptMngrEmplNo(null)
+                    .deptNm("인사팀")
+                    .engDeptNm("Human Resource Dept")
+                    .deptSortOdr(2)
+                    .registerId(emplAdmin.getEmplId())
+                    .registerId(emplAdmin.getEmplId()).build();
+
+            assertThrows(DuplicateKeyException.class, () -> deptDao.insertDept(newDept));
+        }
+
+        @Test
+
+        @DisplayName("중복된 부서 이름 insert 테스트")
+        void insertDuplicatedDeptNmTest(){
+            EmplDto emplAdmin = getEmplAdmin();
+
+            DeptDto existingDept = fiveDeptList.get(0);
+            assertEquals(1, deptDao.insertDept(existingDept));
+
+            DeptDto newDept = DeptDto.DeptDtoBuilder()
+                    .deptCd("9999")
+                    .uppDeptCd("#")
+                    .deptMngrEmplNo(null)
+                    .deptNm(existingDept.getDeptNm())
+                    .engDeptNm(existingDept.getEngDeptNm())
+                    .deptSortOdr(2)
+                    .registerId(emplAdmin.getEmplId()).build();
+
+            assertThrows(DuplicateKeyException.class, () -> deptDao.insertDept(newDept));
+        }
+
+        @Test
+        @DisplayName("존재하지 않는 관리자 아이디를 사용했을 때")
+        void insertDeptWithNotExistingManagerId(){
+            DeptDto DeptWithInvalidManagerId = modifyEmplId(fiveDeptList.get(0), "invalidId");
+            assertEquals(1, deptDao.insertDept(DeptWithInvalidManagerId));
+            assertNull(deptDao.selectDept(DeptWithInvalidManagerId.getDeptCd()).getDeptMngrEmplNo());
+        }
     }
 
-    @Test
-    @Transactional
-    void selectDeptTest(){
-        DeptDto deptDto = new DeptDto("1111", "#", null, "인사부", "HR", 0, "asdf", "asdf");
-        int rowCnt = deptDao.insertDept(deptDto);
+    @Nested
+    class UpdateTest {
+        private List<DeptDto> fiveDeptList;
+        private List<EmplDto> threeEmplList;
 
-        assertEquals(1, rowCnt);
-        assertEquals(deptDto.getEngDeptNm(), deptDao.selectDept(deptDto.getDeptCd()).getEngDeptNm());
-    }
+        @BeforeEach
+        void setup(){
+            deptDao.deleteAll();
+            emplDao.deleteAll();
 
-    @Test
-    @Transactional
-    @DisplayName("부서명으로 부서 수 조회 테스트")
-    void selectDeptNmTest(){
-        DeptDto deptDto = new DeptDto("1111", "#", null, "인사부", "HR", 0, "admin", "admin");
-        assertEquals(1, deptDao.insertDept(deptDto));
+            threeEmplList = getThreeEmplList();
+            fiveDeptList = getFiveDeptList();
 
-        assertEquals(1, deptDao.selectDeptCntWithNm(deptDto.getDeptNm()));
-    }
+            EmplDto emplAdmin = getEmplAdmin();
+            emplDao.insertEmpl(emplAdmin);
 
-    @Test
-    @Transactional
-    @DisplayName("부서 관리자 수정 테스트")
-    void updateManagerTest() {
-        deptDao.deleteAll();
-        DeptDto deptDto = new DeptDto("1111", "", null, "HR", "eng", 0, "asdf", "asdf");
-        assertEquals(1, deptDao.insertDept(deptDto));
 
-        DeptDto deptDto1 = deptDao.selectDept(deptDto.getDeptCd());
-        assertNotNull(deptDto1);
+            for (EmplDto emplDto : threeEmplList) {
+                emplDao.insertEmpl(emplDto);
+            }
 
-        Map<String, String> map = new HashMap<>();
-        map.put("manager", "1111");
-        map.put("empId", "bbbb");
-        map.put("deptCd", deptDto.getDeptCd());
-        assertEquals(1, deptDao.updateManager(map));
-
-        DeptDto deptDto2 = deptDao.selectDept(deptDto.getDeptCd());
-        assertNotNull(deptDto2);
-    }
-
-    @Test
-    @Transactional
-    @DisplayName("모든 부서 조회 테스트")
-    void selectAllDept() {
-        deptDao.deleteAll();
-        DeptDto deptDto = new DeptDto("11111111", "", null, "HR", "eng", 0, "asdf", "asdf");
-        int rowCnt = deptDao.insertDept(deptDto);
-        assertEquals(1, rowCnt);
-
-        DeptDto deptDto2 = new DeptDto("11111112", "", null, "AA", "eng", 0, "asdf", "asdf");
-        rowCnt = deptDao.insertDept(deptDto2);
-        assertEquals(1, rowCnt);
-
-        List<DeptDto> list = deptDao.selectAllDept();
-        assertEquals(2, list.size());
-    }
-
-    @Test
-    @Transactional
-    @DisplayName("모든 부서 수 조회 테스트")
-    void selectAllDeptCntTest(){
-        deptDao.deleteAll();
-
-        DeptDto deptDto = new DeptDto("1111", "", null, "HR", "eng", 0, "asdf", "asdf");
-        DeptDto deptDto2 = new DeptDto("2222", "", null, "AA", "eng", 0, "asdf", "asdf");
-        deptDao.insertDept(deptDto);
-        deptDao.insertDept(deptDto2);
-
-        assertEquals(2, deptDao.selectAllDeptCnt());
-    }
-
-    @Test
-    @Transactional
-    @DisplayName("모든 부서 삭제 테스트")
-    void deleteAllTest() {
-        deptDao.deleteAll();
-
-        DeptDto deptDto = new DeptDto("11111111", "", null, "HR", "eng", 0, "asdf", "asdf");
-        DeptDto deptDto2 = new DeptDto("11111112", "", null, "AA", "eng", 0, "asdf", "asdf");
-        deptDao.insertDept(deptDto);
-        deptDao.insertDept(deptDto2);
-
-        assertEquals(2, deptDao.selectAllDeptCnt());
-
-        int deletedRowCnt = deptDao.deleteAll();
-        assertEquals(2, deletedRowCnt);
-
-        int finalSelectedRowCnt = deptDao.selectAllDeptCnt();
-        assertEquals(0, finalSelectedRowCnt);
-    }
-
-    @Test
-    @Transactional
-    @DisplayName("복수 개 부서 순서 수정 테스트")
-    void updateAllDeptTreeDataTest() {
-        deptDao.deleteAll();
-        DeptDto deptDto1 = new DeptDto("11111111", "#", null, "a", "eng", 0, "asdf", "asdf");
-        DeptDto deptDto2 = new DeptDto("11112222", "#", null, "b", "eng", 1, "asdf", "asdf");
-        DeptDto deptDto3 = new DeptDto("22222222", "11111111", null, "c", "eng", 0, "asdf", "asdf");
-        DeptDto deptDto4 = new DeptDto("22222233", "11111111", null, "d", "eng", 1, "asdf", "asdf");
-        DeptDto deptDto5 = new DeptDto("33333333", "22222222", null, "e", "eng", 0, "asdf", "asdf");
-        deptDao.insertDept(deptDto1);
-        deptDao.insertDept(deptDto2);
-        deptDao.insertDept(deptDto3);
-        deptDao.insertDept(deptDto4);
-        deptDao.insertDept(deptDto5);
-
-        List<DeptDto> list = deptDao.selectAllDept();
-        assertEquals(5, list.size());
-
-        deptDto3.setUppDeptCd("11112222");
-        deptDto3.setDeptSortOdr(0);
-        deptDto3.setLastUpdrIdnfNo("aaaa");
-        deptDto4.setUppDeptCd("11112222");
-        deptDto4.setDeptSortOdr(0);
-        deptDto4.setLastUpdrIdnfNo("aaaa");
-        deptDto5.setDeptSortOdr(1);
-
-        List<DeptDto> modifiedList = new ArrayList<>();
-        modifiedList.add(deptDto3);
-        modifiedList.add(deptDto4);
-        modifiedList.add(deptDto1);
-        modifiedList.add(deptDto2);
-        modifiedList.add(deptDto5);
-
-        int rowCnt = deptDao.updateAllDeptTreeOdrData(modifiedList);
-        assertEquals(3, rowCnt);
-    }
-
-    @Test
-    @Transactional
-    @DisplayName("부서 정보 및 부서 이름 조회 테스트")
-    void selectDeptCdAndNm() {
-        deptDao.deleteAll();
-
-        DeptDto deptDto1 = new DeptDto("11111111", "#", null, "a", "eng", 0, "asdf", "asdf");
-        DeptDto deptDto2 = new DeptDto("11112222", "#", null, "b", "eng", 1, "asdf", "asdf");
-        DeptDto deptDto3 = new DeptDto("22222222", "11111111", null, "c", "eng", 0, "asdf", "asdf");
-        DeptDto deptDto4 = new DeptDto("22222233", "11111111", null, "d", "eng", 1, "asdf", "asdf");
-        DeptDto deptDto5 = new DeptDto("33333333", "22222222", null, "e", "eng", 0, "asdf", "asdf");
-
-        deptDao.insertDept(deptDto1);
-        deptDao.insertDept(deptDto2);
-        deptDao.insertDept(deptDto3);
-        deptDao.insertDept(deptDto4);
-        deptDao.insertDept(deptDto5);
-
-        List<DeptDto> list = new ArrayList<>();
-        list.add(deptDto1);
-        list.add(deptDto2);
-        list.add(deptDto3);
-        list.add(deptDto4);
-        list.add(deptDto5);
-
-        int allDeptCnt = deptDao.selectAllDeptCnt();
-        assertEquals(5, allDeptCnt);
-
-        List<DeptDto> selectedList = deptDao.selectDeptCdAndNm();
-
-        for (DeptDto deptDto : selectedList) {
-            for (DeptDto oldDeptDto : list) {
-                if (deptDto.getDeptCd().equals(oldDeptDto.getDeptCd())) {
-                    assertEquals(deptDto.getDeptNm(), oldDeptDto.getDeptNm());
+            for (int i = 0; i < fiveDeptList.size(); i++) {
+                if (i == 0) {
+                    deptDao.insertDept(addManager(fiveDeptList.get(i), emplAdmin.getEmplId())); // 0번째 부서는 관리자가 있음
+                } else {
+                    deptDao.insertDept(fiveDeptList.get(i));
                 }
             }
         }
-    }
 
-    @Test
-    @Transactional
-    @DisplayName("부서 계층 구조 표시를 위한 부서 데이터 조회 테스트")
-    void selectAllDeptForTreeTest() {
-        deptDao.deleteAll();
+        @Test
+        @DisplayName("부서 관리자 수정 테스트")
+        void updateManagerTest() {
+            DeptDto deptToUpdate = fiveDeptList.get(0);
 
-        DeptDto deptDto1 = new DeptDto("11111111", "#", null, "a", "eng", 0, "asdf", "asdf");
-        DeptDto deptDto2 = new DeptDto("11112222", "#", null, "b", "eng", 1, "asdf", "asdf");
-        DeptDto deptDto3 = new DeptDto("22222222", "11111111", null, "c", "eng", 0, "asdf", "asdf");
-        DeptDto deptDto4 = new DeptDto("22222233", "11111111", null, "d", "eng", 1, "asdf", "asdf");
-        DeptDto deptDto5 = new DeptDto("33333333", "22222222", null, "e", "eng", 0, "asdf", "asdf");
+            Map<String, String> map = new HashMap<>();
+            map.put("manager", threeEmplList.get(0).getEmplId());
+            map.put("empId", "bbbb");
+            map.put("deptCd", deptToUpdate.getDeptCd());
 
-        deptDao.insertDept(deptDto1);
-        deptDao.insertDept(deptDto2);
-        deptDao.insertDept(deptDto3);
-        deptDao.insertDept(deptDto4);
-        deptDao.insertDept(deptDto5);
+            assertEquals(1, deptDao.updateManager(map));
+        }
 
-        List<DeptDto> oldList = new ArrayList<>();
-        oldList.add(deptDto1);
-        oldList.add(deptDto2);
-        oldList.add(deptDto3);
-        oldList.add(deptDto4);
-        oldList.add(deptDto5);
 
-        List<DeptDto> selectedList = deptDao.selectAllDeptForTree();
+        /*
+         *  <변경 후 부서 조직도>
+         *   #
+         *   L 영업부(index: 0)
+         *       L 영업기획팀(index: 2)
+         *   L 기획부(index: 1)
+         *       L 영업지원팀(index: 3)
+         *           L 고객만족팀(index: 4)
+         * */
+        @Test
+        @DisplayName("복수 개 부서 순서 수정 테스트")
+        void updateAllDeptTreeDataTest() {
+            EmplDto emplAdmin = getEmplAdmin();
+            DeptDto deptToUpdate1 = moveDept(fiveDeptList.get(3), "11112222", 0, emplAdmin.getEmplId());
+            DeptDto deptToUpdate2 = moveDept(fiveDeptList.get(4), "22222233", 0, emplAdmin.getEmplId());
 
-        assertEquals(oldList.size(), selectedList.size());
+            List<DeptDto> list = List.of(
+                    fiveDeptList.get(0)
+                    ,fiveDeptList.get(1)
+                    ,fiveDeptList.get(2)
+                    ,deptToUpdate1
+                    ,deptToUpdate2
+            );
 
-        for (DeptDto inputDept : oldList) {
-            for(DeptDto selectedDept : selectedList){
-                if(selectedDept.getDeptCd().equals(inputDept.getDeptCd())){
-                    assertNull(selectedDept.getDeptMngrEmplNo());
-                    assertNull(selectedDept.getEngDeptNm());
-                }
-            }
+            int rowCnt = deptDao.updateAllDeptTreeOdrData(list);
+            assertEquals(2, rowCnt);
         }
     }
 
-    @Test
-    @Transactional
-    @DisplayName("구성원이 있는 부서 삭제 실패 테스트")
-    void deleteDeptWithEmpl(){
-        deptDao.deleteAll();
+    private DeptDto moveDept(DeptDto deptDto, String uppDeptCd, int deptSortDor, String modifierId) {
 
-        String deptCd1 = "11111111";
-        String deptCd2 = "22222222";
-        String deptCd3 = "33333333";
-        String deptCd4 = "44444444";
-        String deptCd5 = "55555555";
-
-        DeptDto deptDto1 = new DeptDto(deptCd1, "#", null, "a", "eng", 0, "asdf", "asdf");
-        DeptDto deptDto2 = new DeptDto(deptCd2, "#", null, "b", "eng", 1, "asdf", "asdf");
-        DeptDto deptDto3 = new DeptDto(deptCd3, "11111111", null, "c", "eng", 0, "asdf", "asdf");
-        DeptDto deptDto4 = new DeptDto(deptCd4, "11111111", null, "d", "eng", 1, "asdf", "asdf");
-        DeptDto deptDto5 = new DeptDto(deptCd5, "22222222", null, "e", "eng", 0, "asdf", "asdf");
-
-        assertEquals(1, deptDao.insertDept(deptDto1));
-        assertEquals(1, deptDao.insertDept(deptDto2));
-        assertEquals(1, deptDao.insertDept(deptDto3));
-        assertEquals(1, deptDao.insertDept(deptDto4));
-        assertEquals(1, deptDao.insertDept(deptDto5));
-
-        BlngDeptDto blngDeptDto1 = new BlngDeptDto(deptCd1, "00000001", 'N', "00000002", "00000002");
-        BlngDeptDto blngDeptDto2 = new BlngDeptDto(deptCd1, "00000002", 'N', "00000002", "00000002");
-        BlngDeptDto blngDeptDto3 = new BlngDeptDto(deptCd1, "00000003", 'N', "00000002", "00000002");
-
-        assertEquals(1, blngDeptDao.insertBlngDept(blngDeptDto1));
-        assertEquals(1, blngDeptDao.insertBlngDept(blngDeptDto2));
-        assertEquals(1, blngDeptDao.insertBlngDept(blngDeptDto3));
-
-        assertEquals(0, deptDao.deleteDeptWithNoEmpl(deptCd1));
+        return DeptDto.DeptDtoBuilder()
+                .deptCd(deptDto.getDeptCd())
+                .uppDeptCd(uppDeptCd)
+                .deptMngrEmplNo(deptDto.getDeptMngrEmplNo())
+                .deptNm(deptDto.getDeptNm())
+                .engDeptNm(deptDto.getEngDeptNm())
+                .deptSortOdr(deptSortDor)
+                .lastUpdDtm(LocalDateTime.now())
+                .modifierId(modifierId).build();
     }
 
-    @Test
-    @Transactional
-    @DisplayName("구성원이 없는 부서 삭제 성공 테스트")
-    void deleteDeptWithNoEmpl(){
-        deptDao.deleteAll();
-        blngDeptDao.deleteAllBlngDept();
+    @Nested
+    class DeletionTest {
+        private List<DeptDto> fiveDeptList;
+        private List<EmplDto> threeEmplList;
 
-        String deptCd1 = "11111111";
-        String deptCd2 = "22222222";
-        String deptCd3 = "33333333";
-        String deptCd4 = "44444444";
-        String deptCd5 = "55555555";
+        @BeforeEach
+        void setup(){
+            deptDao.deleteAll();
+            emplDao.deleteAll();
+            blngDeptDao.deleteAllBlngDept();
 
-        DeptDto deptDto1 = new DeptDto(deptCd1, "#", null, "a", "eng", 0, "asdf", "asdf");
-        DeptDto deptDto2 = new DeptDto(deptCd2, "#", null, "b", "eng", 1, "asdf", "asdf");
-        DeptDto deptDto3 = new DeptDto(deptCd3, "11111111", null, "c", "eng", 0, "asdf", "asdf");
-        DeptDto deptDto4 = new DeptDto(deptCd4, "11111111", null, "d", "eng", 1, "asdf", "asdf");
-        DeptDto deptDto5 = new DeptDto(deptCd5, "22222222", null, "e", "eng", 0, "asdf", "asdf");
+            //관리자 추가
+            EmplDto emplAdmin = getEmplAdmin();
+            emplDao.insertEmpl(emplAdmin);
 
-        assertEquals(1, deptDao.insertDept(deptDto1));
-        assertEquals(1, deptDao.insertDept(deptDto2));
-        assertEquals(1, deptDao.insertDept(deptDto3));
-        assertEquals(1, deptDao.insertDept(deptDto4));
-        assertEquals(1, deptDao.insertDept(deptDto5));
+            //3명 사원 추가
+            threeEmplList = getThreeEmplList();
 
-        BlngDeptDto blngDeptDto1 = new BlngDeptDto(deptCd1, "00000001", 'N', "00000002", "00000002");
-        BlngDeptDto blngDeptDto2 = new BlngDeptDto(deptCd1, "00000002", 'N', "00000002", "00000002");
-        BlngDeptDto blngDeptDto3 = new BlngDeptDto(deptCd1, "00000003", 'N', "00000002", "00000002");
+            for (EmplDto emplDto : threeEmplList) {
+                emplDao.insertEmpl(emplDto);
+            }
 
-        assertEquals(1, blngDeptDao.insertBlngDept(blngDeptDto1));
-        assertEquals(1, blngDeptDao.insertBlngDept(blngDeptDto2));
-        assertEquals(1, blngDeptDao.insertBlngDept(blngDeptDto3));
+            //5개 부서 추가
+            fiveDeptList = getFiveDeptList();
 
-        assertEquals(1, deptDao.deleteDeptWithNoEmpl(deptCd2));
+            for (int i = 0; i < fiveDeptList.size(); i++) {
+                if (i == 0) {
+                    deptDao.insertDept(addManager(fiveDeptList.get(i), emplAdmin.getEmplId())); // 0번째 부서는 관리자가 있음
+                } else {
+                    deptDao.insertDept(fiveDeptList.get(i));
+                }
+            }
+
+            //소속 부서 추가
+        }
+
+        @Test
+        @DisplayName("구성원이 있고 하위부서는 없는 부서 삭제 실패")
+        void deleteDeptWithEmpl(){
+            DeptDto DeptToRemvoe = fiveDeptList.get(1);
+            EmplDto emplInDeptToRemove = threeEmplList.get(0);
+
+            EmplDto adminEmpl = getEmplAdmin();
+            BlngDeptDto blngDeptDto = BlngDeptDto.BlngDeptDtoBuilder()
+                    .blngDeptCd(DeptToRemvoe.getDeptCd())
+                    .blngEmplId(emplInDeptToRemove.getEmplId())
+                    .repDeptYn('N')
+                    .registerId(adminEmpl.getEmplId()).build();
+
+            assertEquals(1, blngDeptDao.insertBlngDept(blngDeptDto));
+            assertEquals(0, deptDao.deleteDeptWithNoEmpl(DeptToRemvoe.getDeptCd()));
+        }
+
+        @Test
+        @DisplayName("구성원이 없는 부서 삭제 성공 테스트")
+        void deleteDeptWithNoEmpl(){
+            assertEquals(1, deptDao.deleteDeptWithNoEmpl(fiveDeptList.get(4).getDeptCd()));
+        }
+
+        @Test
+        @DisplayName("모든 부서 삭제 테스트")
+        void deleteAllTest() {
+            assertEquals(fiveDeptList.size(), deptDao.deleteAll());
+            assertEquals(0, deptDao.selectAllDeptCnt());
+        }
     }
 
-    @Test
-    @Transactional
-    @DisplayName("부서 수정 테스트 성공")
-    void updateDeptTest() {
-        deptDao.deleteAll();
-        emplDao.deleteAll();
+    @Nested
+    class SelectionTest {
+        private List<DeptDto> fiveDeptList;
 
-        EmplDto emplDto1 = new EmplDto("11111111", "jy123", "1234", "jy123@gmail.com", 0, "김지영", "darwin", "2024-01-01", "2002-01-01", "123123", 11111, null, null, 'Y', 'Y', 'Y', 'N');
-        EmplDto emplDto2 = new EmplDto("22222222", "Mogu", "1234", "mogu@gmail.com", 0, "최모구", "mogu", "2020-01-01", "1980-10-10", "222222", 22222, null, null, 'Y', 'Y', 'Y', 'N');
+        @BeforeEach
+        void setup(){
+            List<EmplDto> threeEmplList = getThreeEmplList();
+            fiveDeptList = getFiveDeptList();
+            deptDao.deleteAll();
+            emplDao.deleteAll();
 
-        assertEquals(1, emplDao.insertEmpl(emplDto1));
-        assertEquals(1, emplDao.insertEmpl(emplDto2));
+            EmplDto emplAdmin = getEmplAdmin();
+            emplDao.insertEmpl(emplAdmin);
 
-        DeptDto deptDto1 = new DeptDto("1234", "#", null, "a", "engA", 0, "asdf", "asdf"); //수정할 dept
-        DeptDto deptDto2 = new DeptDto("5678", "#", null, "b", "engB", 1, "asdf", "asdf");
+            for (EmplDto emplDto : threeEmplList) {
+                emplDao.insertEmpl(emplDto);
+            }
 
-        assertEquals(1, deptDao.insertDept(deptDto1));
-        assertEquals(1, deptDao.insertDept(deptDto2));
+            for (int i = 0; i < fiveDeptList.size(); i++) {
+                if (i == 0) {
+                    deptDao.insertDept(addManager(fiveDeptList.get(i), emplAdmin.getEmplId())); // 0번째 부서는 관리자가 있음
+                } else {
+                    deptDao.insertDept(fiveDeptList.get(i));
+                }
+            }
+        }
 
-        Map<String, String> map = new HashMap<>();
-        map.put("emplId", emplDto1.getEmplId());
-        map.put("deptNm", "바뀐이름");
-        map.put("engDeptNm", "changedName");
-        map.put("lastUpdrIdnfNo", "modifierID");
-        map.put("deptCd", deptDto1.getDeptCd());
+        @Test
+        @DisplayName("부서명으로 부서 수 조회 테스트")
+        void selectDeptNmTest(){
+            assertEquals(1, deptDao.selectDeptCntWithNm(fiveDeptList.get(0).getDeptNm()));
+        }
 
-        assertEquals(1, deptDao.updateDept(map));
+        @Test
+        @DisplayName("하위 부서 개수 조회 테스트")
+        void selectChildrenDeptCount(){
+            assertEquals(1, deptDao.selectCdrDeptCnt(fiveDeptList.get(2).getDeptCd()));
+        }
 
-        DeptDto selectedDeptDto = deptDao.selectDept(map.get("deptCd"));
-        assertEquals(map.get("deptNm"), selectedDeptDto.getDeptNm());
-        assertEquals(emplDto1.getEmplNo(), selectedDeptDto.getDeptMngrEmplNo());
+        @Test
+        @DisplayName("하위 부서 개수 조회 테스트")
+        void selectChildrenDeptCountZeroTest(){
+            assertEquals(0, deptDao.selectCdrDeptCnt(fiveDeptList.get(4).getDeptCd()));
+        }
+
+        @Test
+        @DisplayName("부서 매니저 정보가 없을 때")
+        void selectDeptAndItsManager(){
+            DeptAndEmplDto deptWithNoChildren = deptDao.selectOneDeptAndMngrAndCdrDeptCnt(fiveDeptList.get(1).getDeptCd());
+            assertNull(deptWithNoChildren.getEmplId());
+        }
+
+        @Test
+        @DisplayName("부서 매니저 정보가 없을 때")
+        void selectOneDeptTest(){
+            DeptAndEmplDto deptWithNoChildren = deptDao.selectOneDeptAndMngrAndCdrDeptCnt(fiveDeptList.get(0).getDeptCd());
+            assertEquals(getEmplAdmin().getEmplId(), deptWithNoChildren.getEmplId());
+        }
+
+        @Test
+        @DisplayName("모든 부서 수 조회 테스트")
+        void selectAllDeptCntTest(){
+            assertEquals(fiveDeptList.size(), deptDao.selectAllDeptCnt());
+        }
     }
 
-    @Test
-    @Transactional
-    @DisplayName("부서 수정 시 잘못된 관리자 아이디 사용 테스트")
-    void updateDeptFailTest() {
-        deptDao.deleteAll();
-        emplDao.deleteAll();
+    @Nested
+    class UpdateDeptTest {
+        List<EmplDto> threeEmplList;
+        DeptDto dummyDept;
+        @BeforeEach
+        void setup() {
+            deptDao.deleteAll();
+            emplDao.deleteAll();
 
-        EmplDto emplDto1 = new EmplDto("11111111", "jy123", "1234", "jy123@gmail.com", 0, "김지영", "darwin", "2024-01-01", "2002-01-01", "123123", 11111, null, null, 'Y', 'Y', 'Y', 'N');
-        EmplDto emplDto2 = new EmplDto("22222222", "Mogu", "1234", "mogu@gmail.com", 0, "최모구", "mogu", "2020-01-01", "1980-10-10", "222222", 22222, null, null, 'Y', 'Y', 'Y', 'N');
+            assertEquals(1, emplDao.insertEmpl(getEmplAdmin()));
 
-        assertEquals(1, emplDao.insertEmpl(emplDto1));
-        assertEquals(1, emplDao.insertEmpl(emplDto2));
+            threeEmplList = getThreeEmplList();
+            assertEquals(1, emplDao.insertEmpl(threeEmplList.get(0)));
+            assertEquals(1, emplDao.insertEmpl(threeEmplList.get(1)));
+            assertEquals(1, emplDao.insertEmpl(threeEmplList.get(2)));
 
-        DeptDto deptDto1 = new DeptDto("1234", "#", null, "a", "engA", 0, "asdf", "asdf"); //수정할 dept
+            dummyDept = DeptDto.DeptDtoBuilder().deptCd("1234").uppDeptCd("#").deptMngrEmplNo(null).deptNm("a").engDeptNm("engA").deptSortOdr(0).registerId(getEmplAdmin().getEmplId()).build();
+//            dummyDept = new DeptDto("1234", "#", null, "a", "engA", 0, "asdf", "asdf");
+            assertEquals(1, deptDao.insertDept(dummyDept));
+        }
 
-        assertEquals(1, deptDao.insertDept(deptDto1));
+        @Test
+        @DisplayName("수정 사항 없는 업데이트 시 수정 성공")
+        void updateDeptWithSameValueTest() {
+            EmplDto adminEmpl = getEmplAdmin();
 
-        Map<String, String> map = new HashMap<>();
-        map.put("emplId", "33333333");
-        map.put("deptNm", "바뀐이름");
-        map.put("engDeptNm", "changedName");
-        map.put("lastUpdrIdnfNo", "modifierID");
-        map.put("deptCd", deptDto1.getDeptCd());
+            DeptDto newDept = DeptDto.DeptDtoBuilder()
+                    .deptCd(dummyDept.getDeptCd())
+                    .emplId(threeEmplList.get(0).getEmplId())
+                    .deptNm(dummyDept.getDeptNm())
+                    .engDeptNm(dummyDept.getEngDeptNm())
+                    .lastUpdDtm(LocalDateTime.now())
+                    .modifierId(adminEmpl.getEmplId())
+                    .build();
 
-        assertEquals(1, deptDao.updateDept(map));
+            assertEquals(1, deptDao.updateDept(newDept));
+        }
 
-        DeptDto selectedDeptDto = deptDao.selectDept(map.get("deptCd"));
-        assertEquals(map.get("deptNm"), selectedDeptDto.getDeptNm());
-        assertEquals(deptDto1.getDeptMngrEmplNo(), selectedDeptDto.getDeptMngrEmplNo()); //관리자 번호는 업데이트 되지 않음
+        @Test
+        @DisplayName("부서 수정 테스트 성공")
+        void updateDeptTest() {
+            DeptDto deptDto = DeptDto.DeptDtoBuilder()
+                    .emplId(threeEmplList.get(0).getEmplId())
+                    .deptNm("바뀐이름")
+                    .engDeptNm("changedName")
+                    .lastUpdDtm(LocalDateTime.now())
+                    .modifierId(getEmplAdmin().getEmplId())
+                    .deptCd(dummyDept.getDeptCd())
+                    .build();
+
+            assertEquals(1, deptDao.updateDept(deptDto));
+        }
+
+        @Test
+        @DisplayName("유효하지 않은 관리자 아이디 사용")
+        void updateDeptFailTest() {
+            DeptDto deptDto = DeptDto.DeptDtoBuilder()
+                    .emplId(threeEmplList.get(0).getEmplId())
+                    .deptNm("바뀐이름")
+                    .engDeptNm("changedName")
+                    .lastUpdDtm(LocalDateTime.now())
+                    .modifierId("modifierId")
+                    .deptCd(dummyDept.getDeptCd())
+                    .build();
+
+            assertThrows(DataIntegrityViolationException.class, () -> deptDao.updateDept(deptDto));
+        }
     }
 
-    @Test
-    @Transactional
-    @DisplayName("기존과 동일한 데이터 입력 시 부서 수정 테스트") //동일한 데이터로 업데이트 해도 반영됨
-    void updateDeptWithSameValueTest() {
-        deptDao.deleteAll();
-        emplDao.deleteAll();
-
-        EmplDto emplDto1 = new EmplDto("11111111", "jy123", "1234", "jy123@gmail.com", 0, "김지영", "darwin", "2024-01-01", "2002-01-01", "123123", 11111, null, null, 'Y', 'Y', 'Y', 'N');
-        assertEquals(1, emplDao.insertEmpl(emplDto1));
-
-        DeptDto deptDto1 = new DeptDto("1234", "#", null, "a", "engA", 0, "asdf", "asdf", emplDto1.getEmplId()); //수정할 dept
-
-        assertEquals(1, deptDao.insertDept(deptDto1));
-
-        Map<String, String> map = new HashMap<>();
-        map.put("emplId", emplDto1.getEmplId());
-        map.put("deptNm", deptDto1.getDeptNm());
-        map.put("engDeptNm", deptDto1.getEngDeptNm());
-        map.put("lastUpdrIdnfNo", deptDto1.getLastUpdrIdnfNo());
-        map.put("deptCd", deptDto1.getDeptCd());
-
-        assertEquals(1, deptDao.updateDept(map));
-
-        DeptDto selectedDeptDto = deptDao.selectDept(map.get("deptCd"));
-        assertEquals(map.get("deptNm"), selectedDeptDto.getDeptNm());
+    private EmplDto getEmplAdmin() {
+        return EmplDto.EmplDtoBuilder().emplNo("44444444").emplId("adminId").pwd("1234").email("testid1@gmail.com")
+                .pwdErrTms(0).rnm("감자영").engNm("gamja").entDt("2024-01-01").emplAuthNm("ROLE_EMPL_ADMIN").brdt("2000-01-01")
+                .wncomTelno("111111").empno(1111).msgrId(null).prfPhotoPath(null)
+                .subsCertiYn('Y').termsAgreYn('Y').subsAprvYn('Y').secsnYn('N').build();
     }
 
-    @Test
-    @Transactional
-    @DisplayName("부서 구성원 및 부서명 조회 테스트")
-    void selectDeptAndEmplDataTest(){
-        deptDao.deleteAll();
-        blngDeptDao.deleteAllBlngDept();
-        emplDao.deleteAll();
-
-        String deptCd1 = "1111";
-        String deptCd2 = "2222";
-
-        DeptDto deptDto1 = new DeptDto(deptCd1, "#", null, "a", "eng", 0, "asdf", "asdf");
-        DeptDto deptDto2 = new DeptDto(deptCd2, "#", null, "b", "eng", 1, "asdf", "asdf");
-
-        assertEquals(1, deptDao.insertDept(deptDto1));
-        assertEquals(1, deptDao.insertDept(deptDto2));
-
-        EmplDto emplDto1 = new EmplDto("11111111", "jy123", "1234", "jy123@gmail.com", 0, "김지영", "darwin", "2024-01-01", "2002-01-01", "123123", 11111, null, null, 'Y', 'Y', 'Y', 'N');
-        EmplDto emplDto2 = new EmplDto("22222222", "Mogu", "1234", "mogu@gmail.com", 0, "최모구", "mogu", "2020-01-01", "1980-10-10", "222222", 22222, null, null, 'Y', 'Y', 'Y', 'N');
-        EmplDto emplDto3 = new EmplDto("33333333", "dongju", "1234", "dj@gmail.com", 0, "박동주", "djPumpthisparty", "2020-01-01", "1980-10-10", "333333", 33333, null, null, 'Y', 'Y', 'Y', 'N');
-
-        assertEquals(1, emplDao.insertEmpl(emplDto1));
-        assertEquals(1, emplDao.insertEmpl(emplDto2));
-        assertEquals(1, emplDao.insertEmpl(emplDto3));
-
-        BlngDeptDto blngDeptDto1 = new BlngDeptDto(deptCd1, emplDto1.getEmplNo(), 'N', emplDto1.getEmplNo(), emplDto1.getEmplNo());
-        BlngDeptDto blngDeptDto2 = new BlngDeptDto(deptCd1, emplDto2.getEmplNo(), 'N', "admin1", "admin1");
-        BlngDeptDto blngDeptDto3 = new BlngDeptDto(deptCd2, emplDto3.getEmplNo(), 'N', "admin1", "admin1");
-
-        assertEquals(1, blngDeptDao.insertBlngDept(blngDeptDto1));
-        assertEquals(1, blngDeptDao.insertBlngDept(blngDeptDto2));
-        assertEquals(1, blngDeptDao.insertBlngDept(blngDeptDto3));
-
-        List<DeptAndEmplDto> memberofDeptCd1 = deptDao.selectMemberProfilesAndDeptName(deptCd1);
-        assertEquals(2, memberofDeptCd1.size());
-
-        List<DeptAndEmplDto> memberofDeptCd2 = deptDao.selectMemberProfilesAndDeptName(deptCd2);
-        assertEquals(1, memberofDeptCd2.size());
+    private List<EmplDto> getThreeEmplList() {
+        return List.of(EmplDto.EmplDtoBuilder().emplNo("11111111").emplId("jy123").pwd("1234").email("jy123@gmail.com")
+                        .pwdErrTms(0).rnm("김지영").engNm("darwin").entDt("2024-01-01").emplAuthNm("ROLE_USER").brdt("2000-01-01")
+                        .wncomTelno("123123").empno(1111).msgrId(null).prfPhotoPath(null)
+                        .subsCertiYn('Y').termsAgreYn('Y').subsAprvYn('Y').secsnYn('N').build(),
+                EmplDto.EmplDtoBuilder().emplNo("22222222").emplId("Mogu").pwd("1234").email("mogu@gmail.com")
+                        .pwdErrTms(0).rnm("최모구").engNm("mogu").entDt("1980-10-10").emplAuthNm("ROLE_USER").brdt("1980-10-10")
+                        .wncomTelno("222222").empno(22222).msgrId(null).prfPhotoPath(null)
+                        .subsCertiYn('Y').termsAgreYn('Y').subsAprvYn('Y').secsnYn('N').build(),
+                EmplDto.EmplDtoBuilder().emplNo("33333333").emplId("dongju").pwd("1234").email("dj@gmail.com")
+                        .pwdErrTms(0).rnm("박동주").engNm("dongju").entDt("2020-01-01").emplAuthNm("ROLE_USER").brdt("1980-10-10")
+                        .wncomTelno("333333").empno(33333).msgrId(null).prfPhotoPath(null)
+                        .subsCertiYn('Y').termsAgreYn('Y').subsAprvYn('Y').secsnYn('N').build()
+        );
     }
 
-    @Test
-    @Transactional
-    @DisplayName("하위 부서가 있는 부서 정보 조회 테스트")
-    void selectOneDeptAndMngrAndCdrDeptCntWithChildrenTest(){
-        deptDao.deleteAll();
-        emplDao.deleteAll();
-
-        EmplDto emplDto1 = new EmplDto("11111111", "jy123", "1234", "jy123@gmail.com", 0, "김지영", "darwin", "2024-01-01", "2002-01-01", "123123", 11111, null, null, 'Y', 'Y', 'Y', 'N');
-        EmplDto emplDto2 = new EmplDto("22222222", "Mogu", "1234", "mogu@gmail.com", 0, "최모구", "mogu", "2020-01-01", "1980-10-10", "222222", 22222, null, null, 'Y', 'Y', 'Y', 'N');
-
-        assertEquals(1, emplDao.insertEmpl(emplDto1));
-        assertEquals(1, emplDao.insertEmpl(emplDto2));
-
-        String deptCd1 = "1111";
-        String deptCd2 = "2222";
-
-        DeptDto parentDept = new DeptDto(deptCd1, "#", null, "a", "eng", 0, "asdf", "asdf", emplDto1.getEmplId());
-        DeptDto childDept = new DeptDto(deptCd2, parentDept.getDeptCd(), null, "b", "eng", 1, "asdf", "asdf", emplDto2.getEmplId());
-
-        assertEquals(1, deptDao.insertDept(parentDept));
-        assertEquals(1, deptDao.insertDept(childDept));
-
-        DeptAndEmplDto deptWithChildren = deptDao.selectOneDeptAndMngrAndCdrDeptCnt(parentDept.getDeptCd());
-        assertEquals(1, deptWithChildren.getCdrDeptCnt());
-
-        DeptAndEmplDto deptWithNoChildren = deptDao.selectOneDeptAndMngrAndCdrDeptCnt(childDept.getDeptCd());
-        assertEquals(0, deptWithNoChildren.getCdrDeptCnt());
+    /*
+    *   #
+    *   L 영업부(index: 0)
+    *       L 영업기획팀(index: 2)
+    *           L 고객만족팀(index: 4)
+    *       L 영업지원팀(index: 3)
+    *   L 기획부(index: 1)
+    * */
+    private List<DeptDto> getFiveDeptList() {
+        return List.of(
+                DeptDto.DeptDtoBuilder().deptCd("11111111").uppDeptCd("#").deptMngrEmplNo(null).deptNm("영업부").engDeptNm("Sales Dept").deptSortOdr(0).registerId(getEmplAdmin().getEmplId()).build(),
+                DeptDto.DeptDtoBuilder().deptCd("11112222").uppDeptCd("#").deptMngrEmplNo(null).deptNm("기획부").engDeptNm("Planning Dept").deptSortOdr(1).registerId(getEmplAdmin().getEmplId()).build(),
+                DeptDto.DeptDtoBuilder().deptCd("22222222").uppDeptCd("11111111").deptMngrEmplNo(null).deptNm("영업기획팀").engDeptNm("Sales Planning Team").deptSortOdr(0).registerId(getEmplAdmin().getEmplId()).build(),
+                DeptDto.DeptDtoBuilder().deptCd("22222233").uppDeptCd("11111111").deptMngrEmplNo(null).deptNm("영업지원팀").engDeptNm("Sales Support Team").deptSortOdr(1).registerId(getEmplAdmin().getEmplId()).build(),
+                DeptDto.DeptDtoBuilder().deptCd("33333333").uppDeptCd("22222222").deptMngrEmplNo(null).deptNm("고객만족팀").engDeptNm("Customer Satisfaction Team").deptSortOdr(0).registerId(getEmplAdmin().getEmplId()).build());
     }
 
-    @Test
-    @Transactional
-    @DisplayName("하위 부서가 없는 부서 정보 조회 테스트")
-    void selectOneDeptAndMngrAndCdrDeptCntWithNoChildrenTest(){
-        deptDao.deleteAll();
-        emplDao.deleteAll();
-
-        EmplDto emplDto1 = new EmplDto("11111111", "jy123", "1234", "jy123@gmail.com", 0, "김지영", "darwin", "2024-01-01", "2002-01-01", "123123", 11111, null, null, 'Y', 'Y', 'Y', 'N');
-        assertEquals(1, emplDao.insertEmpl(emplDto1));
-
-        String deptCd1 = "1111";
-
-        DeptDto dept = new DeptDto(deptCd1, "#", null, "a", "eng", 0, "asdf", "asdf", emplDto1.getEmplId());
-        assertEquals(1, deptDao.insertDept(dept));
-
-        DeptAndEmplDto deptWithNoChildren = deptDao.selectOneDeptAndMngrAndCdrDeptCnt(dept.getDeptCd());
-        assertEquals(0, deptWithNoChildren.getCdrDeptCnt());
+    private DeptDto modifyEmplId(DeptDto existingDeptDto, String deptName) {
+        return DeptDto.DeptDtoBuilder()
+                .deptCd(existingDeptDto.getDeptCd())
+                .uppDeptCd(existingDeptDto.getUppDeptCd())
+                .deptMngrEmplNo(existingDeptDto.getDeptMngrEmplNo())
+                .deptNm(deptName)
+                .engDeptNm(existingDeptDto.getEngDeptNm())
+                .deptSortOdr(existingDeptDto.getDeptSortOdr())
+                .registerId(existingDeptDto.getRegisterId()).build();
     }
 
-    @Test
-    @Transactional
-    @DisplayName("하위 부서가 없고 매니저 정보 없는 부서 정보 조회 테스트")
-    void selectOneDeptTest(){
-        deptDao.deleteAll();
-        emplDao.deleteAll();
-
-        EmplDto emplDto1 = new EmplDto("11111111", "jy123", "1234", "jy123@gmail.com", 0, "김지영", "darwin", "2024-01-01", "2002-01-01", "123123", 11111, null, null, 'Y', 'Y', 'Y', 'N');
-        assertEquals(1, emplDao.insertEmpl(emplDto1));
-
-        String deptCd1 = "1111";
-
-        DeptDto dept = new DeptDto(deptCd1, "#", null, "a", "eng", 0, "asdf", "asdf");
-        assertEquals(1, deptDao.insertDept(dept));
-
-        DeptAndEmplDto deptWithNoChildren = deptDao.selectOneDeptAndMngrAndCdrDeptCnt(dept.getDeptCd());
-        assertEquals(0, deptWithNoChildren.getCdrDeptCnt());
-        assertNull(deptWithNoChildren.getEmplId());
-    }
-
-    @Test
-    @Transactional
-    @DisplayName("하위 부서 개수 조회 테스트")
-    void selectCdrDeptCntTest(){
-        deptDao.deleteAll();
-        emplDao.deleteAll();
-
-        EmplDto emplDto1 = new EmplDto("11111111", "jy123", "1234", "jy123@gmail.com", 0, "김지영", "darwin", "2024-01-01", "2002-01-01", "123123", 11111, null, null, 'Y', 'Y', 'Y', 'N');
-        EmplDto emplDto2 = new EmplDto("22222222", "Mogu", "1234", "mogu@gmail.com", 0, "최모구", "mogu", "2020-01-01", "1980-10-10", "222222", 22222, null, null, 'Y', 'Y', 'Y', 'N');
-
-        assertEquals(1, emplDao.insertEmpl(emplDto1));
-        assertEquals(1, emplDao.insertEmpl(emplDto2));
-
-        String deptCd1 = "1111";
-        String deptCd2 = "2222";
-
-        DeptDto parentDept = new DeptDto(deptCd1, "#", null, "a", "eng", 0, "asdf", "asdf");
-        DeptDto childDept = new DeptDto(deptCd2, parentDept.getDeptCd(), null, "b", "eng", 1, "asdf", "asdf");
-
-        assertEquals(1, deptDao.insertDept(parentDept));
-        assertEquals(1, deptDao.insertDept(childDept));
-
-        assertEquals(1, deptDao.selectCdrDeptCnt(parentDept.getDeptCd()));
+    private DeptDto addManager(DeptDto deptDto, String adminId) {
+        return DeptDto.DeptDtoBuilder()
+                .deptCd(deptDto.getDeptCd())
+                .uppDeptCd(deptDto.getUppDeptCd())
+                .emplId(adminId)
+                .deptNm(deptDto.getDeptNm())
+                .engDeptNm(deptDto.getEngDeptNm())
+                .deptSortOdr(deptDto.getDeptSortOdr())
+                .registerId(deptDto.getRegisterId())
+                .build();
     }
 }
