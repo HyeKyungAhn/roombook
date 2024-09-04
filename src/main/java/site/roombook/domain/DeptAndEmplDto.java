@@ -21,6 +21,10 @@ public class DeptAndEmplDto {
 
     public DeptAndEmplDto(){}
 
+    public DeptAndEmplDto(String emplId){
+        this.emplId = emplId;
+    }
+
     public DeptAndEmplDto(String deptCd, String deptNm, String engDeptNm, String emplId, String prfPhotoPath, String rnm, String engNm, String empno, String email, int cdrDeptCnt, Date fstRegDtm, String fstRegrIdnfNo, Date lastUpdDtm, String lastUpdrIdnfNo) {
         this.deptCd = deptCd;
         this.deptNm = deptNm;

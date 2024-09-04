@@ -1,10 +1,7 @@
 package site.roombook.service;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import site.roombook.ExceptionMsg;
@@ -13,13 +10,12 @@ import site.roombook.dao.DeptDao;
 import site.roombook.dao.EmplDao;
 import site.roombook.domain.*;
 
-import java.lang.reflect.InvocationTargetException;
+import java.time.LocalDateTime;
 import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
 
 @Service
 public class DeptServiceImpl implements DeptService {
-    private static final Logger logger = LogManager.getLogger();
 
     @Autowired
     DeptDao deptDao;
@@ -37,41 +33,24 @@ public class DeptServiceImpl implements DeptService {
 
     @Transactional
     @Override
-    public boolean saveOneDept(List<DeptDto> depts, String emplNo) throws DuplicateKeyException, NullPointerException{
-        // TODO : test하기, service test 돌아가게 수정, test갯수는 필요한 것만 최소화, 중복 제거하기
-        DeptDto newDept = null;
-        int rowCnt;
-
-        for (DeptDto deptDto : depts) {
-            if(Objects.equals(deptDto.getDeptCd(), NO_DEPT_CD)){
-                newDept = deptDto;
-                break;
-            }
-        }
-
+    public boolean saveOneDept(List<DeptDto> deptList, String registerId) throws NullPointerException {
+        DeptDto newDept = findNewDept(deptList);
         if(Objects.isNull(newDept)) return false;
 
-        newDept.setFstRegrIdnfNo(emplNo);
-        newDept.setLastUpdrIdnfNo(emplNo);
-        newDept.setDeptCd(generateDeptCd());
-        rowCnt = deptDao.insertDept(newDept);
-        if(rowCnt == 0){
-            return false;
-        }
+        newDept.setRegisterId(registerId);
+        newDept.setDeptCd(getUniqueDeptCode());
 
-        depts.forEach( deptDto -> deptDto.setLastUpdrIdnfNo(emplNo));
+        int insertedDeptCount = deptDao.insertDept(newDept);
+        if(insertedDeptCount == 0) return false;
 
-        try{
-            deptDao.updateAllDeptTreeOdrData(depts);
-        } catch (Exception e){
-            e.printStackTrace();
-        }
+        deptList.forEach( deptDto -> {
+            deptDto.setModifierId(registerId);
+            deptDto.setLastUpdDtm(LocalDateTime.now());
+        });
+
+        deptDao.updateAllDeptTreeOdrData(deptList);
+
         return true;
-    }
-
-
-    private String generateDeptCd() {
-        return ((ThreadLocalRandom.current().nextInt(9999))+1)+""; // 1-9999
     }
 
     @Transactional
@@ -150,8 +129,8 @@ public class DeptServiceImpl implements DeptService {
 
     @Transactional
     @Override
-    public boolean modifyOneDept(Map<String, String> deptDataAndEmplId){
-        return deptDao.updateDept(deptDataAndEmplId)>0;
+    public boolean modifyOneDept(DeptDto deptDataAndEmplId){
+        return deptDao.updateDept(deptDataAndEmplId) > 0;
     }
 
     @Override
@@ -161,12 +140,13 @@ public class DeptServiceImpl implements DeptService {
 
     @Override
     @Transactional
-    public void modifyDeptMem(String deptCd, List<String> memIDs, String modifier) throws DataIntegrityViolationException {
-        List<DeptAndEmplDto> oldMemList = deptDao.selectMemberProfilesAndDeptName(deptCd);
+    public ServiceResult modifyDeptMem(String deptCd, List<String> memIDs, String modifierId) throws DataIntegrityViolationException {
+        List<EmplDto> oldMemList = emplDao.selectDeptMembers(deptCd);
 
         HashSet<String> newMemIDs = new HashSet<>(memIDs);
         HashSet<String> oldMemIDs = new HashSet<>();
-        for (DeptAndEmplDto de : oldMemList) {
+
+        for (EmplDto de : oldMemList) {
             oldMemIDs.add(de.getEmplId());
         }
 
@@ -178,10 +158,10 @@ public class DeptServiceImpl implements DeptService {
             blngDepts.put("blngDeptCd", deptCd);
             blngDepts.put("emplIDs", memForRemoval.toArray());
 
-            try{
-                blngDeptDao.deleteBlngDepts(blngDepts);
-            } catch (InvocationTargetException e){
-                logger.info("dept 구성원 수정 중 delete value 없음");
+            int affectedRows = blngDeptDao.deleteBlngDepts(blngDepts);
+
+            if (memForRemoval.size() != affectedRows) {
+                return new ServiceResult(false, ExceptionMsg.DEPT_MEM_DELETE_FAIL);
             }
         }
 
@@ -191,19 +171,42 @@ public class DeptServiceImpl implements DeptService {
             List<BlngDeptAndEmplIdDto> newMemList = new ArrayList<>();
 
             for (String newMemID : newMemIDs) {
-                newMemList.add(new BlngDeptAndEmplIdDto(deptCd, newMemID, modifier, modifier));
+                newMemList.add(new BlngDeptAndEmplIdDto(deptCd, newMemID, modifierId, modifierId));
             }
 
-            try{
-                blngDeptDao.insertBlngDepts(newMemList);
-            } catch (InvocationTargetException e){
-                logger.info("dept 구성원 수정 중 insert value 없음");
-            }
+            blngDeptDao.insertBlngDepts(newMemList);
         }
+
+        return new ServiceResult(true);
     }
 
     @Override
     public DeptAndEmplDto getDeptDetailInfo(String deptCd){
         return deptDao.selectOneDeptAndMngrAndCdrDeptCnt(deptCd);
+    }
+
+
+    private String getUniqueDeptCode() {
+        String generateDeptCd;
+        DeptDto selectedDept;
+        do {
+            generateDeptCd = generateDeptCd();
+            selectedDept = deptDao.selectDept(generateDeptCd);
+        } while(selectedDept!=null);
+
+        return generateDeptCd;
+    }
+
+    private DeptDto findNewDept(List<DeptDto> deptList) {
+        for (DeptDto deptDto : deptList) {
+            if(Objects.equals(deptDto.getDeptCd(), NO_DEPT_CD)){
+                return deptDto;
+            }
+        }
+        return null;
+    }
+
+    private String generateDeptCd() {
+        return ((ThreadLocalRandom.current().nextInt(9999))+1)+""; // 1-9999
     }
 }

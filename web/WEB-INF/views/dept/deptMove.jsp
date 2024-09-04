@@ -97,18 +97,13 @@
                 body: JSON.stringify(nodes)
             }).then(response => {
                     return response.text();
-                }).then(text => {
-                    const modifiedNum = parseInt(text);
-                    if(modifiedNum > 0){
-                        alert(text + '개의 부서가 수정되었습니다.');
-                    } else if(modifiedNum === 0){
-                        alert('변경사항이 없습니다.');
-                    } else {
-                        alert('잘못된 접근입니다.');
-                    }
-                }).catch(error => {
+            }).then(text => {
+                const response = JSON.parse(text);
+                alert(response.msg);
+                location.href = response.redirectUrl;
+            }).catch(error => {
                     console.error('Error sending data:', error);
-                });
+            });
         });
     });
 </script>

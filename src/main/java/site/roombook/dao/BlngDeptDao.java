@@ -19,7 +19,7 @@ public interface BlngDeptDao {
     * - 파라미터인 List<BlngDeptAndEmplIdDto>의 size 반드시 1이상이어야한다.
     *   0일 경우 InvocationTargetException 발생.
     * */
-    int deleteBlngDepts(Map<String, Object> blngDepts) throws InvocationTargetException;
+    int deleteBlngDepts(Map<String, Object> blngDepts);
 
     /* insertBlngDepts
      * - BlngDeptAndEmplIdDto 의 emplId(사원 아이디)가 반드시 empl 테이블 내에 하나 존재해야한다.
@@ -27,7 +27,7 @@ public interface BlngDeptDao {
      * - 파라미터인 List<BlngDeptAndEmplIdDto>의 size 반드시 1이상이어야한다.
      *   0일 경우 InvocationTargetException 발생.
      * */
-    int insertBlngDepts(List<BlngDeptAndEmplIdDto> blngDepts) throws DataIntegrityViolationException, InvocationTargetException;
+    int insertBlngDepts(List<BlngDeptAndEmplIdDto> blngDepts) throws DataIntegrityViolationException;
 
     /* insertOneBlngDept
      * - BlngDeptAndEmplIdDto 의 emplId(사원 아이디)가 반드시 empl 테이블 내에 하나 존재해야한다.

@@ -1,14 +1,17 @@
 package site.roombook.controller.dept;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.util.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.dao.DuplicateKeyException;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -20,14 +23,12 @@ import site.roombook.domain.EmplDto;
 import site.roombook.service.DeptService;
 
 import javax.servlet.http.HttpServletRequest;
+import java.time.LocalDateTime;
 import java.util.*;
 
 @Controller
 @RequestMapping("/dept")
 public class DeptController {
-    private static final Logger logger = LogManager.getLogger();
-    // TODO : 모든 메서드 권환 확인 필요
-
     @Autowired
     DeptService deptService;
 
@@ -83,19 +84,17 @@ public class DeptController {
 
     @GetMapping("/list")
     public String getDeptListPage(){
-        return "/dept/deptList";
+        return "dept/deptList";
     }
 
     @GetMapping("/move")
     public String getDeptMovePage(){
-        return "/dept/deptMove";
+        return "dept/deptMove";
     }
 
     @GetMapping(value = "/tree", produces = "application/json;charset=UTF-8")
     @ResponseBody
     public String getDeptTreeDataForMove(){
-        //권한 확인 필요
-        //TODO : mngr -> empl id로 대체 고려해보기
         List<DeptDto> deptDtoList = deptService.getAllDeptTreeData();
         ObjectMapper objMapper = new ObjectMapper();
 
@@ -139,9 +138,36 @@ public class DeptController {
 
     @PostMapping(value = "/move", produces = MediaType.APPLICATION_JSON_VALUE+";charset=UTF-8")
     @ResponseBody
-    public String modifyDeptDataForMove(@RequestBody List<DeptDto> list){
-        list.forEach( deptDto -> deptDto.setLastUpdrIdnfNo("ahk")); // TODO : 실제 변경 직원 이름 넣기
-        return deptService.modifyDeptOdr(list)+"";
+    public ResponseEntity<String> modifyDeptDataForMove(@RequestBody List<DeptDto> list){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+
+        list.forEach( deptDto -> {
+            deptDto.setModifierId(userDetails.getUsername());
+            deptDto.setLastUpdDtm(LocalDateTime.now());
+        });
+
+        Map<String, String> map = new HashMap<>();
+        map.put("result", "SUCCESS");
+        map.put("redirectUrl", "/dept/list");
+        try {
+            int modifiedDeptCount = deptService.modifyDeptOdr(list);
+            map.put("msg", modifiedDeptCount == 0 ? "수정사항이 없습니다." : "부서 이동이 완료되었습니다.");
+        } catch (Exception e) {
+            map.put("msg", "부서이동이 정상적으로 처리되지 않았습니다.");
+        }
+
+        String result = "";
+        try {
+            result = new ObjectMapper().writeValueAsString(map);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(result);
     }
 
     @GetMapping("/save")
@@ -169,7 +195,7 @@ public class DeptController {
             addAttribute(deptNm, engDeptNm, parent, mngrId, rattr);
             return "redirect:"+req.getHeader("Referer");
         }
-        return "/dept/deptInsert2";
+        return "dept/deptInsert2";
     }
 
     @PostMapping(value = "/save2", produces = "application/json;charset=UTF-8")
@@ -177,12 +203,12 @@ public class DeptController {
     public String insertOneDeptAndModifyDeptTreeData(HttpServletRequest req
             , RedirectAttributes rattr
             , @RequestBody List<DeptDto> list){
-        String emplNo = "asdf"; // TODO : 직원테이블 관련 기능 구현 후 실제 작성자 번호로 수정
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+
         boolean result;
         try {
-            result = deptService.saveOneDept(list, emplNo);
-        } catch(DuplicateKeyException e){
-            result = deptService.saveOneDept(list, emplNo);
+            result = deptService.saveOneDept(list, userDetails.getUsername());
         } catch(NullPointerException e){
             e.printStackTrace();
             rattr.addFlashAttribute("msg", "NO_DEPT");
@@ -194,7 +220,7 @@ public class DeptController {
             return "redirect:" + req.getHeader("Referer");
         }
 
-        return req.getHeader("origin")+"/dept/save";
+        return req.getHeader("origin")+"/dept/list";
     }
 
     @PostMapping(value = "/del", produces = "application/json;charset=UTF-8")
@@ -216,16 +242,15 @@ public class DeptController {
         return "DEL_OK";
     }
 
-    @GetMapping("/memSrch")
+    @GetMapping(value = "/memSrch", produces = MediaType.APPLICATION_JSON_VALUE+";charset=UTF-8")
     @ResponseBody
     public String searchEmplWithKeyword(String keyword){
         List<EmplDto> emplProfilelist = deptService.searchEmplWithRnmOrEmail(keyword);
-        ObjectMapper objMapper = new ObjectMapper();
 
         String emplProfile = "";
 
         try {
-            emplProfile = objMapper.writeValueAsString(emplProfilelist);
+            emplProfile =  new ObjectMapper().writeValueAsString(emplProfilelist);
         } catch (JsonProcessingException e) {
             e.printStackTrace();
         }
@@ -234,33 +259,36 @@ public class DeptController {
     }
 
     @PostMapping("/mod")
-    public String modifyDept(@RequestParam(value = "deptCd", required = false) String DEPT_CD,
-                             @RequestParam(value = "deptNm", required = false) String DEPT_NM,
-                             @RequestParam(value = "engDeptNm", required = false) String ENG_DEPT_NM,
+    public String modifyDept(@RequestParam(value = "deptCd", required = false) String deptCd,
+                             @RequestParam(value = "deptNm", required = false) String deptName,
+                             @RequestParam(value = "engDeptNm", required = false) String engDeptName,
                              String mngrId,
                              RedirectAttributes rattr,
                              HttpServletRequest req){
-        if(Strings.isEmpty(DEPT_CD)||Strings.isEmpty(DEPT_NM)){
+        if(Strings.isEmpty(deptCd)||Strings.isEmpty(deptName)){
             rattr.addFlashAttribute("msg", "DEPTNAME_REQUIRED");
             return "redirect:"+req.getHeader("referer");
         }
 
-        String LAST_UPDR_IDNF_NO = "asdf"; // TODO : 실제 수정자 EmplNo로 번경하기
-        Map<String, String> deptData = new HashMap<>();
-        deptData.put("emplId", mngrId);
-        deptData.put("deptNm",DEPT_NM);
-        deptData.put("engDeptNm",ENG_DEPT_NM);
-        deptData.put("lastUpdrIdnfNo",LAST_UPDR_IDNF_NO);
-        deptData.put("deptCd",DEPT_CD);
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
 
-        boolean isModifySuccess = deptService.modifyOneDept(deptData);
+        DeptDto deptDto = new DeptDto();
+        deptDto.setEmplId(mngrId);
+        deptDto.setDeptNm(deptName);
+        deptDto.setEngDeptNm(engDeptName);
+        deptDto.setLastUpdDtm(LocalDateTime.now());
+        deptDto.setModifierId(userDetails.getUsername());
+        deptDto.setDeptCd(deptCd);
+
+        boolean isModifySuccess = deptService.modifyOneDept(deptDto);
 
         if(isModifySuccess){
             rattr.addFlashAttribute("msg", "MOD_SUCCESS");
-            return "redirect:/dept/dept?deptCd="+DEPT_CD;
+            return "redirect:/dept/dept?deptCd="+deptCd;
         } else {
             rattr.addFlashAttribute("msg", "MOD_FAIL");
-            return "redirect:/dept/mod?deptCd="+DEPT_CD;
+            return "redirect:/dept/mod?deptCd="+deptCd;
         }
     }
 
@@ -275,23 +303,53 @@ public class DeptController {
         m.addAttribute("deptCd", deptMembersAndName.get(0).getDeptCd());
         m.addAttribute("deptNm", deptMembersAndName.get(0).getDeptNm());
         m.addAttribute("engDeptNm", deptMembersAndName.get(0).getEngDeptNm());
-        m.addAttribute("deptMemAndDeptNm", deptMembersAndName);
+
+        if (!(deptMembersAndName.size() == 1 && deptMembersAndName.get(0).getEmplId() == null)) {
+            m.addAttribute("deptMemAndDeptNm", deptMembersAndName);
+        }
         return "/dept/deptMemMod";
     }
 
     @PostMapping("/mem")
     @ResponseBody
-    public String updateDeptMem(@RequestBody Map<String, Object> deptMemData){
-        String emplNo = "admin"; //TODO: 관리자 emplNo로 추후 변경
-        List<String> memIDs = (List<String>) deptMemData.get("memIDs");
-        String deptCd = (String) deptMemData.get("deptCd");
-        try{
-            deptService.modifyDeptMem(deptCd, memIDs, emplNo);
-        } catch (DataIntegrityViolationException e){
-            logger.warn("empl에 없는 empl_id값으로 blng_dept update 시도");
-            return "INVALID_INPUT";
+    public ResponseEntity<String> updateDeptMem(@RequestBody String body){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+
+        JsonNode jsonNode;
+        ObjectMapper objectMapper = new ObjectMapper();
+        List<String> memIds = new ArrayList<>();
+        String deptCd;
+
+        try {
+            jsonNode  = objectMapper.readTree(body);
+
+            if (!jsonNode.has("deptCd")) {
+                return ResponseEntity
+                        .status(HttpStatus.BAD_REQUEST)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .body("INPUT_REQUIRED");
+            }
+
+            if (jsonNode.has("memIds") && jsonNode.get("memIds").isArray()) {
+                for(final JsonNode objNode : jsonNode.get("memIds")){
+                    memIds.add(objNode.asText());
+                }
+            }
+            deptCd = jsonNode.get("deptCd").asText();
+
+            deptService.modifyDeptMem(deptCd, memIds, userDetails.getUsername());
+        } catch (JsonProcessingException | DataIntegrityViolationException e) {
+            return ResponseEntity
+                    .status(HttpStatus.BAD_REQUEST)
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .body("INVALID_INPUT");
         }
-        return "SUCCESS";
+
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .contentType(MediaType.APPLICATION_JSON)
+                .body("SUCCESS");
     }
 
     private void addAttribute(String deptNm, String engDeptNm, String parent, String mngr, RedirectAttributes rattr) {

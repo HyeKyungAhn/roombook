@@ -70,7 +70,7 @@ public class DeptDaoImpl implements DeptDao {
     public int deleteDeptWithNoEmpl(String deptCd) { return session.delete(namespace+"deleteDeptWithNoEmpl", deptCd); }
 
     @Override
-    public int updateDept(Map<String, String> deptDataAndEmplId) {
+    public int updateDept(DeptDto deptDataAndEmplId) {
         return session.update(namespace+"updateDept",deptDataAndEmplId);
     }
 

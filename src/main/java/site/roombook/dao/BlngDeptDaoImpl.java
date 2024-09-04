@@ -31,10 +31,10 @@ public class BlngDeptDaoImpl implements BlngDeptDao {
     public int deleteAllBlngDept() { return session.delete(namespace+"deleteAll"); }
 
     @Override
-    public int deleteBlngDepts(Map<String, Object> blngDepts) throws InvocationTargetException{ return session.delete(namespace+"deleteBlngDepts", blngDepts); }
+    public int deleteBlngDepts(Map<String, Object> blngDepts) { return session.delete(namespace+"deleteBlngDepts", blngDepts); }
 
     @Override
-    public int insertBlngDepts(List<BlngDeptAndEmplIdDto> blngDepts) throws DataIntegrityViolationException, InvocationTargetException  {
+    public int insertBlngDepts(List<BlngDeptAndEmplIdDto> blngDepts) throws DataIntegrityViolationException  {
         return session.insert(namespace+"insertBlngDepts", blngDepts);
     }
 

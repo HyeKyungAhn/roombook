@@ -1,21 +1,19 @@
 package site.roombook.service;
 
 import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.dao.DuplicateKeyException;
 import site.roombook.domain.DeptAndEmplDto;
 import site.roombook.domain.DeptDto;
 import site.roombook.domain.EmplDto;
+import site.roombook.domain.ServiceResult;
 
-import java.lang.reflect.InvocationTargetException;
 import java.util.List;
-import java.util.Map;
 
 public interface DeptService {
     String NO_DEPT_CD = "0";
 
     boolean haveIdenticalDeptNm(String deptNm);
 
-    boolean saveOneDept(List<DeptDto> list, String emplNo) throws DuplicateKeyException, NullPointerException;
+    boolean saveOneDept(List<DeptDto> list, String emplNo) throws NullPointerException;
 
     List<DeptDto> getAllDeptTreeData();
 
@@ -35,11 +33,11 @@ public interface DeptService {
 
     List<EmplDto> searchEmplWithRnmOrEmail(String keyword);
 
-    boolean modifyOneDept(Map<String, String> deptDataAndEmplId);
+    boolean modifyOneDept(DeptDto deptDataAndEmplId);
 
     List<DeptAndEmplDto> getProfilesOfMemberAndDeptName(String deptCd);
 
-    void modifyDeptMem(String deptCd, List<String> list, String modifier) throws DataIntegrityViolationException;
+    ServiceResult modifyDeptMem(String deptCd, List<String> list, String modifierId) throws DataIntegrityViolationException;
 
     DeptAndEmplDto getDeptDetailInfo(String deptCd);
 }

@@ -15,6 +15,17 @@
         SELECT COUNT(*) FROM blng_dept
     </select>
 
+    <select id="selectDeptEmplList" parameterType="String" resultType="EmplDto">
+        SELECT i.DEPT_CD, e.EMPL_ID
+        FROM (
+                 SELECT bd.BLNG_EMPL_NO, d.DEPT_CD, d.DEPT_NM, d.ENG_DEPT_NM
+                 FROM blng_dept bd
+                          INNER JOIN dept d
+                                     ON bd.BLNG_DEPT_CD = d.DEPT_CD
+                 WHERE d.DEPT_CD = #{deptCd}
+             ) i INNER JOIN empl e ON i.BLNG_EMPL_NO = e.EMPL_NO;
+    </select>
+
     <delete id="deleteAll">
         DELETE FROM blng_dept
     </delete>
@@ -33,7 +44,10 @@
         INSERT INTO blng_dept(BLNG_DEPT_CD, BLNG_EMPL_NO, FST_REGR_IDNF_NO, LAST_UPDR_IDNF_NO)
         VALUES
         <foreach item="item" collection="list" separator=",">
-            (#{item.blngDeptCd}, (SELECT EMPL_NO from empl where EMPL_ID = #{item.emplId}), #{item.fstRegrIdnfNo}, #{item.lastUpdrIdnfNo})
+            (#{item.blngDeptCd}
+            , (SELECT EMPL_NO from empl WHERE EMPL_ID = #{item.emplId})
+            , (SELECT @regrIdnfNo := EMPL_NO from empl WHERE EMPL_ID = #{item.fstRegrIdnfNo})
+            , @regrIdnfNo)
         </foreach>
     </insert>
 

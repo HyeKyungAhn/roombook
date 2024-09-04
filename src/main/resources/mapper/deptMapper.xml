@@ -23,24 +23,28 @@
     <insert id="insert" parameterType="DeptDto">
         INSERT INTO dept (DEPT_CD, UPP_DEPT_CD, DEPT_MNGR_EMPL_NO, DEPT_NM, ENG_DEPT_NM, DEPT_SORT_ODR, FST_REGR_IDNF_NO,
                           LAST_UPDR_IDNF_NO)
-        VALUES (#{deptCd},
-                #{uppDeptCd},
-                (SELECT EMPL_NO
+        VALUES (#{deptCd}
+                , #{uppDeptCd}
+                , (SELECT EMPL_NO
                     FROM empl
-                    WHERE EMPL_ID = #{emplId}),
-                #{deptNm},
-                #{engDeptNm},
-                #{deptSortOdr},
-                #{fstRegrIdnfNo},
-                #{lastUpdrIdnfNo})
+                    WHERE EMPL_ID = #{emplId})
+                , #{deptNm}
+                , #{engDeptNm}
+                , #{deptSortOdr}
+                , (SELECT @registerId := EMPL_NO FROM empl WHERE EMPL_ID = #{registerId})
+                , @registerId)
     </insert>
 
-    <update id="updateAllDeptTreeOdrData" parameterType="List">
+    <update id="updateAllDeptTreeOdrData" parameterType="DeptDto">
             UPDATE dept
             SET UPP_DEPT_CD = #{uppDeptCd},
-            DEPT_SORT_ODR = #{deptSortOdr},
-            LAST_UPDR_IDNF_NO = #{lastUpdrIdnfNo},
-            Last_UPD_DTM = CURRENT_TIMESTAMP
+                DEPT_SORT_ODR = #{deptSortOdr},
+                LAST_UPDR_IDNF_NO = (
+                    SELECT EMPL_NO
+                    FROM empl
+                    WHERE EMPL_ID = #{modifierId}
+                ),
+                Last_UPD_DTM = #{lastUpdDtm}
             WHERE DEPT_CD = #{deptCd}
             AND (UPP_DEPT_CD <![CDATA[<>]]> #{uppDeptCd} OR DEPT_SORT_ODR <![CDATA[<>]]> #{deptSortOdr})
     </update>
@@ -85,13 +89,15 @@
         FROM dept
     </select>
 
-    <update id="updateDept" parameterType="map">
+    <update id="updateDept" parameterType="DeptDto">
         update dept
         set DEPT_MNGR_EMPL_NO = (select EMPL_NO from empl where EMPL_ID = #{emplId}),
             DEPT_NM = #{deptNm},
             ENG_DEPT_NM = #{engDeptNm},
-            LAST_UPD_DTM = current_timestamp,
-            LAST_UPDR_IDNF_NO = #{lastUpdrIdnfNo}
+            LAST_UPD_DTM = #{lastUpdDtm},
+            LAST_UPDR_IDNF_NO = (
+                SELECT EMPL_NO FROM empl WHERE EMPL_ID = #{modifierId}
+                )
         where DEPT_CD = #{deptCd};
     </update>
 

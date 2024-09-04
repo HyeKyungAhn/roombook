@@ -8,6 +8,7 @@ import lombok.*;
 import site.roombook.serializer.DeptOdrDeserializer;
 import site.roombook.serializer.DeptOdrSerializer;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.Objects;
 
@@ -35,17 +36,21 @@ public class DeptDto {
     @JsonDeserialize(using = DeptOdrDeserializer.class)
     private Integer deptSortOdr;
     @JsonIgnore
-    private Date fstRegDtm;
+    private LocalDateTime fstRegDtm;
     @NonNull
     @JsonIgnore
     private String fstRegrIdnfNo;
     @JsonIgnore
-    private Date lastUpdDtm;
+    private LocalDateTime lastUpdDtm;
     @NonNull
     @JsonIgnore
     private String lastUpdrIdnfNo;
     @JsonProperty("mngrId")
     private String emplId; //부서 저장 시 입력받는 관리자 아이디
+    @JsonIgnore
+    private String registerId;
+    @JsonIgnore
+    private String modifierId;
 
     public DeptDto(String deptCd, String uppDeptCd, String deptMngrEmplNo, String deptNm, String engDeptNm, Integer deptSortOdr, String fstRegrIdnfNo, String lastUpdrIdnfNo) {
         this.deptCd = deptCd;

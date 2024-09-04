@@ -30,7 +30,7 @@ public interface DeptDao {
 
     int deleteDeptWithNoEmpl(String deptCd);
 
-    int updateDept(Map<String, String> deptDataAndEmplId);
+    int updateDept(DeptDto deptDataAndEmplId);
 
     List<DeptAndEmplDto> selectMemberProfilesAndDeptName(String deptCd);
 

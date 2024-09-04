@@ -19,7 +19,10 @@ public enum ExceptionMsg {
 
     EMPL_AUTH_UNEXPECTED_PROBLEM("301", "예상치 못한 문제가 발생했습니다.\n새로고침 후 다시 시도해주세요."),
     EMPL_AUTH_INVALID_AUTH_NAME("302", "유효하지 않은 않은 값입니다."),
-    EMPL_AUTH_UPDATE_FAIL("303", "업데이트에 실패했습니다. 다시 시도해주세요.");
+    EMPL_AUTH_UPDATE_FAIL("303", "업데이트에 실패했습니다. 다시 시도해주세요."),
+
+    DEPT_MEM_DELETE_FAIL("401", "구성원 수정에 실패하였습니다.\n다시 시도해주세요."),
+    DEPT_MEM_ADD_FAIL("402", "구성원 수정에 실패하였습니다.\n다시 시도해주세요.");
 
     private final String code;
     private final String content;

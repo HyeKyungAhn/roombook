@@ -12,7 +12,7 @@
 <html lang="kr">
 <head>
     <title>roombook | 부서 추가</title>
-    <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/style.scss">
+    <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/style.css">
     <link rel='stylesheet' href='https://unpkg.com/ionicons@4.5.10-0/dist/css/ionicons.min.css'>
     <link rel='stylesheet' href='https://fonts.googleapis.com/css?family=Montserrat:500,700&amp;display=swap'>
 </head>
