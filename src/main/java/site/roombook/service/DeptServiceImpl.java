@@ -37,20 +37,51 @@ public class DeptServiceImpl implements DeptService {
         DeptDto newDept = findNewDept(deptList);
         if(Objects.isNull(newDept)) return false;
 
-        newDept.setRegisterId(registerId);
-        newDept.setDeptCd(getUniqueDeptCode());
+        newDept = addDeptCreationDetail(newDept, registerId);
 
         int insertedDeptCount = deptDao.insertDept(newDept);
         if(insertedDeptCount == 0) return false;
 
-        deptList.forEach( deptDto -> {
-            deptDto.setModifierId(registerId);
-            deptDto.setLastUpdDtm(LocalDateTime.now());
-        });
+        List<DeptDto> modifiedDeptList = addDeptListModificationDetail(deptList, registerId);
 
-        deptDao.updateAllDeptTreeOdrData(deptList);
+        deptDao.updateAllDeptTreeOdrData(modifiedDeptList);
 
         return true;
+    }
+
+    private List<DeptDto> addDeptListModificationDetail(List<DeptDto> deptList, String modifierId) {
+        List<DeptDto> modifiedList = new ArrayList<>();
+
+        for (DeptDto deptDto : deptList) {
+            DeptDto modifiedDept = DeptDto.DeptDtoBuilder()
+                    .deptCd(deptDto.getDeptCd())
+                    .uppDeptCd(deptDto.getUppDeptCd())
+                    .emplId(deptDto.getEmplId())
+                    .deptNm(deptDto.getDeptNm())
+                    .engDeptNm(deptDto.getEngDeptNm())
+                    .deptSortOdr(deptDto.getDeptSortOdr())
+                    .registerId(deptDto.getRegisterId())
+                    .fstRegDtm(deptDto.getFstRegDtm())
+                    .modifierId(modifierId)
+                    .lastUpdDtm(LocalDateTime.now()).build();
+
+            modifiedList.add(modifiedDept);
+        }
+
+        return modifiedList;
+    }
+
+
+    private DeptDto addDeptCreationDetail(DeptDto deptDto, String registerId) {
+        return DeptDto.DeptDtoBuilder()
+                .deptCd(getUniqueDeptCode())
+                .uppDeptCd(deptDto.getUppDeptCd())
+                .emplId(deptDto.getEmplId())
+                .deptNm(deptDto.getDeptNm())
+                .engDeptNm(deptDto.getEngDeptNm())
+                .deptSortOdr(deptDto.getDeptSortOdr())
+                .registerId(registerId)
+                .fstRegDtm(LocalDateTime.now()).build();
     }
 
     @Transactional
@@ -66,14 +97,9 @@ public class DeptServiceImpl implements DeptService {
 
     @Transactional
     @Override
-    public int modifyDeptOdr(List<DeptDto> list) {
-        int rowCnt = 0;
-        try{
-            rowCnt = deptDao.updateAllDeptTreeOdrData(list);
-        } catch (Exception e){
-            e.printStackTrace();
-        }
-        return rowCnt;
+    public int modifyDeptOdr(List<DeptDto> list, String modifierId) {
+        list = addDeptListModificationDetail(list, modifierId);
+        return deptDao.updateAllDeptTreeOdrData(list);
     }
 
     @Transactional

@@ -17,7 +17,7 @@ public interface DeptService {
 
     List<DeptDto> getAllDeptTreeData();
 
-    int modifyDeptOdr(List<DeptDto> list);
+    int modifyDeptOdr(List<DeptDto> list, String modifier);
 
     void deleteAll();
 

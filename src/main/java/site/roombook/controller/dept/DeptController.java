@@ -113,14 +113,14 @@ public class DeptController {
     public String getDeptTreeDataForInsert(String deptNm, String parent, String mngrId){
         List<DeptDto> deptDtoList = deptService.getAllDeptTreeData();
 
-        DeptDto newDept = new DeptDto();
-        newDept.setDeptCd(DeptService.NO_DEPT_CD);
-        newDept.setUppDeptCd(parent);
-        newDept.setDeptNm(deptNm);
-        newDept.setDeptMngrEmplNo(mngrId);
+        DeptDto newDept = DeptDto.DeptDtoBuilder()
+                .deptCd(DeptService.NO_DEPT_CD)
+                .uppDeptCd(parent)
+                .deptNm(deptNm)
+                .deptMngrEmplNo(mngrId).build();
 
         int max = getMaxOdrInSameParent(newDept.getUppDeptCd(), deptDtoList);
-        newDept.setDeptSortOdr(max+1);
+        newDept = modifyDeptSortOdr(newDept, max + 1);
 
         deptDtoList.add(newDept);
 
@@ -136,22 +136,27 @@ public class DeptController {
         return deptData;
     }
 
+    private DeptDto modifyDeptSortOdr(DeptDto deptDto, int maxOrderInSameParent){
+        return DeptDto.DeptDtoBuilder()
+                .deptCd(deptDto.getDeptCd())
+                .uppDeptCd(deptDto.getUppDeptCd())
+                .deptNm(deptDto.getDeptNm())
+                .deptMngrEmplNo(deptDto.getDeptMngrEmplNo())
+                .deptSortOdr(maxOrderInSameParent)
+                .build();
+    }
+
     @PostMapping(value = "/move", produces = MediaType.APPLICATION_JSON_VALUE+";charset=UTF-8")
     @ResponseBody
     public ResponseEntity<String> modifyDeptDataForMove(@RequestBody List<DeptDto> list){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
 
-        list.forEach( deptDto -> {
-            deptDto.setModifierId(userDetails.getUsername());
-            deptDto.setLastUpdDtm(LocalDateTime.now());
-        });
-
         Map<String, String> map = new HashMap<>();
         map.put("result", "SUCCESS");
         map.put("redirectUrl", "/dept/list");
         try {
-            int modifiedDeptCount = deptService.modifyDeptOdr(list);
+            int modifiedDeptCount = deptService.modifyDeptOdr(list, userDetails.getUsername());
             map.put("msg", modifiedDeptCount == 0 ? "수정사항이 없습니다." : "부서 이동이 완료되었습니다.");
         } catch (Exception e) {
             map.put("msg", "부서이동이 정상적으로 처리되지 않았습니다.");
@@ -273,13 +278,14 @@ public class DeptController {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
 
-        DeptDto deptDto = new DeptDto();
-        deptDto.setEmplId(mngrId);
-        deptDto.setDeptNm(deptName);
-        deptDto.setEngDeptNm(engDeptName);
-        deptDto.setLastUpdDtm(LocalDateTime.now());
-        deptDto.setModifierId(userDetails.getUsername());
-        deptDto.setDeptCd(deptCd);
+        DeptDto deptDto = DeptDto.DeptDtoBuilder()
+                .deptCd(deptCd)
+                .emplId(mngrId)
+                .deptNm(deptName)
+                .engDeptNm(engDeptName)
+                .lastUpdDtm(LocalDateTime.now())
+                .modifierId(userDetails.getUsername())
+                .build();
 
         boolean isModifySuccess = deptService.modifyOneDept(deptDto);
 

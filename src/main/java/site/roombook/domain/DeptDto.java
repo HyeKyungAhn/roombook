@@ -9,40 +9,32 @@ import site.roombook.serializer.DeptOdrDeserializer;
 import site.roombook.serializer.DeptOdrSerializer;
 
 import java.time.LocalDateTime;
-import java.util.Date;
 import java.util.Objects;
 
 @NoArgsConstructor
-@RequiredArgsConstructor
-@Getter @Setter
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
+@Builder(builderMethodName = "DeptDtoBuilder")
+@Getter
 public class DeptDto {
-    @NonNull
     @JsonProperty("id")
     private String deptCd;
-    @NonNull
     @JsonProperty("parent")
     private String uppDeptCd;
-//    @JsonProperty("mngrId")
     private String deptMngrEmplNo;
-    @NonNull
     @JsonProperty("text")
     private String deptNm;
-    @NonNull
     @JsonProperty("engDeptNm")
     private String engDeptNm;
-    @NonNull
     @JsonProperty("data")
     @JsonSerialize(using = DeptOdrSerializer.class)
     @JsonDeserialize(using = DeptOdrDeserializer.class)
     private Integer deptSortOdr;
     @JsonIgnore
     private LocalDateTime fstRegDtm;
-    @NonNull
     @JsonIgnore
     private String fstRegrIdnfNo;
     @JsonIgnore
     private LocalDateTime lastUpdDtm;
-    @NonNull
     @JsonIgnore
     private String lastUpdrIdnfNo;
     @JsonProperty("mngrId")
@@ -52,56 +44,16 @@ public class DeptDto {
     @JsonIgnore
     private String modifierId;
 
-    public DeptDto(String deptCd, String uppDeptCd, String deptMngrEmplNo, String deptNm, String engDeptNm, Integer deptSortOdr, String fstRegrIdnfNo, String lastUpdrIdnfNo) {
-        this.deptCd = deptCd;
-        this.uppDeptCd = uppDeptCd;
-        this.deptMngrEmplNo = deptMngrEmplNo;
-        this.deptNm = deptNm;
-        this.engDeptNm = engDeptNm;
-        this.deptSortOdr = deptSortOdr;
-        this.fstRegrIdnfNo = fstRegrIdnfNo;
-        this.lastUpdrIdnfNo = lastUpdrIdnfNo;
-    }
-
-    public DeptDto(String deptCd, String uppDeptCd, String deptMngrEmplNo, String deptNm, String engDeptNm, Integer deptSortOdr, String fstRegrIdnfNo, String lastUpdrIdnfNo, String emplId) {
-        this.deptCd = deptCd;
-        this.uppDeptCd = uppDeptCd;
-        this.deptMngrEmplNo = deptMngrEmplNo;
-        this.deptNm = deptNm;
-        this.engDeptNm = engDeptNm;
-        this.deptSortOdr = deptSortOdr;
-        this.fstRegrIdnfNo = fstRegrIdnfNo;
-        this.lastUpdrIdnfNo = lastUpdrIdnfNo;
-        this.emplId = emplId;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         DeptDto deptDto = (DeptDto) o;
-        return deptCd.equals(deptDto.deptCd) && uppDeptCd.equals(deptDto.uppDeptCd) && deptMngrEmplNo.equals(deptDto.deptMngrEmplNo) && deptNm.equals(deptDto.deptNm) && Objects.equals(engDeptNm, deptDto.engDeptNm) && deptSortOdr.equals(deptDto.deptSortOdr) && Objects.equals(fstRegDtm, deptDto.fstRegDtm) && fstRegrIdnfNo.equals(deptDto.fstRegrIdnfNo) && Objects.equals(lastUpdDtm, deptDto.lastUpdDtm) && lastUpdrIdnfNo.equals(deptDto.lastUpdrIdnfNo);
+        return deptCd.equals(deptDto.deptCd) && uppDeptCd.equals(deptDto.uppDeptCd) && Objects.equals(deptMngrEmplNo, deptDto.deptMngrEmplNo) && deptNm.equals(deptDto.deptNm) && engDeptNm.equals(deptDto.engDeptNm) && deptSortOdr.equals(deptDto.deptSortOdr) && Objects.equals(fstRegDtm, deptDto.fstRegDtm) && fstRegrIdnfNo.equals(deptDto.fstRegrIdnfNo) && Objects.equals(lastUpdDtm, deptDto.lastUpdDtm) && lastUpdrIdnfNo.equals(deptDto.lastUpdrIdnfNo) && Objects.equals(emplId, deptDto.emplId) && Objects.equals(registerId, deptDto.registerId) && Objects.equals(modifierId, deptDto.modifierId);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(deptCd, uppDeptCd, deptMngrEmplNo, deptNm, engDeptNm, deptSortOdr, fstRegDtm, fstRegrIdnfNo, lastUpdDtm, lastUpdrIdnfNo);
-    }
-
-    @Override
-    public String toString() {
-        return "DeptDto{" +
-                "deptCd='" + deptCd + '\'' +
-                ", uppDeptCd='" + uppDeptCd + '\'' +
-                ", deptMngrEmplNo='" + deptMngrEmplNo + '\'' +
-                ", deptNm='" + deptNm + '\'' +
-                ", engDeptNm='" + engDeptNm + '\'' +
-                ", deptSortOdr=" + deptSortOdr +
-                ", FST_REG_DTM=" + fstRegDtm +
-                ", fstRegrIdnfNo='" + fstRegrIdnfNo + '\'' +
-                ", LAST_UPD_DTM=" + lastUpdDtm +
-                ", lastUpdrIdnfNo='" + lastUpdrIdnfNo + '\'' +
-                ", emplId='" + emplId + '\'' +
-                '}';
+        return Objects.hash(deptCd, uppDeptCd, deptMngrEmplNo, deptNm, engDeptNm, deptSortOdr, fstRegDtm, fstRegrIdnfNo, lastUpdDtm, lastUpdrIdnfNo, emplId, registerId, modifierId);
     }
 }
