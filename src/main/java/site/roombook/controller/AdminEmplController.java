@@ -1,4 +1,4 @@
-package site.roombook.controller.empl;
+package site.roombook.controller;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;

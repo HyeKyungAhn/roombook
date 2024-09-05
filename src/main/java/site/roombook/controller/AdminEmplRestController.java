@@ -1,4 +1,4 @@
-package site.roombook.controller.empl;
+package site.roombook.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;

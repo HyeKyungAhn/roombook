@@ -1,10 +1,11 @@
-package site.roombook.controller.space;
+package site.roombook.controller;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
@@ -51,7 +52,7 @@ public class SpaceController {
     @GetMapping("/admin-spaces/new")
     public ModelAndView getSpaceCreationPage(ModelAndView mv){
         mv.setViewName("space/adminSpaceInsert");
-        mv.addObject("spaceSaveRequestUrl", linkTo(methodOn(SpaceRestController.class).saveNewSpace(null, null, null)).toUri().toString());
+        mv.addObject("spaceSaveRequestUrl", WebMvcLinkBuilder.linkTo(methodOn(SpaceRestController.class).saveNewSpace(null, null, null)).toUri().toString());
         return mv;
     }
 

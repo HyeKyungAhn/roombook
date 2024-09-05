@@ -1,4 +1,4 @@
-package site.roombook.controller.space;
+package site.roombook.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;

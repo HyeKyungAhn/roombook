@@ -1,4 +1,4 @@
-package site.roombook.controller.dept;
+package site.roombook.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
