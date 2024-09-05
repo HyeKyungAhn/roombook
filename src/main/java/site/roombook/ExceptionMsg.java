@@ -22,7 +22,9 @@ public enum ExceptionMsg {
     EMPL_AUTH_UPDATE_FAIL("303", "업데이트에 실패했습니다. 다시 시도해주세요."),
 
     DEPT_MEM_DELETE_FAIL("401", "구성원 수정에 실패하였습니다.\n다시 시도해주세요."),
-    DEPT_MEM_ADD_FAIL("402", "구성원 수정에 실패하였습니다.\n다시 시도해주세요.");
+    DEPT_MEM_ADD_FAIL("402", "구성원 수정에 실패하였습니다.\n다시 시도해주세요."),
+
+    SPACE_NOT_FOUND("502", "찾을 수 없습니다.");
 
     private final String code;
     private final String content;

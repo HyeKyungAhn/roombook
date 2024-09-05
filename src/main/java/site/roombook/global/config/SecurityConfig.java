@@ -66,7 +66,7 @@ public class SecurityConfig {
                         .requestMatchers("/favicon/**").permitAll()
                         .requestMatchers("/", "/signin/**", "/api/signin/**", "/signup/**", "/api/signup/**", "/password-reset/**", "/id-inquiry/**", "/error/**", "/invalid-access/**", "/not-found/**", "/api/empls/*/dupcheck").permitAll()
                         .requestMatchers( "/spaces/**").access(userAuthorityAuthorizationManager())
-                        .requestMatchers("/admin-spaces/**").access(rscAdminAuthorityAuthorizationManager())
+                        .requestMatchers("/admin-spaces/**", "/api/admin/spaces/**").access(rscAdminAuthorityAuthorizationManager())
                         .requestMatchers("/dept/**", "/api/admin/empls/**").access(emplAdminAuthorityAuthorizationManager())
                         .requestMatchers("/admin/empls/**").access(superAdminAuthorityAuthorizationManager())
                         .anyRequest().authenticated())

@@ -23,7 +23,7 @@
 </head>
 <body>
     <h1>공간 정보 수정</h1>
-    <form action="/admin-spaces/${space.spaceNo}" method="post" id="spaceForm">
+    <form action="<c:url value="/api/admin/spaces/${space.spaceNo}"/>" method="post" id="spaceForm">
         <div>
             <label>
                 공간명
@@ -126,22 +126,17 @@
             if(file.status!=='error') formData.append('newFiles', file, file.name);
         });
 
-        fetch('<c:url value="/admin-spaces"/>/'+getNoFromUrl(), {
+        fetch('<c:url value="${modificationRequestUrl}"/>', {
             method: 'POST',
             body: formData,
         }).then(response => {
             if(response.ok){
-                return response.text();
+                location.href = response.headers.get('location');
             } else {
                 return response.text().then(errorData => {
                     throw new Error(errorData);
                 });
             }
-        }).then(text => {
-            if(text){
-                alert(text);
-            }
-            location.href = '<c:url value="/admin-spaces"/>/'+getNoFromUrl();
         }).catch(error => {
             alert(error.message);
         });

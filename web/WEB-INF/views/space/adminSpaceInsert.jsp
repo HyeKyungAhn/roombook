@@ -94,8 +94,6 @@
         </div>
     </form>
 <script>
-    const jsonRescs = '${resources}';
-
     const spaceForm = document.getElementById("spaceForm");
     spaceForm.addEventListener('submit', function(e){
         e.preventDefault();
@@ -124,25 +122,18 @@
             formData.append('files', file, file.name);
         }
 
-        fetch('<c:url value="/admin-spaces"/>', {
+        fetch('<c:url value="${spaceSaveRequestUrl}"/>', {
             method: 'POST',
             body: formData,
         }).then(response => {
             if(response.ok){
-                return response.text();
+                location.href = response.headers.get('location');
             } else {
                 return response.text().then(errorData => {
                     throw new Error(errorData);
                 });
             }
-        })
-        .then(msg => {
-            if(msg){
-                alert(msg);
-            }
-            location.href = '<c:url value="/admin-spaces"/>';
-        })
-        .catch(error => {
+        }).catch(error => {
             alert(error.message);
         });
     });
