@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="site.roombook.dao.spaceBookMapper">
+    <insert id="insert" parameterType="SpaceBookDto">
+        <selectKey keyProperty="spaceBookEmplNo" resultType="String" order="BEFORE">
+            SELECT EMPL_NO FROM empl WHERE EMPL_ID = #{emplId}
+        </selectKey>
+        INSERT INTO space_book (SPACE_BOOK_ID, SPACE_BOOK_EMPL_NO, SPACE_BOOK_SPACE_NO, SPACE_BOOK_SPACE_NM, SPACE_BOOK_LOC_DESC, SPACE_BOOK_DATE, SPACE_BOOK_BGN_TM, SPACE_BOOK_END_TM, SPACE_BOOK_CN, SPACE_BOOK_STUS_CD, FST_REG_DTM, FST_REGR_IDNF_NO, LAST_UPD_DTM, LAST_UPDR_IDNF_NO)
+        SELECT #{spaceBookId}, #{spaceBookEmplNo}, #{spaceBookSpaceNo}, (SELECT SPACE_NM FROM space WHERE SPACE_NO = #{spaceBookSpaceNo}), (SELECT SPACE_LOC_DESC FROM space WHERE SPACE_NO = #{spaceBookSpaceNo}), #{spaceBookDate}, #{spaceBookBgnTm}, #{spaceBookEndTm}, #{spaceBookCn}, #{spaceBookStusCd}, #{fstRegDtm}, #{spaceBookEmplNo}, #{lastUpdDtm}, #{spaceBookEmplNo}
+        WHERE not exists(
+            SELECT *
+            FROM space_book
+            WHERE DATEDIFF(SPACE_BOOK_DATE, #{spaceBookDate}) = 0
+                AND SPACE_BOOK_SPACE_NO = #{spaceBookSpaceNo}
+                AND SPACE_BOOK_STUS_CD = #{spaceBookStusCd}
+                AND (
+                    (SPACE_BOOK_END_TM <![CDATA[>]]> #{spaceBookBgnTm} AND SPACE_BOOK_BGN_TM <![CDATA[<]]> #{spaceBookEndTm})
+                    <if test="emplRole != 'ROLE_RSC_ADMIN' and emplRole != 'ROLE_SUPER_ADMIN'">
+                    OR
+                    (SPACE_BOOK_END_TM = #{spaceBookBgnTm} AND SPACE_BOOK_EMPL_NO = #{spaceBookEmplNo})
+                    OR
+                    (SPACE_BOOK_BGN_TM = #{spaceBookEndTm} AND SPACE_BOOK_EMPL_NO = #{spaceBookEmplNo})
+                    </if>
+                )
+        )
+        AND (SELECT IF(
+            <if test="emplRole != 'ROLE_RSC_ADMIN' and emplRole != 'ROLE_SUPER_ADMIN'">
+            NOT(s.SPACE_WKEND_USG_POSBL_YN = 'N'
+                AND WEEKDAY(#{spaceBookDate}) IN (5,6))
+            AND
+            </if>
+            s.SPACE_USG_POSBL_BGN_TM <![CDATA[<=]]> #{spaceBookBgnTm}
+            AND s.SPACE_USG_POSBL_END_TM <![CDATA[>=]]> #{spaceBookEndTm}
+            <if test="emplRole != 'ROLE_RSC_ADMIN' and emplRole != 'ROLE_SUPER_ADMIN'">
+            AND TIMESTAMPDIFF(HOUR, TIME(#{spaceBookBgnTm}), TIME(#{spaceBookEndTm})) <![CDATA[<=]]> s.SPACE_MAX_RSVD_TMS
+            </if>
+            , TRUE, FALSE)
+
+        FROM (
+            SELECT SPACE_WKEND_USG_POSBL_YN, SPACE_USG_POSBL_BGN_TM, SPACE_USG_POSBL_END_TM, SPACE_MAX_RSVD_TMS
+            FROM space
+            WHERE SPACE_NO = #{spaceBookSpaceNo}) s)
+        AND DATEDIFF(#{spaceBookDate}, CURDATE()) <![CDATA[>=]]> 0
+        <if test="emplRole != 'ROLE_RSC_ADMIN' and emplRole != 'ROLE_SUPER_ADMIN'">
+        AND DATEDIFF(#{spaceBookDate}, CURDATE()) <![CDATA[<=]]> 90
+        </if>
+    </insert>
+    <select id="selectBookedTimeslotsAtTheDate" parameterType="SpaceBookDto" resultType="SpaceBookDto">
+        SELECT sb.SPACE_BOOK_ID
+             , (SELECT EMPL_ID
+                FROM empl
+                WHERE EMPL_NO = sb.SPACE_BOOK_EMPL_NO) AS 'emplId'
+             , sb.SPACE_BOOK_SPACE_NO
+             , sb.SPACE_BOOK_SPACE_NM
+             , sb.SPACE_BOOK_DATE
+             , sb.SPACE_BOOK_BGN_TM
+             , sb.SPACE_BOOK_END_TM
+        FROM space_book sb
+        WHERE SPACE_BOOK_SPACE_NO = #{spaceBookSpaceNo}
+            AND DATEDIFF(SPACE_BOOK_DATE, #{spaceBookDate}) = 0
+            AND SPACE_BOOK_STUS_CD = #{spaceBookStusCd}
+    </select>
+    <select id="selectOneTimeslot" parameterType="SpaceBookDto" resultType="SpaceBookAndSpaceDto">
+        SELECT sb.SPACE_BOOK_ID, sb.SPACE_BOOK_DATE, sb.SPACE_BOOK_BGN_TM, sb.SPACE_BOOK_END_TM, sb.SPACE_BOOK_CN, sb.SPACE_BOOK_STUS_CD
+             , s.SPACE_NO, s.SPACE_NM, s.SPACE_LOC_DESC, s.SPACE_MAX_PSON_CNT, s.SPACE_MAX_RSVD_TMS, s.SPACE_WKEND_USG_POSBL_YN, s.SPACE_USG_POSBL_BGN_TM, s.SPACE_USG_POSBL_END_TM
+        FROM space_book sb
+                 INNER JOIN space s
+                            ON sb.SPACE_BOOK_SPACE_NO = s.SPACE_NO
+        WHERE SPACE_BOOK_ID = #{spaceBookId}
+          AND SPACE_BOOK_EMPL_NO = (
+            SELECT EMPL_NO
+            FROM empl
+            WHERE EMPL_ID = #{emplId}
+        )
+    </select>
+    <update id="updateTimeslotStatus" parameterType="spaceBookDto">
+        <selectKey keyProperty="spaceBookEmplNo" resultType="String" order="BEFORE">
+            SELECT EMPL_NO FROM empl WHERE EMPL_ID = #{emplId}
+        </selectKey>
+        UPDATE space_book
+        SET SPACE_BOOK_STUS_CD = #{spaceBookStusCd}
+                            , LAST_UPDR_IDNF_NO = #{spaceBookEmplNo}
+                            , LAST_UPD_DTM = #{lastUpdDtm}
+        WHERE SPACE_BOOK_ID = #{spaceBookId}
+            <if test="emplRole != 'ROLE_RSC_ADMIN' and emplRole != 'ROLE_SUPER_ADMIN'">
+            AND SPACE_BOOK_EMPL_NO = #{spaceBookEmplNo}
+            </if>
+    </update>
+    <update id="updateTimeslot" parameterType="spaceBookDto">
+        <selectKey keyProperty="spaceBookEmplNo" resultType="String" order="BEFORE">
+            SELECT EMPL_NO FROM empl WHERE EMPL_ID = #{emplId}
+        </selectKey>
+        UPDATE space_book SET SPACE_BOOK_DATE = #{spaceBookDate}
+                            , SPACE_BOOK_BGN_TM = #{spaceBookBgnTm}
+                            , SPACE_BOOK_END_TM = #{spaceBookEndTm}
+                            , SPACE_BOOK_CN = #{spaceBookCn}
+                            , LAST_UPDR_IDNF_NO = #{spaceBookEmplNo}
+                            , LAST_UPD_DTM = #{lastUpdDtm}
+        WHERE SPACE_BOOK_ID = #{spaceBookId}
+            AND NOT EXISTS(
+                    SELECT 1
+                    FROM (
+                        SELECT *
+                        FROM space_book sb2
+                        WHERE sb2.SPACE_BOOK_DATE = #{spaceBookDate}
+                            AND sb2.SPACE_BOOK_SPACE_NO = #{spaceBookSpaceNo}
+                            AND SPACE_BOOK_STUS_CD = #{spaceBookStusCd}
+                            AND sb2.SPACE_BOOK_ID != #{spaceBookId}
+                            AND (
+                                (sb2.SPACE_BOOK_END_TM <![CDATA[>]]> #{spaceBookBgnTm} AND sb2.SPACE_BOOK_BGN_TM <![CDATA[<]]> #{spaceBookEndTm})
+                                <if test="emplRole != 'ROLE_RSC_ADMIN' and emplRole != 'ROLE_SUPER_ADMIN'">
+                                OR
+                                (sb2.SPACE_BOOK_END_TM = #{spaceBookBgnTm} AND sb2.SPACE_BOOK_EMPL_NO = #{spaceBookEmplNo})
+                                OR
+                                (sb2.SPACE_BOOK_BGN_TM = #{spaceBookEndTm} AND sb2.SPACE_BOOK_EMPL_NO = #{spaceBookEmplNo})
+                                </if>
+                            )
+                         ) AS temp_sb2
+                    )
+            AND (SELECT IF(
+                <if test="emplRole != 'ROLE_RSC_ADMIN' and emplRole != 'ROLE_SUPER_ADMIN'">
+                NOT(s.SPACE_WKEND_USG_POSBL_YN = 'N'
+                AND WEEKDAY(#{spaceBookDate}) IN (5,6))
+                AND
+                </if>
+                s.SPACE_USG_POSBL_BGN_TM <![CDATA[<=]]> #{spaceBookBgnTm}
+                AND s.SPACE_USG_POSBL_END_TM <![CDATA[>=]]> #{spaceBookEndTm}
+                <if test="emplRole != 'ROLE_RSC_ADMIN' and emplRole != 'ROLE_SUPER_ADMIN'">
+                    AND TIMESTAMPDIFF(HOUR, TIME(#{spaceBookBgnTm}), TIME(#{spaceBookEndTm})) <![CDATA[<=]]> s.SPACE_MAX_RSVD_TMS
+                </if>
+                , TRUE, FALSE)
+        FROM (
+            SELECT SPACE_WKEND_USG_POSBL_YN, SPACE_USG_POSBL_BGN_TM, SPACE_USG_POSBL_END_TM, SPACE_MAX_RSVD_TMS
+            FROM space
+            WHERE SPACE_NO = #{spaceBookSpaceNo}) s)
+                AND DATEDIFF(#{spaceBookDate}, CURDATE()) <![CDATA[>=]]> 0
+                <if test="emplRole != 'ROLE_RSC_ADMIN' and emplRole != 'ROLE_SUPER_ADMIN'">
+                AND DATEDIFF(#{spaceBookDate}, CURDATE()) <![CDATA[<=]]> 90
+                </if>
+    </update>
+    <delete id="deleteAll">
+        DELETE FROM space_book
+    </delete>
+</mapper>

@@ -44,6 +44,23 @@ public class SpaceServiceImpl implements SpaceService {
     }
 
     @Override
+    public SpaceDto getSpaceDataForBooking(int spaceNo) {
+        SpaceDto selectedSpace = spaceDao.selectOne(spaceNo);
+        if (selectedSpace == null) {
+            return null;
+        }
+        return new SpaceDto.Builder()
+                .spaceNo(selectedSpace.getSpaceNo())
+                .spaceNm(selectedSpace.getSpaceNm())
+                .spaceMaxPsonCnt(selectedSpace.getSpaceMaxPsonCnt())
+                .spaceMaxRsvdTms(selectedSpace.getSpaceMaxRsvdTms())
+                .spaceWkendUsgPosblYn(selectedSpace.getSpaceWkendUsgPosblYn())
+                .spaceUsgPosblBgnTm(selectedSpace.getSpaceUsgPosblBgnTm())
+                .spaceUsgPosblEndTm(selectedSpace.getSpaceUsgPosblEndTm())
+                .build();
+    }
+
+    @Override
     @Transactional(propagation = Propagation.REQUIRED)
     public boolean updateSpace(int spaceNo, String lastUpdrIdnfNo, SpaceDto spaceDto){
         SpaceDto space = new SpaceDto.Builder().spaceNo(spaceNo)

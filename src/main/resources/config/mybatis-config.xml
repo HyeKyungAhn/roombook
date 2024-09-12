@@ -21,5 +21,7 @@
         <typeAlias alias="EmailVerfDto" type="site.roombook.domain.EmailVerfDto"/>
         <typeAlias alias="JwtDto" type="site.roombook.domain.JwtDto"/>
         <typeAlias alias="AuthChgHistDto" type="site.roombook.domain.AuthChgHistDto"/>
+        <typeAlias alias="SpaceBookDto" type="site.roombook.domain.SpaceBookDto"/>
+        <typeAlias alias="SpaceBookAndSpaceDto" type="site.roombook.domain.SpaceBookAndSpaceDto"/>
     </typeAliases>
 </configuration>

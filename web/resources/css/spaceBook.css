@@ -1,0 +1,51 @@
+select::-ms-expand {
+    display: none;
+}
+.select {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+}
+
+.myCalendar {
+}
+
+.rootWrapper {
+    width: 60%;
+    min-width: 600px;
+}
+
+.spaceInfo {
+    display: flex;
+}
+
+.maxCapacity::before {
+    content: '\1F464';
+}
+
+.maxBookingTime::before {
+    content: '\23F1';
+}
+
+.bookingAvailableTime::before {
+    content: '\1F559';
+}
+
+.timeSelectBtn {
+    height: 80px;
+    text-align: right;
+    align-content: center;
+}
+
+.timeSelect {
+    font-size: 18px;
+}
+
+.timeSelect::after {
+    content: '\3009';
+    margin: 0 10px;
+}
+
+.bookedTime {
+    color: red;
+}

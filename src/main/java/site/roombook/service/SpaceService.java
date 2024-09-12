@@ -13,6 +13,8 @@ public interface SpaceService {
 
     SpaceDto getOneSpace(int spaceNo);
 
+    SpaceDto getSpaceDataForBooking(int spaceNo);
+
     boolean updateSpace(int spaceNo, String lastUpdrIdnfNo, SpaceDto spaceDto);
 
     List<SpaceRescFileDto> getSpaceList(int spaceCnt, int offset, int rescCnt, CmnCode atchLocCd, boolean isHiddenSpaceInvisible);

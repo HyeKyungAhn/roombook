@@ -18,7 +18,7 @@ import java.util.List;
 @ToString
 @Builder(builderMethodName = "SpaceDtoBuilder")
 public class SpaceDto {
-    @JsonIgnore
+    @JsonProperty("spaceNo")
     private Integer spaceNo;
     @JsonProperty("spaceNm")
     private String spaceNm;
@@ -72,7 +72,6 @@ public class SpaceDto {
     }
 
     public static class Builder{
-        //필수
         private String spaceNm;
         private Integer spaceMaxPsonCnt;
         private String spaceLocDesc;
@@ -82,8 +81,6 @@ public class SpaceDto {
         private LocalTime spaceUsgPosblEndTm;
         private Character spaceWkendUsgPosblYn = 'N';
         private Character spaceHideYn = 'N';
-
-        //비필수
         private Integer spaceNo;
         private LocalDateTime fstRegDtm;
         private String fstRegrIdnfNo;
@@ -173,42 +170,6 @@ public class SpaceDto {
         }
 
         public SpaceDto build(){
-            if (this.spaceNm == null || this.spaceNm.isEmpty()) {
-                throw new IllegalArgumentException("spaceNm is a required field and cannot be null or empty");
-            }
-
-            if (this.spaceMaxPsonCnt == null || this.spaceMaxPsonCnt==0) {
-                throw new IllegalArgumentException("spaceMaxPsonCnt is a required field and cannot be null");
-            }
-
-            if (this.spaceLocDesc == null || this.spaceLocDesc.isEmpty()) {
-                throw new IllegalArgumentException("spaceLocDesc is a required field and cannot be null or empty");
-            }
-
-            if (this.spaceAdtnDesc == null || this.spaceAdtnDesc.isEmpty()) {
-                throw new IllegalArgumentException("spaceAdtnDesc is a required field and cannot be null or empty");
-            }
-
-            if (this.spaceMaxRsvdTms == null || this.spaceMaxRsvdTms == 0) {
-                throw new IllegalArgumentException("spaceMaxRsvdTms is a required field and cannot be null or zero");
-            }
-
-            if (this.spaceUsgPosblBgnTm == null) {
-                throw new IllegalArgumentException("spaceUsgPosblBgnTm is a required field and cannot be null or empty");
-            }
-
-            if (this.spaceUsgPosblEndTm == null) {
-                throw new IllegalArgumentException("spaceUsgPosblEndTm is a required field and cannot be null or empty");
-            }
-
-            if (this.spaceWkendUsgPosblYn == null) {
-                throw new IllegalArgumentException("spaceWkendUsgPosblYn is a required field and cannot be null or empty");
-            }
-
-            if (this.spaceHideYn == null) {
-                throw new IllegalArgumentException("spaceHideYn is a required field and cannot be null or empty");
-            }
-
             return new SpaceDto(this);
         }
     }

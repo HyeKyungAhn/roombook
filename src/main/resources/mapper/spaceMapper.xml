@@ -22,9 +22,6 @@
     <select id="selectOne" parameterType="int" resultType="SpaceDto">
         SELECT * FROM space WHERE SPACE_NO = #{spaceNo}
     </select>
-    <select id="selectTenSpace" resultType="SpaceDto">
-
-    </select>
     <select id="selectSpacesAndRescAndFile" parameterType="Map" resultType="SpaceRescFileDto">
         SELECT s.SPACE_NO, s.SPACE_NM, s.SPACE_MAX_PSON_CNT, s.SPACE_LOC_DESC, s.SPACE_ADTN_DESC,
         s.SPACE_MAX_RSVD_TMS, s.SPACE_USG_POSBL_BGN_TM, s.SPACE_USG_POSBL_END_TM, s.SPACE_WKEND_USG_POSBL_YN,
