@@ -30,7 +30,7 @@ public class SpaceBookDto {
     private Integer spaceBookSpaceNo;
     @JsonProperty("spaceName")
     private String spaceBookSpaceNm;
-    @JsonIgnore
+    @JsonProperty("location")
     private String spaceBookLocDesc;
     @JsonProperty("date")
     @JsonDeserialize(using = DateDeserializer.class)
@@ -56,6 +56,10 @@ public class SpaceBookDto {
     private String lastUpdrIdnfNo;
     @JsonIgnore
     private String modifierId;
+    @JsonIgnore
+    private Integer offset;
+    @JsonIgnore
+    private Integer limit;
 
     @Override
     public boolean equals(Object o) {

@@ -14,6 +14,10 @@ public interface SpaceBookService {
 
     SpaceBookAndSpaceDto getTimeslot(String spaceBookId, String emplId);
 
+    List<SpaceBookDto> getPersonalTimeslots(String emplId, int offset, int limit);
+
+    int getPersonalTimeslotsCount(String emplId);
+
     ServiceResult modifyBooking(SpaceBookDto spaceBookDto, String bookId, String emplId, String emplRole);
 
     ServiceResult cancelBooking(String emplId, String emplRole, String bookId);

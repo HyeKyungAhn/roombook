@@ -148,6 +148,7 @@
         }
 
         if(!validateBookingData(bookingData)) return false;
+        let locationURL;
 
         fetch('<c:url value="${modifyingUrl}"/>', {
             method: 'PATCH',
@@ -157,13 +158,18 @@
             body: JSON.stringify(bookingData),
         }).then(response => {
             if(response.ok){
-                // location.href = response.headers.get('location');
-            } else {
+                locationURL = response.headers.get('location');
                 return response.text();
+            } else {
+                throw new Error();
             }
-        }).then(text => {
-            const jsonData = JSON.parse(text);
+        }).then(data => {
+            const jsonData = JSON.parse(data);
             alert(jsonData.errorMessage);
+
+            if (jsonData.result === "SUCCESS") {
+                location.href = locationURL;
+            }
         }).catch(error => {
             console.error('Error:', error);
         });

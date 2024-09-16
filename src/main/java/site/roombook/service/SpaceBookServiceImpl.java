@@ -67,6 +67,28 @@ public class SpaceBookServiceImpl implements SpaceBookService{
     }
 
     @Override
+    public List<SpaceBookDto> getPersonalTimeslots(String emplId, int offset, int limit) {
+        SpaceBookDto spaceBookDto = SpaceBookDto.spaceBookDtoBuilder()
+                .spaceBookStusCd(CmnCode.SPACE_BOOK_COMPLETE.getCode())
+                .emplId(emplId)
+                .offset(offset)
+                .limit(limit)
+                .build();
+
+        return spaceBookDao.selectPersonalTimeslots(spaceBookDto);
+    }
+
+    @Override
+    public int getPersonalTimeslotsCount(String emplId) {
+        SpaceBookDto spaceBookDto = SpaceBookDto.spaceBookDtoBuilder()
+                .spaceBookStusCd(CmnCode.SPACE_BOOK_COMPLETE.getCode())
+                .emplId(emplId)
+                .build();
+
+        return spaceBookDao.selectPersonalTimeslotsCount(spaceBookDto);
+    }
+
+    @Override
     public ServiceResult modifyBooking(SpaceBookDto inputs, String bookId, String emplId, String emplRole) {
         ServiceResult result = new ServiceResult();
 

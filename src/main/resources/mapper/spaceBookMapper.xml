@@ -74,6 +74,28 @@
             WHERE EMPL_ID = #{emplId}
         )
     </select>
+    <select id="selectLimitedPersonalTimeslots" parameterType="SpaceBookDto" resultType="SpaceBookDto">
+        SELECT SPACE_BOOK_ID, SPACE_BOOK_SPACE_NO, SPACE_BOOK_SPACE_NM, SPACE_BOOK_LOC_DESC, SPACE_BOOK_DATE, SPACE_BOOK_BGN_TM, SPACE_BOOK_END_TM, SPACE_BOOK_CN, FST_REG_DTM
+        FROM space_book
+        WHERE SPACE_BOOK_EMPL_NO = (
+                SELECT EMPL_NO FROM empl WHERE EMPL_ID = #{emplId}
+            )
+            <if test="spaceBookStusCd != null">
+                AND SPACE_BOOK_STUS_CD = #{spaceBookStusCd}
+            </if>
+        ORDER BY SPACE_BOOK_DATE DESC, SPACE_BOOK_BGN_TM
+        LIMIT #{limit} OFFSET #{offset}
+    </select>
+    <select id="selectPersonalTimeslotsCount" parameterType="SpaceBookDto" resultType="int">
+        SELECT COUNT(*)
+        FROM space_book
+        WHERE SPACE_BOOK_EMPL_NO = (
+        SELECT EMPL_NO FROM empl WHERE EMPL_ID = #{emplId}
+        )
+        <if test="spaceBookStusCd != null">
+            AND SPACE_BOOK_STUS_CD = #{spaceBookStusCd}
+        </if>
+    </select>
     <update id="updateTimeslotStatus" parameterType="spaceBookDto">
         <selectKey keyProperty="spaceBookEmplNo" resultType="String" order="BEFORE">
             SELECT EMPL_NO FROM empl WHERE EMPL_ID = #{emplId}

@@ -13,6 +13,15 @@
         <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
     </listener>
 
+    <error-page>
+        <error-code>400</error-code>
+        <location>/notFound.jsp</location>
+    </error-page>
+    <error-page>
+        <error-code>500</error-code>
+        <location>/error500.jsp</location>
+    </error-page>
+
     <!-- Spring Security -->
     <filter>
         <filter-name>springSecurityFilterChain</filter-name>

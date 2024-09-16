@@ -33,6 +33,16 @@ public class SpaceBookDaoImpl implements SpaceBookDao{
     }
 
     @Override
+    public List<SpaceBookDto> selectPersonalTimeslots(SpaceBookDto spaceBookDto) {
+        return session.selectList(namespace+"selectLimitedPersonalTimeslots", spaceBookDto);
+    }
+
+    @Override
+    public int selectPersonalTimeslotsCount(SpaceBookDto spaceBookDto) {
+        return session.selectOne(namespace+"selectPersonalTimeslotsCount", spaceBookDto);
+    }
+
+    @Override
     public int updateTimeslot(SpaceBookDto spaceBookDto) {
         return session.update(namespace+"updateTimeslot", spaceBookDto);
     }

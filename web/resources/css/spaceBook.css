@@ -49,3 +49,93 @@ select::-ms-expand {
 .bookedTime {
     color: red;
 }
+
+
+/* myBook */
+
+.loadMoreTrigger {
+    width: 800px;
+    height: 300px;
+}
+
+.myBookWrapper .dropBtn::before {
+    content: '\22EE';
+}
+
+.myBookWrapper {
+    display: flex;
+    flex-direction: initial;
+    justify-content: space-between;
+    width: 600px;
+}
+
+.myBookWrapper .dateTimeWrapper{
+    display: flex;
+    justify-content: space-between;
+    width: 570px;
+    font-size: 18px;
+}
+
+.myBookWrapper .content {
+
+}
+
+.myBookWrapper .date {
+
+}
+
+.myBookWrapper .beginTime {
+
+}
+
+.myBookWrapper .endTime {
+
+}
+
+.myBookWrapper .spaceName {
+    font-size: 20px;
+}
+
+.myBookWrapper .spaceLocation {
+
+}
+
+.myBookWrapper .menuDropdown {
+    position: relative;
+    display: inline-block;
+}
+
+.myBookWrapper .dropBtn {
+    display: inline-block;
+    width: 20px;
+    height: 24px;
+    text-align: center;
+    cursor: pointer;
+}
+
+.myBookWrapper .dropdownContent {
+    display: none;
+    position: absolute;
+    background-color: #f1f1f1;
+    min-width: 160px;
+    box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
+    z-index: 1;
+}
+
+.myBookWrapper .dropdownContent div {
+    padding: 12px 16px;
+    display: block;
+}
+
+.myBookWrapper a {
+    color: black;
+    text-decoration: none;
+}
+
+.myBookWrapper .show {
+    display: block;
+}
+
+.myBookWrapper .cancelBooking {
+    cursor: pointer;
+}

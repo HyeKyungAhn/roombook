@@ -10,7 +10,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 import site.roombook.domain.SpaceBookAndSpaceDto;
@@ -24,16 +23,15 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 @Controller
-@RequestMapping("/book")
 public class SpaceBookController {
 
     @Autowired
-    SpaceService spaceService;
+    private SpaceService spaceService;
 
     @Autowired
-    SpaceBookService spaceBookService;
+    private SpaceBookService spaceBookService;
 
-    @GetMapping("/timeslots/{space-no}")
+    @GetMapping("/book/timeslots/{space-no}")
     public ModelAndView getSpaceBookingPage(@PathVariable("space-no") Integer spaceNo, @RequestParam(required = false) String date, ModelAndView mv, HttpServletResponse response) {
         SpaceDto spaceDto = spaceService.getSpaceDataForBooking(spaceNo);
         if (spaceDto == null) {
@@ -63,8 +61,9 @@ public class SpaceBookController {
         return mv;
     }
 
-    @GetMapping("/timeslots/{spaceBookId}/edit")
-    public ModelAndView getModifyingTimeslotPage(@PathVariable("spaceBookId") String spaceBookId, ModelAndView mv) {
+    @GetMapping("/book/timeslots/{bookId}/edit")
+    public ModelAndView getChangingBookingPage(@PathVariable("bookId") String spaceBookId) {
+        ModelAndView mv = new ModelAndView();
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
 
@@ -83,7 +82,7 @@ public class SpaceBookController {
             mv.setViewName("redirect:/error");
             return mv;
         }
-        // TODO:  location은 내 예약 페이지 목록 구현 후 추가할 것
+
         String modifyingTimeslotUrl = linkTo(methodOn(SpaceBookRestController.class).modifyTimeslot(spaceBookId, null)).toUri().toString();
         String bookedTimeslotsUrl = linkTo(methodOn(SpaceBookRestController.class).getTimeslotOfTheDay(spaceAndBookData.getSpaceNo(), null)).toUri().toString();
         String spaceDetailPageUrl = linkTo(methodOn(SpaceController.class).getSpaceDetailPage(spaceAndBookData.getSpaceNo(), null)).toUri().toString();
@@ -92,6 +91,17 @@ public class SpaceBookController {
         mv.addObject("spaceDetailPageUrl", spaceDetailPageUrl);
         mv.addObject("spaceAndBookData", jsonSpaceAndBookData);
         mv.setViewName("spaceBook/bookEdit");
+        return mv;
+    }
+
+    @GetMapping("/mybook")
+    public ModelAndView getMyBookPage() {
+        ModelAndView mv = new ModelAndView();
+        String timeslotsRequestUri = linkTo(methodOn(SpaceBookRestController.class).getMyTimeslots(null, null)).toUri().toString();
+        String selfUri = linkTo(methodOn(SpaceBookController.class).getMyBookPage()).toUri().toString();
+        mv.addObject("self", selfUri);
+        mv.addObject("timeslotsRequestUri", timeslotsRequestUri);
+        mv.setViewName("spaceBook/myBook");
         return mv;
     }
 }
