@@ -9,8 +9,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
@@ -27,6 +25,7 @@ import site.roombook.service.SpaceBookService;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import static org.mockito.Mockito.*;
@@ -44,7 +43,7 @@ class SpaceBookRestControllerTest {
     private SpaceBookRestController spaceBookRestController;
 
     @Mock
-    private SpaceBookService spaceBookService;
+    private SpaceBookService mockSpaceBookService;
     
     @BeforeEach
     void setup(){
@@ -74,7 +73,7 @@ class SpaceBookRestControllerTest {
                 .spaceBookEndTm(LocalTime.of(12, 0))
                 .build();
 
-        when(spaceBookService.bookTimeslot(spaceBookDto, "user", "ROLE_RSC_ADMIN")).thenReturn(new ServiceResult(true));
+        when(mockSpaceBookService.bookTimeslot(spaceBookDto, "user", "ROLE_RSC_ADMIN")).thenReturn(new ServiceResult(true));
 
         mockMvc.perform(post("/api/book/timeslots")
                 .content(jsonInput)
@@ -275,5 +274,28 @@ class SpaceBookRestControllerTest {
                 .andExpect(MockMvcResultMatchers.status().isBadRequest())
                 .andExpect(jsonPath("$.errorMessage", is("예약 내용을 입력해주세요.")))
                 .andExpect(jsonPath("$.result", is("FAIL")));
+    }
+
+    @Test
+    @WithMockUser(roles = "USER")
+    @DisplayName("예약 내역이 없을 때")
+    void noBookedTimeslots() throws Exception {
+        when(mockSpaceBookService.getPersonalTimeslotsCount(anyString())).thenReturn(0);
+
+        mockMvc.perform(get("/api/mybook/timeslots")
+                .param("page", "1"))
+                .andExpect(MockMvcResultMatchers.status().isNoContent());
+    }
+
+    @Test
+    @WithMockUser(roles = "USER")
+    @DisplayName("예약 내역이 있을 때")
+    void hasBookedTimeslots() throws Exception {
+        when(mockSpaceBookService.getPersonalTimeslotsCount(anyString())).thenReturn(10);
+        when(mockSpaceBookService.getPersonalTimeslots(anyString(), anyInt(), anyInt())).thenReturn(List.of(SpaceBookDto.spaceBookDtoBuilder().build()));
+
+        mockMvc.perform(get("/api/mybook/timeslots")
+                        .param("page", "1"))
+                .andExpect(MockMvcResultMatchers.status().isOk());
     }
 }

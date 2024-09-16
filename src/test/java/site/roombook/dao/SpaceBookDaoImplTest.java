@@ -18,6 +18,7 @@ import site.roombook.domain.SpaceDto;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -71,7 +72,7 @@ class SpaceBookDaoImplTest {
                     .spaceWkendUsgPosblYn('N')
                     .spaceHideYn('N')
                     .fstRegDtm(LocalDateTime.now())
-                    .fstRegrIdnfNo("admin").build();
+                    .fstRegrIdnfNo(dummyRscAdminEmpl.getEmplNo()).build();
 
             assertEquals(1, spaceDao.insertSpace(dummySpace));
 
@@ -469,7 +470,7 @@ class SpaceBookDaoImplTest {
                     .spaceWkendUsgPosblYn('N')
                     .spaceHideYn('N')
                     .fstRegDtm(LocalDateTime.now())
-                    .fstRegrIdnfNo("admin").build();
+                    .fstRegrIdnfNo(dummyRscAdminEmpl.getEmplNo()).build();
 
             assertEquals(1, spaceDao.insertSpace(dummySpace));
 
@@ -901,11 +902,10 @@ class SpaceBookDaoImplTest {
     }
 
     @Nested
-    @DisplayName("예약 한 건 조회 테스트")
-    class OneTimeslotSelectionTest {
+    @DisplayName("조회 테스트")
+    class SelectionTest {
         EmplDto dummyEmpl;
-        String dummySpaceBookId1;
-        String dummySpaceBookId2;
+        List<String> dummySpaceBookIdList;
 
 
         @BeforeEach
@@ -933,54 +933,69 @@ class SpaceBookDaoImplTest {
                     .spaceMaxRsvdTms(2)
                     .spaceUsgPosblBgnTm(LocalTime.of(9,0))
                     .spaceUsgPosblEndTm(LocalTime.of(18,0))
-                    .spaceWkendUsgPosblYn('N')
+                    .spaceWkendUsgPosblYn('Y')
                     .spaceHideYn('N')
                     .fstRegDtm(LocalDateTime.now())
-                    .fstRegrIdnfNo("admin").build();
+                    .fstRegrIdnfNo(dummyRscAdminEmpl.getEmplNo()).build();
 
             assertEquals(1, spaceDao.insertSpace(dummySpace));
 
-            dummySpaceBookId1 = UUID.randomUUID().toString();
-            SpaceBookDto existingSpaceBooking1 = SpaceBookDto.spaceBookDtoBuilder()
-                    .spaceBookId(dummySpaceBookId1)
-                    .emplId(dummyEmpl.getEmplId())
-                    .spaceBookSpaceNo(dummySpace.getSpaceNo())
-                    .spaceBookDate(LocalDate.of(2024, 10, 10))
-                    .spaceBookBgnTm(LocalTime.of(9, 0))
-                    .spaceBookEndTm(LocalTime.of(11, 0))
-                    .spaceBookCn("회의")
-                    .spaceBookStusCd(CmnCode.SPACE_BOOK_COMPLETE.getCode())
-                    .fstRegDtm(LocalDateTime.now())
-                    .lastUpdDtm(LocalDateTime.now())
-                    .build();
+            List<String> idList = new ArrayList<>();
 
-            dummySpaceBookId2 = UUID.randomUUID().toString();
-            SpaceBookDto existingSpaceBooking2 = SpaceBookDto.spaceBookDtoBuilder()
-                    .spaceBookId(dummySpaceBookId2)
-                    .emplId(dummyEmpl.getEmplId())
-                    .spaceBookSpaceNo(dummySpace.getSpaceNo())
-                    .spaceBookDate(LocalDate.of(2024, 10, 10))
-                    .spaceBookBgnTm(LocalTime.of(14, 0))
-                    .spaceBookEndTm(LocalTime.of(16, 0))
-                    .spaceBookCn("회의")
-                    .spaceBookStusCd(CmnCode.SPACE_BOOK_COMPLETE.getCode())
-                    .fstRegDtm(LocalDateTime.now())
-                    .lastUpdDtm(LocalDateTime.now())
-                    .build();
+            for (int i = 1; i < 30; i++) {
+                String id = UUID.randomUUID().toString();
+                SpaceBookDto existingSpaceBooking = SpaceBookDto.spaceBookDtoBuilder()
+                        .spaceBookId(id)
+                        .emplId(dummyEmpl.getEmplId())
+                        .spaceBookSpaceNo(dummySpace.getSpaceNo())
+                        .spaceBookDate(LocalDate.of(2024, 11, i))
+                        .spaceBookBgnTm(LocalTime.of(9, 0))
+                        .spaceBookEndTm(LocalTime.of(11, 0))
+                        .spaceBookCn("회의")
+                        .spaceBookStusCd(CmnCode.SPACE_BOOK_COMPLETE.getCode())
+                        .fstRegDtm(LocalDateTime.now())
+                        .lastUpdDtm(LocalDateTime.now())
+                        .build();
 
-            assertEquals(1, spaceBookDao.insert(existingSpaceBooking1));
-            assertEquals(1, spaceBookDao.insert(existingSpaceBooking2));
+                assertEquals(1, spaceBookDao.insert(existingSpaceBooking));
+                idList.add(id);
+            }
         }
 
         @Test
-        @DisplayName("성공")
-        void success() {
+        @DisplayName("한 건 예약 조회")
+        void selectOneTimeslot() {
             SpaceBookDto spaceBookDto = SpaceBookDto.spaceBookDtoBuilder()
-                    .spaceBookId(dummySpaceBookId1)
+                    .spaceBookId(dummySpaceBookIdList.get(0))
                     .emplId(dummyEmpl.getEmplId())
                     .build();
 
             assertNotNull(spaceBookDao.selectTimeslot(spaceBookDto));
+        }
+
+        @Test
+        @DisplayName("개인 예약 5건 조회")
+        void select5PersonalTimeslots() {
+            SpaceBookDto spaceBookDto = SpaceBookDto.spaceBookDtoBuilder()
+                            .emplId(dummyEmpl.getEmplId())
+                            .spaceBookStusCd(CmnCode.SPACE_BOOK_COMPLETE.getCode())
+                            .limit(5)
+                            .offset(0)
+                            .build();
+
+            List<SpaceBookDto> personalTimeslots = spaceBookDao.selectPersonalTimeslots(spaceBookDto);
+            assertEquals(5, personalTimeslots.size());
+            assertEquals(29, personalTimeslots.get(0).getSpaceBookDate().getDayOfMonth());
+        }
+
+        @Test
+        @DisplayName("개인 예약 수 조회")
+        void selectPersonalTimeslotsCount() {
+            SpaceBookDto spaceBookDto = SpaceBookDto.spaceBookDtoBuilder()
+                    .emplId(dummyEmpl.getEmplId())
+                    .spaceBookStusCd(CmnCode.SPACE_BOOK_COMPLETE.getCode()).build();
+
+            assertEquals(29, spaceBookDao.selectPersonalTimeslotsCount(spaceBookDto));
         }
     }
 

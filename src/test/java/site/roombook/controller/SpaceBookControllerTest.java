@@ -4,9 +4,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
+import org.mockito.*;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
@@ -16,9 +14,7 @@ import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.servlet.ModelAndView;
 import site.roombook.domain.SpaceDto;
-import site.roombook.service.SpaceBookService;
 import site.roombook.service.SpaceService;
-
 
 import static org.mockito.Mockito.*;
 import static org.junit.jupiter.api.Assertions.*;
@@ -35,10 +31,10 @@ class SpaceBookControllerTest {
     private SpaceBookController spaceBookController;
 
     @Mock
-    private SpaceService spaceService;
+    private SpaceService mockSpaceService;
 
     @BeforeEach
-    void setup(){
+    void setup() {
         MockitoAnnotations.openMocks(this);
         mockMvc = MockMvcBuilders.standaloneSetup(spaceBookController).build();
     }
@@ -46,7 +42,7 @@ class SpaceBookControllerTest {
     @Test
     @DisplayName("check")
     void test() throws Exception {
-        when(spaceService.getSpaceDataForBooking(123123)).thenReturn(new SpaceDto.Builder().build());
+        when(mockSpaceService.getSpaceDataForBooking(123123)).thenReturn(new SpaceDto.Builder().build());
 
         MvcResult mvcResult = mockMvc.perform(get("/book/timeslots/123123")
                 .param("date", "20240910"))
