@@ -5,13 +5,16 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.transaction.annotation.Transactional;
-import site.roombook.domain.SpaceDto;
+import site.roombook.CmnCode;
+import site.roombook.domain.*;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.*;
@@ -19,22 +22,24 @@ import java.util.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 @DisplayName("공간")
+@Transactional
 @ExtendWith(SpringExtension.class)
 @ContextConfiguration(locations = {"file:web/WEB-INF/spring/**/applicationContext.xml"})
 class SpaceDaoImplTest {
     @Autowired
-    SpaceDao spaceDao;
+    private SpaceDao spaceDao;
 
     @Autowired
-    RescDao rescDao;
+    private RescDao rescDao;
 
     @Autowired
-    SpaceRescDao spaceRescDao;
+    private SpaceRescDao spaceRescDao;
 
     @Autowired
-    FileDao fileDao;
+    private EmplDao emplDao;
 
-    protected SpaceDto spaceDto;
+    @Autowired
+    private SpaceBookDao spaceBookDao;
 
     @BeforeEach
     void setUp(){
@@ -66,7 +71,6 @@ class SpaceDaoImplTest {
     @DisplayName("삽입 시")
     class WhenNewSpaceInsertTest{
         @Test
-        @Transactional
         @DisplayName("정상으로 처리될 때")
         void isInserted(){
             assertEquals(1, spaceDao.insertSpace(createSpaceDto()));
@@ -74,7 +78,6 @@ class SpaceDaoImplTest {
     }
 
     @Test
-    @Transactional
     @DisplayName("전체 삭제 테스트")
     void deleteAllTest(){
         spaceDao.deleteAll();
@@ -89,7 +92,6 @@ class SpaceDaoImplTest {
     }
 
     @Test
-    @Transactional
     @DisplayName("전체 공간 수 조회 테스트")
     void deleteAllCntTest(){
         spaceDao.deleteAll();
@@ -103,7 +105,6 @@ class SpaceDaoImplTest {
     }
 
     @Test
-    @Transactional
     @DisplayName("spaceNo로 공간 한 개 조회 테스트")
     void selectOneTest(){
         spaceDao.deleteAll();
@@ -112,7 +113,6 @@ class SpaceDaoImplTest {
     }
 
     @Test
-    @Transactional
     @DisplayName("공간 수정 테스트")
     void updateTest(){
         spaceDao.deleteAll();
@@ -153,7 +153,6 @@ class SpaceDaoImplTest {
 
 
     @Test
-    @Transactional
     @DisplayName("숨겨지지 않은 공간 갯수 조회 테스트")
     void selectCntAllNotHiddenSpaceTest(){
         assertEquals(1, spaceDao.insertSpace(createSpaceDto(true, false)));
@@ -164,13 +163,117 @@ class SpaceDaoImplTest {
     }
 
     @Test
-    @Transactional
-    @DisplayName("")
+    @DisplayName("공간 갯수 조회 테스트")
     void selectAllTest(){
         assertEquals(1, spaceDao.insertSpace(createSpaceDto(true, true)));
         assertEquals(1, spaceDao.insertSpace(createSpaceDto(false, true)));
         assertEquals(1, spaceDao.insertSpace(createSpaceDto(true, true)));
 
         assertEquals(3, spaceDao.selectAllCnt());
+    }
+
+    @Nested
+    @DisplayName("공간 목록 조회 테스트")
+    class SpaceListTest {
+
+        @BeforeEach
+        void setup() {
+            spaceDao.deleteAll();
+            rescDao.deleteAll();
+            emplDao.deleteAll();
+            //관리자 저장
+            EmplDto dummyRscAdminEmpl = getRscAdmin();
+            assertEquals(1, emplDao.insertEmpl(dummyRscAdminEmpl));
+
+            //공간 저장
+            SpaceDto dummySpace = new SpaceDto.Builder()
+                    .spaceNo(999999)
+                    .spaceNm("회의실A")
+                    .spaceMaxPsonCnt(10)
+                    .spaceLocDesc("2층 정수기 옆")
+                    .spaceAdtnDesc("쾌적한 환경의 회의실입니다")
+                    .spaceMaxRsvdTms(2)
+                    .spaceUsgPosblBgnTm(LocalTime.of(9,0))
+                    .spaceUsgPosblEndTm(LocalTime.of(18,0))
+                    .spaceWkendUsgPosblYn('Y')
+                    .spaceHideYn('N')
+                    .fstRegDtm(LocalDateTime.now())
+                    .fstRegrIdnfNo(dummyRscAdminEmpl.getEmplNo()).build();
+
+            assertEquals(1, spaceDao.insertSpace(dummySpace));
+            //물품 저장
+
+            RescDto rescDto1 = RescDto.builder("wifi").spaceNo(dummySpace.getSpaceNo()).fstRegrIdnfNo(dummyRscAdminEmpl.getEmplNo()).lastUpdrIdnfNo(dummyRscAdminEmpl.getEmplNo()).build();
+            RescDto rescDto2 = RescDto.builder("의자").spaceNo(dummySpace.getSpaceNo()).fstRegrIdnfNo(dummyRscAdminEmpl.getEmplNo()).lastUpdrIdnfNo(dummyRscAdminEmpl.getEmplNo()).build();
+            RescDto rescDto3 = RescDto.builder("pc").spaceNo(dummySpace.getSpaceNo()).fstRegrIdnfNo(dummyRscAdminEmpl.getEmplNo()).lastUpdrIdnfNo(dummyRscAdminEmpl.getEmplNo()).build();
+
+            List<RescDto> list = new ArrayList<>();
+            list.add(rescDto1);
+            list.add(rescDto2);
+            list.add(rescDto3);
+
+            assertEquals(3,rescDao.insertRescs(list));
+            assertEquals(3, spaceRescDao.insertSpaceRescs(list));
+
+
+            //예약 저장
+            String spaceBookId1 = UUID.randomUUID().toString();
+            SpaceBookDto existingSpaceBooking1 = SpaceBookDto.spaceBookDtoBuilder()
+                    .spaceBookId(spaceBookId1)
+                    .emplId(dummyRscAdminEmpl.getEmplId())
+                    .spaceBookSpaceNo(dummySpace.getSpaceNo())
+                    .spaceBookDate(LocalDate.of(2024, 11, 11))
+                    .spaceBookBgnTm(LocalTime.of(9, 0))
+                    .spaceBookEndTm(LocalTime.of(11, 0))
+                    .spaceBookCn("회의")
+                    .spaceBookStusCd(CmnCode.SPACE_BOOK_COMPLETE.getCode())
+                    .fstRegDtm(LocalDateTime.now())
+                    .lastUpdDtm(LocalDateTime.now())
+                    .build();
+
+            assertEquals(1, spaceBookDao.insert(existingSpaceBooking1));
+
+
+            String spaceBookId2 = UUID.randomUUID().toString();
+            SpaceBookDto existingSpaceBooking2 = SpaceBookDto.spaceBookDtoBuilder()
+                    .spaceBookId(spaceBookId2)
+                    .emplId(dummyRscAdminEmpl.getEmplId())
+                    .spaceBookSpaceNo(dummySpace.getSpaceNo())
+                    .spaceBookDate(LocalDate.of(2024, 11, 11))
+                    .spaceBookBgnTm(LocalTime.of(13, 0))
+                    .spaceBookEndTm(LocalTime.of(14, 0))
+                    .spaceBookCn("회의")
+                    .spaceBookStusCd(CmnCode.SPACE_BOOK_COMPLETE.getCode())
+                    .fstRegDtm(LocalDateTime.now())
+                    .lastUpdDtm(LocalDateTime.now())
+                    .build();
+
+            assertEquals(1, spaceBookDao.insert(existingSpaceBooking2));
+        }
+
+
+        @Test
+        @DisplayName("공간 목록 조회")
+        void selectList() {
+            SpaceInfoAndTimeslotDto spaceInfoAndTimeslotDto = SpaceInfoAndTimeslotDto.SpaceRescFileDtoBuilder()
+                    .spaceCnt(5)
+                    .offset(0)
+                    .rescCnt(3)
+                    .atchLocCd(CmnCode.ATCH_LOC_CD_SPACE.getCode())
+                    .spaceBookStusCd(CmnCode.SPACE_BOOK_COMPLETE.getCode())
+                    .spaceBookDate(LocalDate.of(2024,11,11))
+                    .isHiddenSpaceInvisible(true)
+                    .build();
+
+            List<SpaceInfoAndTimeslotDto> list = spaceDao.selectSpaceList(spaceInfoAndTimeslotDto);
+            assertEquals(6, list.size());
+        }
+
+        private EmplDto getRscAdmin() {
+            return EmplDto.EmplDtoBuilder().emplNo("8457294").emplId("adminId").pwd("1234").email("testid1@gmail.com")
+                    .pwdErrTms(0).rnm("감자영").engNm("gamja").entDt("2024-01-01").emplAuthNm("ROLE_RSC_ADMIN").brdt("2000-01-01")
+                    .wncomTelno("111111").empno(1111).msgrId(null).prfPhotoPath(null)
+                    .subsCertiYn('Y').termsAgreYn('Y').subsAprvYn('Y').secsnYn('N').build();
+        }
     }
 }

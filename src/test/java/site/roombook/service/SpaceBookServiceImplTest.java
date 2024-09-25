@@ -52,7 +52,7 @@ class SpaceBookServiceImplTest {
             when(spaceBookDao.selectTimeSlotsAtTheDate(spaceBookDto))
                     .thenReturn(List.of(SpaceBookDto.spaceBookDtoBuilder().emplId("user").build()));
 
-            assertNotNull(spaceBookService.getBookedTimeslotsOfTheDay(123123, "20240910", "user"));
+            assertNotNull(spaceBookService.getBookedTimeslotsOfTheDay(123123, LocalDate.of(2024,9,10), "user"));
         }
     }
 

@@ -13,8 +13,9 @@ import site.roombook.CmnCode;
 import site.roombook.domain.FileDto;
 import site.roombook.domain.RescDto;
 import site.roombook.domain.SpaceDto;
-import site.roombook.domain.SpaceRescFileDto;
+import site.roombook.domain.SpaceInfoAndTimeslotDto;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.*;
@@ -71,13 +72,17 @@ class ComprehensiveSpaceTest {
             assertEquals(fileOfSpace3.size(), fileDao.insertFiles(fileOfSpace3));
 
             //select spaceList
-            Map<String, Object> map = new HashMap<>();
-            map.put("spaceCnt", 5);                                          //5개 공간 조회
-            map.put("offset", 0);                                            //조회 시작 번호
-            map.put("rescCnt", 3);                                           //조회 물품 갯수
-            map.put("atchLocCd", CmnCode.ATCH_LOC_CD_SPACE.getCode());       //파일 첨부 위치 유형
-            map.put("isHiddenSpaceInvisible", false);
-            assertEquals(3, spaceDao.selectSpaceList(map).size());
+            SpaceInfoAndTimeslotDto spaceInfoAndTimeslotDto = SpaceInfoAndTimeslotDto.SpaceRescFileDtoBuilder()
+                    .spaceCnt(5)
+                    .offset(0)
+                    .rescCnt(3)
+                    .atchLocCd(CmnCode.ATCH_LOC_CD_SPACE.getCode())
+                    .isHiddenSpaceInvisible(false)
+                    .spaceBookStusCd(CmnCode.SPACE_BOOK_COMPLETE.getCode())
+                    .spaceBookDate(LocalDate.now())
+                    .build();
+
+            assertEquals(3, spaceDao.selectSpaceList(spaceInfoAndTimeslotDto).size());
         }
 
         @Test
@@ -99,18 +104,21 @@ class ComprehensiveSpaceTest {
             assertEquals(rescOfSpace2.size(), spaceRescDao.insertSpaceRescs(rescOfSpace2));
 
             //select spaceList
-            Map<String, Object> map = new HashMap<>();
-            map.put("spaceCnt", 5);                                          //5개 공간 조회
-            map.put("offset", 0);                                            //조회 시작 번호
-            map.put("rescCnt", 3);                                           //조회 물품 갯수
-            map.put("atchLocCd", CmnCode.ATCH_LOC_CD_SPACE.getCode());       //파일 첨부 위치 유형
-            map.put("isHiddenSpaceInvisible", false);
+            SpaceInfoAndTimeslotDto spaceInfoAndTimeslotDto = SpaceInfoAndTimeslotDto.SpaceRescFileDtoBuilder()
+                    .spaceCnt(5)
+                    .offset(0)
+                    .rescCnt(3)
+                    .atchLocCd(CmnCode.ATCH_LOC_CD_SPACE.getCode())
+                    .isHiddenSpaceInvisible(false)
+                    .spaceBookStusCd(CmnCode.SPACE_BOOK_COMPLETE.getCode())
+                    .spaceBookDate(LocalDate.now())
+                    .build();
 
             int spaceCnt = spaces.size();
             int spaceWithNoResc = spaceCnt - 2;
             int rescCnt = countResc(rescOfSpace1) + countResc(rescOfSpace2);
 
-            assertEquals(rescCnt + spaceWithNoResc, spaceDao.selectSpaceList(map).size());
+            assertEquals(rescCnt + spaceWithNoResc, spaceDao.selectSpaceList(spaceInfoAndTimeslotDto).size());
         }
 
         @Test
@@ -144,18 +152,21 @@ class ComprehensiveSpaceTest {
             assertEquals(fileOfSpace3.size(), fileDao.insertFiles(fileOfSpace3));
 
             //select spaceList
-            Map<String, Object> map = new HashMap<>();
-            map.put("spaceCnt", 5);                                          //5개 공간 조회
-            map.put("offset", 0);                                            //조회 시작 번호
-            map.put("rescCnt", 3);                                           //조회 물품 갯수
-            map.put("atchLocCd", CmnCode.ATCH_LOC_CD_SPACE.getCode());       //파일 첨부 위치 유형
-            map.put("isHiddenSpaceInvisible", false);
+            SpaceInfoAndTimeslotDto spaceInfoAndTimeslotDto = SpaceInfoAndTimeslotDto.SpaceRescFileDtoBuilder()
+                    .spaceCnt(5)
+                    .offset(0)
+                    .rescCnt(3)
+                    .atchLocCd(CmnCode.ATCH_LOC_CD_SPACE.getCode())
+                    .isHiddenSpaceInvisible(false)
+                    .spaceBookStusCd(CmnCode.SPACE_BOOK_COMPLETE.getCode())
+                    .spaceBookDate(LocalDate.now())
+                    .build();
 
             int spaceCnt = spaces.size();
             int spaceWithNoResc = spaceCnt - 3;
             int rescCnt = countResc(rescOfSpace1) + countResc(rescOfSpace2) + countResc(rescOfSpace3);
 
-            assertEquals(rescCnt + spaceWithNoResc, spaceDao.selectSpaceList(map).size());
+            assertEquals(rescCnt + spaceWithNoResc, spaceDao.selectSpaceList(spaceInfoAndTimeslotDto).size());
         }
 
         @Nested
@@ -199,7 +210,7 @@ class ComprehensiveSpaceTest {
                 map.put("atchLocCd", CmnCode.ATCH_LOC_CD_SPACE.getCode());      //파일 첨부 위치 유형
                 map.put("isHiddenSpaceInvisible", false);                       //숨겨진 공간 비조회 여부
 
-                List<SpaceRescFileDto> space = spaceDao.selectOneSpaceAndRescAndFIle(map);
+                List<SpaceInfoAndTimeslotDto> space = spaceDao.selectOneSpaceAndRescAndFIle(map);
 
                 int fileCnt = 2, rescCnt = 4;
                 assertEquals(fileCnt*rescCnt, space.size());
@@ -214,7 +225,7 @@ class ComprehensiveSpaceTest {
                 map.put("atchLocCd", CmnCode.ATCH_LOC_CD_SPACE.getCode());      //파일 첨부 위치 유형
                 map.put("isHiddenSpaceInvisible", true);                       //숨겨진 공간 비조회 여부
 
-                List<SpaceRescFileDto> space = spaceDao.selectOneSpaceAndRescAndFIle(map);
+                List<SpaceInfoAndTimeslotDto> space = spaceDao.selectOneSpaceAndRescAndFIle(map);
 
                 assertEquals(0, space.size());
             }
