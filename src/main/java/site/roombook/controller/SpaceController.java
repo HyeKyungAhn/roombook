@@ -1,6 +1,5 @@
 package site.roombook.controller;
 
-import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
@@ -10,15 +9,16 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 import org.springframework.web.servlet.ModelAndView;
-import site.roombook.CmnCode;
 import site.roombook.FileStorageProperties;
-import site.roombook.domain.*;
+import site.roombook.annotation.StringDate;
+import site.roombook.domain.SpaceDto;
 import site.roombook.service.FileService;
 import site.roombook.service.RescService;
 import site.roombook.service.SpaceService;
 import site.roombook.service.SpaceTransactionService;
 
-import java.util.*;
+import java.time.LocalDate;
+
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
@@ -41,124 +41,123 @@ public class SpaceController {
     @Autowired
     FileStorageProperties properties;
 
-    static final int SPACE_CNT_OF_LIST = 5;
-    static final int RESC_CNT_OF_LIST = 3;
-
     @ExceptionHandler(MethodArgumentTypeMismatchException.class)
     public String handleTypeMismatch(MethodArgumentTypeMismatchException e){
         return "space/notfound";
     }
 
-    @GetMapping("/admin-spaces/new")
+    @GetMapping("/admin/spaces/new")
     public ModelAndView getSpaceCreationPage(ModelAndView mv){
         mv.setViewName("space/adminSpaceInsert");
         mv.addObject("spaceSaveRequestUrl", WebMvcLinkBuilder.linkTo(methodOn(SpaceRestController.class).saveNewSpace(null, null, null)).toUri().toString());
         return mv;
     }
 
-    @GetMapping("/admin-spaces/{spaceNo:[0-9]{1,9}}/edit")
-    public ModelAndView getModifySpacePage(@PathVariable("spaceNo") Integer spaceNo, ModelAndView mv){
-        try{
-            getDetailPage(spaceNo, mv, false);
+    @GetMapping("/admin/spaces/{spaceNo:[0-9]{1,9}}/edit")
+    public ModelAndView getModifySpacePage(@PathVariable("spaceNo") Integer spaceNo){
+        ModelAndView mv = new ModelAndView();
+        SpaceDto spaceDto = spaceService.getOneSpaceAndDetails(spaceNo, false);
+        String stringifiedSpaceDto = stringifyObject(spaceDto);
 
-            String spaceModificationUri = linkTo(methodOn(SpaceRestController.class).modifySpace(null, spaceNo, null, null, null)).toUri().toString();
-            mv.addObject("modificationRequestUrl", spaceModificationUri);
-            mv.setViewName("space/adminSpaceMod");
-        } catch (IllegalArgumentException e){
-            mv.setViewName("space/notfound");
-        }
+        String spaceModificationUri = linkTo(methodOn(SpaceRestController.class).modifySpace(spaceNo,null, null, null, null)).toUri().toString();
+        mv.addObject("modificationRequestUrl", spaceModificationUri);
+        mv.addObject("jsonSpace", stringifiedSpaceDto);
+        mv.setViewName("space/adminSpaceMod");
 
-      return mv;
-    }
-
-    @GetMapping("/admin-spaces")
-    public ModelAndView getAdminSpaceList(@RequestParam(required = false, name = "page", defaultValue = "1") Integer page, ModelAndView mv){
-        PageHandler ph = new PageHandler(spaceService.getSpaceAllCnt(), page);
-
-        if (page < 0 || page > ph.getTotalPage()) {
-            return new ModelAndView("space/notfound");
-        }
-
-        List<SpaceRescFileDto> list = spaceService.getSpaceList(SPACE_CNT_OF_LIST, ph.getOffset(), RESC_CNT_OF_LIST, CmnCode.ATCH_LOC_CD_SPACE, false);
-        mv.addObject("list", list);
-        mv.addObject("thumbnailPath", properties.getThumbnailUploadPath());
-        mv.addObject("ph", ph);
-        mv.setViewName("space/adminSpaceList");
         return mv;
     }
 
-    @GetMapping("/admin-spaces/{spaceNo:[0-9]{1,9}}")
-    public ModelAndView getAdminSpaceDetailPage(@PathVariable("spaceNo") int spaceNo, ModelAndView mv){
-        try{
-            getDetailPage(spaceNo, mv, false);
-            mv.addObject("imgPath", properties.getOriginalUploadPath());
-            mv.setViewName("space/adminSpaceDetail");
-        } catch (IllegalArgumentException e){
+    @GetMapping("/admin/spaces")
+    public ModelAndView getAdminSpaceList(@RequestParam(required = false, name = "page", defaultValue = "1") String page
+            , @StringDate LocalDate date){
+        ModelAndView mv = new ModelAndView();
+        mv.addObject("page", page);
+        mv.addObject("date", convertToBasicIsoDate(date));
+        mv.addObject("spaceListRequestUrl"
+                , linkTo(methodOn(SpaceRestController.class).getSpaceListForAdmin(null, null, null)).toUri().toString());
+        mv.setViewName("space/spaceList");
+        return mv;
+    }
+
+    @GetMapping("/admin/spaces/{spaceNo:[0-9]{1,9}}")
+    public ModelAndView getAdminSpaceDetailPage(@PathVariable("spaceNo") Integer spaceNo){
+        ModelAndView mv = new ModelAndView();
+        SpaceDto spaceDto = spaceService.getOneSpaceAndDetails(spaceNo, false);
+
+        if (spaceDto.getSpaceNo() == null) {
             mv.setViewName("space/notfound");
+            return mv;
         }
+
+        String stringifiedSpaceDto = stringifyObject(spaceDto);
+
+        String editUri = linkTo(methodOn(SpaceController.class).getModifySpacePage(spaceNo)).toUri().toString();
+        String spaceListUri = linkTo(methodOn(SpaceController.class).getAdminSpaceList(null, null)).toUri().toString();
+        String bookingUri = linkTo(methodOn(SpaceBookController.class).getSpaceBookingPage(spaceNo, null, null, null)).toUri().toString();
+        String requestTimeslotsUri = linkTo(methodOn(SpaceBookRestController.class).getTimeslotOfTheDay(spaceNo, null)).toUri().toString();
+
+        mv.addObject("imgPath", properties.getOriginalUploadPath());
+        mv.addObject("bookingUri", bookingUri);
+        mv.addObject("editUri", editUri);
+        mv.addObject("spaceListUri", spaceListUri);
+        mv.addObject("jsonSpace", stringifiedSpaceDto);
+        mv.addObject("requestTimeslots", requestTimeslotsUri);
+        mv.setViewName("space/adminSpaceDetail");
 
         return mv;
     }
 
     @GetMapping("/spaces")
-    public ModelAndView getSpaceList(@RequestParam(required = false, name = "page", defaultValue = "1") int page, ModelAndView mv){
-        PageHandler ph = new PageHandler(spaceService.getNotHiddenSpaceCnt(), page);
-
-        if(page<0 || page>ph.getTotalPage()){
-            return new ModelAndView("space/notfound");
-        }
-
-        List<SpaceRescFileDto> list = spaceService.getSpaceList(SPACE_CNT_OF_LIST, ph.getOffset(), RESC_CNT_OF_LIST, CmnCode.ATCH_LOC_CD_SPACE, true);
-        mv.addObject("list", list);
-        mv.addObject("thumbnailPath", properties.getThumbnailUploadPath());
-        mv.addObject("ph", ph);
+    public ModelAndView getSpaceList(@RequestParam(required = false, name = "page", defaultValue = "1") String page
+    , @StringDate LocalDate date){
+        ModelAndView mv = new ModelAndView();
+        mv.addObject("page", page);
+        mv.addObject("date", convertToBasicIsoDate(date));
+        mv.addObject("spaceListRequestUrl"
+                , linkTo(methodOn(SpaceRestController.class).getSpaceList(null, null, null)).toUri().toString());
         mv.setViewName("space/spaceList");
         return mv;
     }
 
     @GetMapping("/spaces/{spaceNo:[0-9]{1,9}}")
-    public ModelAndView getSpaceDetailPage(@PathVariable("spaceNo") int spaceNo, ModelAndView mv){
-        try{
-            getDetailPage(spaceNo, mv, true);
-            mv.addObject("imgPath", properties.getOriginalUploadPath());
-            mv.setViewName("space/spaceDetail");
-        } catch (IllegalArgumentException e){
+    public ModelAndView getSpaceDetailPage(@PathVariable("spaceNo") Integer spaceNo){
+        ModelAndView mv = new ModelAndView();
+        SpaceDto spaceDto = spaceService.getOneSpaceAndDetails(spaceNo, true);
+
+        if (spaceDto.getSpaceNo() == null) {
             mv.setViewName("space/notfound");
             return mv;
         }
+
+        String stringifiedSpaceDto = stringifyObject(spaceDto);
+
+        String bookingUri = linkTo(methodOn(SpaceBookController.class).getSpaceBookingPage(spaceNo, null, null, null)).toUri().toString();
+        String spaceListUri = linkTo(methodOn(SpaceController.class).getSpaceList(null, null)).toUri().toString();
+        String requestTimeslotsUri = linkTo(methodOn(SpaceBookRestController.class).getTimeslotOfTheDay(spaceNo, null)).toUri().toString();
+
+        mv.addObject("imgPath", properties.getOriginalUploadPath());
+        mv.addObject("bookingUri", bookingUri);
+        mv.addObject("spaceListUri", spaceListUri);
+        mv.addObject("jsonSpace", stringifiedSpaceDto);
+        mv.addObject("requestTimeslots", requestTimeslotsUri);
+        mv.setViewName("space/spaceDetail");
         return mv;
     }
 
-    private void getDetailPage(int spaceNo, ModelAndView mv, boolean isHiddenSpaceInvisible) throws IllegalArgumentException{
-        Map<String, Object> spaceDetails = spaceService.getOneSpaceAndDetails(spaceNo, CmnCode.ATCH_LOC_CD_SPACE, isHiddenSpaceInvisible);
-
-        if(spaceDetails.isEmpty()){
-            throw new IllegalArgumentException("Non-existing or hidden space");
-        }
-
-        String jsonRescs = null;
-        String jsonFiles = null;
-
-        try {
-            jsonRescs = convertToJson(spaceDetails, "rescs");
-            jsonFiles = convertToJson(spaceDetails, "files");
-        } catch (JsonProcessingException e) {
-            e.printStackTrace();
-        }
-
-        mv.addObject("space", spaceDetails.get("space"));
-        mv.addObject("files", jsonFiles);
-        mv.addObject("resources", jsonRescs);
-    }
-
-    private String convertToJson(Map<String, Object> spaceDetail, String targetDataName) throws JsonProcessingException {
+    private String stringifyObject(Object object) {
+        String stringifiedObject;
         ObjectMapper objectMapper = new ObjectMapper();
         objectMapper.registerModule(new JavaTimeModule());
-        objectMapper.setVisibility(objectMapper.getSerializationConfig().getDefaultVisibilityChecker()
-                .withFieldVisibility(JsonAutoDetect.Visibility.ANY)
-                .withGetterVisibility(JsonAutoDetect.Visibility.NONE)
-                .withSetterVisibility(JsonAutoDetect.Visibility.NONE)
-                .withCreatorVisibility(JsonAutoDetect.Visibility.NONE));
-        return objectMapper.writeValueAsString(spaceDetail.get(targetDataName));
+        try {
+            stringifiedObject = objectMapper.writeValueAsString(object);
+        } catch (JsonProcessingException e) {
+            stringifiedObject = "";
+        }
+
+        return stringifiedObject;
+    }
+
+    private String convertToBasicIsoDate(LocalDate date) {
+        return String.format("%d%2d%2d", date.getYear(),date.getMonthValue(),date.getDayOfMonth()).replace(' ', '0');
     }
 }

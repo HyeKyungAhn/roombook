@@ -4,11 +4,12 @@ import site.roombook.domain.ServiceResult;
 import site.roombook.domain.SpaceBookAndSpaceDto;
 import site.roombook.domain.SpaceBookDto;
 
+import java.time.LocalDate;
 import java.util.List;
 
 public interface SpaceBookService {
 
-    List<SpaceBookDto> getBookedTimeslotsOfTheDay(int spaceNo, String date, String emplId);
+    List<SpaceBookDto> getBookedTimeslotsOfTheDay(int spaceNo, LocalDate date, String emplId);
 
     ServiceResult bookTimeslot(SpaceBookDto spaceBookDto, String emplId, String emplRole);
 

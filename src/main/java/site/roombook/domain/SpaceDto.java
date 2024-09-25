@@ -4,12 +4,12 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import lombok.*;
-import org.springframework.web.multipart.MultipartFile;
 import site.roombook.serializer.SpaceDeserializer;
 
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
+import java.util.Objects;
 
 @JsonDeserialize(using = SpaceDeserializer.class)
 @Getter
@@ -48,9 +48,9 @@ public class SpaceDto {
     private String lastUpdrIdnfNo;
 
     @JsonProperty("files")
-    private MultipartFile[] FILES;
-    @JsonProperty("rescs")
-    private List<RescDto> RESCS;
+    private List<FileDto> files;
+    @JsonProperty("resources")
+    private List<RescDto> resources;
 
     private SpaceDto(Builder builder) {
         this.spaceNo = builder.spaceNo;
@@ -67,8 +67,8 @@ public class SpaceDto {
         this.fstRegrIdnfNo = builder.fstRegrIdnfNo;
         this.lastUpdDtm = builder.lastUpdDtm;
         this.lastUpdrIdnfNo = builder.lastUpdrIdnfNo;
-        this.FILES = builder.FILES;
-        this.RESCS = builder.RESCS;
+        this.files = builder.files;
+        this.resources = builder.resources;
     }
 
     public static class Builder{
@@ -86,8 +86,8 @@ public class SpaceDto {
         private String fstRegrIdnfNo;
         private LocalDateTime lastUpdDtm;
         private String lastUpdrIdnfNo;
-        private MultipartFile[] FILES;
-        private List<RescDto> RESCS;
+        private List<FileDto> files;
+        private List<RescDto> resources;
 
         public Builder spaceNo(Integer spaceNo) {
             this.spaceNo = spaceNo;
@@ -159,18 +159,31 @@ public class SpaceDto {
             return this;
         }
 
-        public Builder files(MultipartFile[] FILES) {
-            this.FILES = FILES;
+        public Builder files(List<FileDto> files) {
+            this.files = files;
             return this;
         }
 
-        public Builder rescs(List<RescDto> RESCS) {
-            this.RESCS = RESCS;
+        public Builder resources(List<RescDto> resources) {
+            this.resources = resources;
             return this;
         }
 
         public SpaceDto build(){
             return new SpaceDto(this);
         }
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        SpaceDto spaceDto = (SpaceDto) o;
+        return Objects.equals(spaceNo, spaceDto.spaceNo) && Objects.equals(spaceNm, spaceDto.spaceNm) && Objects.equals(spaceMaxPsonCnt, spaceDto.spaceMaxPsonCnt) && Objects.equals(spaceLocDesc, spaceDto.spaceLocDesc) && Objects.equals(spaceAdtnDesc, spaceDto.spaceAdtnDesc) && Objects.equals(spaceMaxRsvdTms, spaceDto.spaceMaxRsvdTms) && Objects.equals(spaceUsgPosblBgnTm, spaceDto.spaceUsgPosblBgnTm) && Objects.equals(spaceUsgPosblEndTm, spaceDto.spaceUsgPosblEndTm) && Objects.equals(spaceWkendUsgPosblYn, spaceDto.spaceWkendUsgPosblYn) && Objects.equals(spaceHideYn, spaceDto.spaceHideYn) && Objects.equals(fstRegDtm, spaceDto.fstRegDtm) && Objects.equals(fstRegrIdnfNo, spaceDto.fstRegrIdnfNo) && Objects.equals(lastUpdDtm, spaceDto.lastUpdDtm) && Objects.equals(lastUpdrIdnfNo, spaceDto.lastUpdrIdnfNo) && Objects.equals(files, spaceDto.files) && Objects.equals(resources, spaceDto.resources);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(spaceNo, spaceNm, spaceMaxPsonCnt, spaceLocDesc, spaceAdtnDesc, spaceMaxRsvdTms, spaceUsgPosblBgnTm, spaceUsgPosblEndTm, spaceWkendUsgPosblYn, spaceHideYn, fstRegDtm, fstRegrIdnfNo, lastUpdDtm, lastUpdrIdnfNo, files, resources);
     }
 }

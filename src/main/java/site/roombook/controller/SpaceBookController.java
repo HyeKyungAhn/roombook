@@ -50,7 +50,7 @@ public class SpaceBookController {
 
             String bookingUrl = linkTo(methodOn(SpaceBookRestController.class).bookTimeslot(null)).toUri().toString();
             String bookedTimeslotsUrl = linkTo(methodOn(SpaceBookRestController.class).getTimeslotOfTheDay(spaceNo, null)).toUri().toString();
-            String spaceDetailPageUrl = linkTo(methodOn(SpaceController.class).getSpaceDetailPage(spaceNo, null)).toUri().toString();
+            String spaceDetailPageUrl = linkTo(methodOn(SpaceController.class).getSpaceDetailPage(spaceNo)).toUri().toString();
             mv.addObject("bookedTimeslotsUrl", bookedTimeslotsUrl);
             mv.addObject("bookingUrl", bookingUrl);
             mv.addObject("spaceDetailPageUrl", spaceDetailPageUrl);
@@ -85,7 +85,7 @@ public class SpaceBookController {
 
         String modifyingTimeslotUrl = linkTo(methodOn(SpaceBookRestController.class).modifyTimeslot(spaceBookId, null)).toUri().toString();
         String bookedTimeslotsUrl = linkTo(methodOn(SpaceBookRestController.class).getTimeslotOfTheDay(spaceAndBookData.getSpaceNo(), null)).toUri().toString();
-        String spaceDetailPageUrl = linkTo(methodOn(SpaceController.class).getSpaceDetailPage(spaceAndBookData.getSpaceNo(), null)).toUri().toString();
+        String spaceDetailPageUrl = linkTo(methodOn(SpaceController.class).getSpaceDetailPage(spaceAndBookData.getSpaceNo())).toUri().toString();
         mv.addObject("modifyingUrl", modifyingTimeslotUrl);
         mv.addObject("bookedTimeslotsUrl", bookedTimeslotsUrl);
         mv.addObject("spaceDetailPageUrl", spaceDetailPageUrl);

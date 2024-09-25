@@ -62,8 +62,9 @@
     const bookingBtnEl = document.getElementById('bookingBtn');
 
     const timestampAdding90Days = 90 * 24 * 3600 * 1000;
-    const todayDateFormat = reverseSlashDate(convertDateToSlashDate(new Date()));
-    const after90DaysDateFormat = reverseSlashDate(convertDateToSlashDate(new Date(Date.now() + timestampAdding90Days)));
+    const bookingDate = '${date}' ? convertPlainDateToDate('${date}') : new Date();
+    const bookingDatePickerFormat = reverseSlashDate(convertDateToSlashDate(bookingDate));
+    const after90DaysDatePickerFormat = reverseSlashDate(convertDateToSlashDate(new Date(bookingDate.getTime() + timestampAdding90Days)));
 
     const element = document.getElementById('myCalendar');
     const myDatePicker = new jsCalendar.datepicker({
@@ -71,9 +72,9 @@
         navigatorPosition : 'right',
         monthFormat : 'month YYYY',
         language : 'ko',
-        date: todayDateFormat,
-        min : todayDateFormat,
-        max : after90DaysDateFormat,
+        date: bookingDatePickerFormat,
+        min : bookingDatePickerFormat,
+        max : after90DaysDatePickerFormat,
     });
 
 
@@ -136,7 +137,7 @@
                if(confirm('예약에 성공하였습니다.\n내 예약 페이지로 이동하시겠습니까?')){
                    location.href = response.headers.get('location');
                } else {
-                   location.href = '\${spaceDetailPageUrl}';
+                   history.back();
                }
            } else {
                return response.text();

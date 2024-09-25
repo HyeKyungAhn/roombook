@@ -23,23 +23,23 @@
 </head>
 <body>
     <h1>공간 정보 수정</h1>
-    <form action="<c:url value="/api/admin/spaces/${space.spaceNo}"/>" method="post" id="spaceForm">
+    <form action="<c:url value="${modificationRequestUrl}"/>" method="post" id="spaceForm">
         <div>
             <label>
                 공간명
-                <input type="text" name="spaceNm" id="nameInputElement" value="${space.spaceNm}">
+                <input type="text" name="spaceNm" id="name" value="">
             </label>
         </div>
         <div>
             <label>
                 위치(20자 이내)
-                <input type="text" name="spaceLoc" id="locationInputElement" value="${space.spaceLocDesc}">
+                <input type="text" name="spaceLoc" id="location" value="">
             </label>
         </div>
         <div>
             <label>
                 공간 설명(100자)
-                <textarea name="spaceDesc" id="descriptionInputElement">${space.spaceAdtnDesc}</textarea>
+                <textarea name="spaceDesc" id="description"></textarea>
             </label>
         </div>
         <div id="dropzone">
@@ -56,27 +56,27 @@
         <div>
             <label>
                 최대 연속 예약 가능 시간(시간 단위)
-                <input type="number" name="maxRsvsTms" id="maxTimeInputElement" value="${space.spaceMaxRsvdTms}">
+                <input type="number" name="maxRsvsTms" id="maxTime" value="">
             </label>
         </div>
         <div>
             <label>
-                <label for="weekendInputElement">공간 주말 이용 가능 여부</label>
-                <input type="checkbox" name="weekend" id="weekendInputElement" ${space.spaceWkendUsgPosblYn.toString()=='Y'?'checked':''}>
+                <label for="weekend">공간 주말 이용 가능 여부</label>
+                <input type="checkbox" name="weekend" id="weekend">
             </label>
         </div>
         <div>
             <label>
                 이용시간
-                <input type="time" name="startTm" id="startTmInputElement" placeholder="시작시간" value="${space.spaceUsgPosblBgnTm}">
+                <input type="time" name="startTm" id="startTime" placeholder="시작시간" value="">
                 <span>-</span>
-                <input type="time" name="finishTm" id="finishTmInputElement" placeholder="종료시간" value="${space.spaceUsgPosblEndTm}">
+                <input type="time" name="finishTm" id="finishTime" placeholder="종료시간" value="">
             </label>
         </div>
         <div>
             <label>
                 최대 수용인원
-                <input type="number" name="maxCapacity" id="maxCapacityInputElement" value="${space.spaceMaxPsonCnt}">
+                <input type="number" name="maxCapacity" id="capacity" value="">
             </label>
         </div>
         <div>
@@ -85,19 +85,52 @@
         </div>
         <div>
             <label>
-                <label for="hideInputElement">목록 숨김 여부</label>
-                <input type="checkbox" name="hide" id="hideInputElement" ${space.spaceHideYn.toString()=='Y'?'checked':''}>
+                <label for="hideYn">목록 숨김 여부</label>
+                <input type="checkbox" name="hide" id="hideYn">
             </label>
         </div>
         <div>
             <button type="submit" id="saveBtn">저장</button>
+            <button type="button" id="cancelBtn">취소</button>
         </div>
     </form>
 <script>
-    const jsonRescs = '${resources}';
-    const jsonFiles = '${files}';
+    const jsonData = JSON.parse('${jsonSpace}');
+    const jsonRescs = jsonData.resources;
+    const jsonFiles = jsonData.files;
+
+    const nameEl = document.getElementById('name');
+    const locationEl = document.getElementById('location');
+    const descriptionEl = document.getElementById('description');
+    const maxTimeEl = document.getElementById('maxTime');
+    const weekendEl = document.getElementById('weekend');
+    const startTimeEl = document.getElementById('startTime');
+    const finishTimeEl = document.getElementById('finishTime');
+    const capacityEl = document.getElementById('capacity');
+    const hideYnEl = document.getElementById('hideYn');
 
     const spaceForm = document.getElementById("spaceForm");
+
+    document.addEventListener('DOMContentLoaded', function() {
+        renderSpaceInfo();
+    });
+
+    document.addEventListener('click', function() {
+        history.back();
+    });
+
+    function renderSpaceInfo(){
+        nameEl.value = jsonData.spaceNm;
+        locationEl.value = jsonData.spaceLoc;
+        descriptionEl.innerText = jsonData.spaceDesc;
+        maxTimeEl.value = jsonData.maxRsvsTms;
+        weekendEl.value = jsonData.weekend === 'Y';
+        startTimeEl.value = `\${jsonData.startTm[0].toString().padStart(2,'0')}:\${jsonData.startTm[1].toString().padStart(2,'0')}`;
+        finishTimeEl.value = `\${jsonData.finishTm[0].toString().padStart(2,'0')}:\${jsonData.finishTm[1].toString().padStart(2,'0')}`;
+        capacityEl.value = jsonData.maxCapacity;
+        hideYnEl.checked = jsonData.hide === 'Y';
+    }
+
     spaceForm.addEventListener('submit', function(e){
         e.preventDefault();
 
@@ -161,12 +194,6 @@
             return false;
         }
         return true;
-    }
-
-    function getNoFromUrl() {
-        const urlPath = window.location.pathname; // 현재 페이지의 경로
-        const pathSegments = urlPath.split('/');
-        return pathSegments[pathSegments.length - 2];
     }
 </script>
 <script src="${pageContext.request.contextPath}/js/myDropzone.js"></script>

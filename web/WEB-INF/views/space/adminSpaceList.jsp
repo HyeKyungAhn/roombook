@@ -12,144 +12,293 @@
 <html lang="kr">
 <head>
     <title>roombook | 공간 목록</title>
+    <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/jsCalendar/jsCalendar.css">
+    <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/jsCalendar/jsCalendar.micro.css">
+    <script type="text/javascript" src="${pageContext.request.contextPath}/js/jsCalendar/jsCalendar.js"></script>
+    <script type="text/javascript" src="${pageContext.request.contextPath}/js/jsCalendar/jsCalendar.datepicker.js"></script>
+    <script type="text/javascript" src="${pageContext.request.contextPath}/js/jsCalendar/jsCalendar.lang.ko.js"></script>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/space.css">
-    <c:if test="${ph.showPrev}">
-    <link rel="prev" href="<c:url value="/admin-spaces?page=${ph.currentPage-1}"/>"/>
-    </c:if>
-    <c:if test="${ph.showNext}">
-    <link rel="next" href="<c:url value="/admin-spaces?page=${ph.currentPage+1}"/>"/>
-    </c:if>
-
 </head>
 <body>
-    <ul>
-        <c:set var="placeNo" value=""/>
-        <c:set var="lastFile" value=""/>
-        <c:forEach var="place" items="${list}" varStatus="status">
-        <c:choose>
-        <c:when test="${placeNo ne place.spaceNo && status.first}"><!--새로시작&&처음-->
-        <c:set var="placeNo" value="${place.spaceNo}"/>
-        <c:set var="lastFile" value="${place.fileNm}"/>
-        <il>
-            <div>
-                <div>
-                    <a href="<c:url value="/admin-spaces/${placeNo}"/>"><span>${place.spaceNm}</span></a><br/>
-                    <span>${place.spaceMaxPsonCnt}명</span><br/>
-                    <span>${place.spaceLocDesc}</span><br/>
-                    <span>${place.spaceAdtnDesc}</span><br/>
-                    <span>${place.spaceMaxRsvdTms}</span><br/>
-                    <span>${place.spaceUsgPosblBgnTm}</span><br/>
-                    <span>${place.spaceUsgPosblEndTm}</span><br/>
-                    <span>${place.spaceWkendUsgPosblYn}</span><br/>
-                    <span>${place.spaceHideYn}</span><br/>
-                </div>
-                <div>
-                    <span>${place.rescNm}</span>
-        </c:when>
-        <c:when test="${placeNo ne place.spaceNo}"> <!--새로 시작 & 처음이 아님-->
-        <c:set var="placeNo" value="${place.spaceNo}"/>
-                </div>
-            </div>
-            <div>
-                <img class="thumbnailImg" src="${empty lastFile ? '/img/noImg.png' : thumbnailPath.concat('/').concat(lastFile)}"  alt="공간 대표사진">
-            </div>
-        </il>
-        <il>
-        <c:set var="lastFile" value="${place.fileNm}"/>
-            <div>
-                <div>
-                    <a href="<c:url value="/admin-spaces/${placeNo}"/>"><span>${place.spaceNm}</span></a><br/>
-                    <span>${place.spaceMaxPsonCnt}명</span><br/>
-                    <span>${place.spaceLocDesc}</span><br/>
-                    <span>${place.spaceAdtnDesc}</span><br/>
-                    <span>${place.spaceMaxRsvdTms}</span><br/>
-                    <span>${place.spaceUsgPosblBgnTm}</span><br/>
-                    <span>${place.spaceUsgPosblEndTm}</span><br/>
-                    <span>${place.spaceWkendUsgPosblYn}</span><br/>
-                    <span>${place.spaceHideYn}</span><br/>
-                </div>
-                <div>
-                    <span>${place.rescNm}</span>
-        </c:when>
-        <c:when test="${placeNo ne place.spaceNo && status.last}"> <!-- 새로 시작 $$ 마지막 하나 -->
-        <il>
-            <div>
-                <div>
-                    <a href="<c:url value="/admin-spaces/${placeNo}"/>"><span>${place.spaceNm}</span></a><br/>
-                    <span>${place.spaceMaxPsonCnt}명</span><br/>
-                    <span>${place.spaceLocDesc}</span><br/>
-                    <span>${place.spaceAdtnDesc}</span><br/>
-                    <span>${place.spaceMaxRsvdTms}</span><br/>
-                    <span>${place.spaceUsgPosblBgnTm}</span><br/>
-                    <span>${place.spaceUsgPosblEndTm}</span><br/>
-                    <span>${place.spaceWkendUsgPosblYn}</span><br/>
-                    <span>${place.spaceHideYn}</span><br/>
-                </div>
-                <div>
-                    <span>${place.rescNm}</span>
-                </div>
-            </div>
-            <div>
-                <img class="thumbnailImg" alt="공간 대표사진" src="${empty lastFile?'/img/noImg.png' : thumbnailPath.concat('/').concat(lastFile)}">
-            </div>
-        </il>
-        </c:when>
-        <c:when test="${placeNo eq place.spaceNo && status.last}"> <!-- 새로 시작 아님 & 마지막 하나 -->
-                    <span>${place.rescNm}</span>
-                </div>
-            </div>
-            <div>
-                <img class="thumbnailImg" alt="공간 대표사진" src="${empty lastFile? '/img/noImg.png': thumbnailPath.concat('/').concat(lastFile)}">
-            </div>
-        </il>
-        </c:when>
-        <c:when test="${placeNo eq place.spaceNo}"> <!-- rescs -->
-            <span>${place.rescNm}</span>
-        </c:when>
-        </c:choose>
-        </c:forEach>
-    </ul>
+<div>
+    <div>
+        <h1>공간 목록(관리자 페이지)</h1>
+    </div>
+    <div>
+        <div>
+            <input type="text" name="myCalendar" value="" id="myCalendar" class="myCalendar">
+        </div>
+        <div id="spaceList" class="spaceList">
+        </div>
+    </div>
+</div>
+<nav id="paginationNav" class="paginationContainer" aria-label="pagination"></nav>
+<script>
+    const spaceListWrapper = document.getElementById('spaceList');
 
-    <nav id="spaceNav" aria-label="pagination">
-        <div class="spacePaginationArrow">
-            <button type="button" class="chevronBtn iconChevronStart" aria-label="previous" ${ph.showPrev?'':'disabled'} aria-disabled="${ph.showPrev}">
-            </button>
+    const timestampAdding90Days = 90 * 24 * 3600 * 1000;
+    const bookingDate = '${date}' ? convertPlainDateToDate('${date}') : new Date();
+    const bookingDatePickerFormat = reverseSlashDate(convertDateToSlashDate(bookingDate));
+
+    const after90DaysDatePickerFormat = reverseSlashDate(convertDateToSlashDate(new Date(Date.now() + timestampAdding90Days)));
+    const calendarEl = document.getElementById('myCalendar');
+    const myDatePicker = new jsCalendar.datepicker({
+        target: calendarEl,
+        navigatorPosition : 'right',
+        monthFormat : 'month YYYY',
+        language : 'ko',
+        date: bookingDatePickerFormat,
+        min : bookingDatePickerFormat,
+        max : after90DaysDatePickerFormat,
+    });
+
+    const pageInputEl = document.querySelector('#pageInput');
+    const chevronBtns = document.getElementsByClassName('chevronBtn');
+    const prevBtnEl = document.getElementById('prevBtn');
+    const nextBtnEl = document.getElementById('nextBtn');
+    const totalPageEl = document.getElementById('totalPage');
+    const paginationNavEl = document.getElementById('paginationNav');
+
+    let pageHandler;
+    let links;
+    let currentPage = 1;
+
+    myDatePicker.jsCalendar.onDateClick(function(event, date){
+        if(event.target.classList.contains('jsCalendar-unselectable')) return;
+
+        const plainDate = convertDateToPlainDate(date);
+        const page = pageHandler ? pageHandler.currentPage : 1;
+        requestSpaceList(page, plainDate);
+    });
+
+    document.addEventListener('DOMContentLoaded', function(){
+        requestSpaceList(1, convertDateToPlainDate(new Date()));
+    });
+
+    //// Space List ////
+
+    function requestSpaceList(page, date) {
+        fetch(`<c:url value="${spaceListRequestUrl}"/>?page=\${page}&date=\${date}`, {
+            method: 'GET',
+        }).then(response => {
+            if (response.status === 200) {
+                return response.text();
+            } else if(response.status === 204) {
+                markListEmpty();
+                return null;
+            } else {
+                location.href = response.headers.get('location');
+            }
+        }).then(response => {
+            if(!response) return;
+            const jsonData = JSON.parse(response);
+            const slashDate = convertPlainDateToSlahDate(date);
+            const reverseDate = reverseSlashDate(slashDate);
+            myDatePicker.set(reverseDate);
+            pageHandler = jsonData.pageHandler;
+
+            initSpaceList();
+            addSpaceList(jsonData);
+            showPaginationNav();
+            initPagination();
+        }).catch(error => {
+            console.error('ERROR: ', error);
+        });
+    }
+
+    function markListEmpty() {
+        spaceListWrapper.insertAdjacentHTML('afterbegin', `
+            <div>
+                <span>예약 가능한 공간이 없습니다.</span>
+            </div>
+        `);
+    }
+
+    function addSpaceList(jsonData) {
+        for (let space of jsonData.spaces) {
+            const rescs = Object.values(jsonData.resources).filter((resc) => resc.spaceNo === space.spaceNo);
+            const file = Object.values(jsonData.files).find((file) => file.loc_no === space.spaceNo);
+            const bookings = Object.values(jsonData.bookings).filter((booking) => booking.spaceNo === space.spaceNo);
+
+            const rescWrapper = document.createElement('div');
+            rescWrapper.classList.add('rescInfo');
+            for (let resc of rescs) {
+                rescWrapper.insertAdjacentHTML('beforeend',`
+          <span data-no="\${resc.rescNo}">\${resc.value}</span>
+        `);
+            }
+
+            const spaceWrapper = document.createElement('div');
+            spaceWrapper.classList.add('spaceInfo');
+            spaceWrapper.insertAdjacentHTML('beforeend', `
+        <div>
+            <a href="\${jsonData.links.find(link => link.rel === 'spaceDetail').href.replace('{spaceNo}', space.spaceNo)}">\${space.spaceNm}</a>
         </div>
         <div>
-            <input class="paginationInput" type="number" value="${ph.currentPage}"><span>/</span><div>${ph.totalPage}</div>
+            <span>\${space.maxCapacity}명</span>
+            <span>\${space.spaceLoc}</span>
+            <span>\${space.spaceDesc}</span>
         </div>
-        <div class="spacePaginationArrow">
-            <button type="button" class="chevronBtn iconChevronEnd" aria-label="next" ${ph.showNext?'':'disabled'} aria-disabled="${ph.showNext}">
-            </button>
+        <div>
+            <span>최대 연속 예약 시간:\${space.maxRsvsTms}</span>
+            <div>
+              <span>\${space.startTm[0].toString().padStart(2,'0')}:\${space.startTm[1].toString().padStart(2,'0')}</span>
+              <span>-</span>
+              <span>\${space.finishTm[0].toString().padStart(2,'0')}:\${space.finishTm[1].toString().padStart(2,'0')}</span>
+            </div>
+            <span>주말 이용 \${space.weekend == 'Y'? '가능' : '불가'}</span>
         </div>
-    </nav>
-<script>
-    const pnInput = document.querySelector('.paginationInput');
+      `);
 
-    const chevronBtns = document.getElementsByClassName('chevronBtn');
+            const infoWrapper = document.createElement('div');
+            infoWrapper.classList.add('info');
+            infoWrapper.appendChild(spaceWrapper);
+            infoWrapper.appendChild(rescWrapper);
+
+            const thumbnailWrapper = document.createElement('div');
+            thumbnailWrapper.insertAdjacentHTML('afterbegin',`<img class="thumbnailImg" alt="공간 대표사진" src="\${file.rename? jsonData.thumbnailPath+'/'+file.rename:jsonData.noImgPath}"/>`);
+
+            const bookingBtnWrapper = document.createElement('div');
+            const bookingUrl = jsonData.links.find((link) => link.rel==='booking').href.replace('{space-no}', space.spaceNo).replace('{?date}',`?date=\${getPlainDate()}`)
+            bookingBtnWrapper.insertAdjacentHTML('afterbegin', `<a class="bookingBtn" href="\${bookingUrl}">예약하기</a>`)
+
+            const spaceContent = document.createElement('div');
+            spaceContent.classList.add('spaceContent');
+            spaceContent.appendChild(thumbnailWrapper);
+            spaceContent.appendChild(infoWrapper);
+            spaceContent.appendChild(bookingBtnWrapper);
+
+            const timeslotWrapper = document.createElement('div');
+            timeslotWrapper.classList.add('timeslotWrapper');
+
+            for (let time = space.startTm[0]; time < space.finishTm[0]; time++) {
+                const isBooked = bookings.some((booking) => booking.beginTime[0] <= time && time < booking.endTime[0]);
+                timeslotWrapper.insertAdjacentHTML('beforeend', `
+          <div class="timeslot">
+            <div><span class="time">\${time}</span></div>
+            <div><span class="slot \${isBooked?'booked':''}"></span></div>
+          </div>
+        `);
+            }
+
+            const spaceListItem = document.createElement('div');
+            spaceListItem.classList.add('item');
+            spaceListItem.appendChild(spaceContent);
+            spaceListItem.appendChild(timeslotWrapper);
+
+            spaceListWrapper.appendChild(spaceListItem);
+        }
+    }
+
+    function initSpaceList(){
+        spaceListWrapper.innerHTML = '';
+    }
+
+    //// Pagination ////
+    function addPaginationNav() {
+        paginationNavEl.insertAdjacentHTML('beforebegin', `
+            <div class="paginationWrapper">
+                <div class="paginationArrow">
+                  <button type="button" id="prevBtn" class="chevronBtn iconChevronStart" aria-label="previous" aria-disabled=""></button>
+                </div>
+                <div class="paginationPageNumber">
+                  <input id="pageInput" class="currentPageInput" type="number" value=""><span class="pageSlash">/</span><span id="totalPage" class="totalPageNumber"></span>
+                </div>
+                <div class="paginationArrow">
+                  <button type="button" id="nextBtn" class="chevronBtn iconChevronEnd" aria-label="next" aria-disabled="">
+                  </button>
+                </div>
+            </div>
+        `);
+    }
+
+    function removePaginationNav() {
+        paginationNavEl.removeChild(paginationWrapperEl);
+    }
+
+    function showPaginationNav() {
+        const paginationWrapper = paginationNavEl.querySelector('.paginationWrapper');
+        if(!paginationWrapper) addPaginationNav();
+    }
+
+    function initPagination(){
+        if(!pageHandler) return;
+
+        prevBtnEl.disabled = !pageHandler.showPrev;
+        nextBtnEl.disabled = !pageHandler.showNext; //true
+
+        prevBtnEl.ariaDisabled = !pageHandler.showPrev;
+        nextBtnEl.ariaDisabled = !pageHandler.showNext;
+        pageInputEl.value = pageHandler.currentPage;
+        totalPageEl.innerText = pageHandler.totalPage;
+    }
+
     Array.from(chevronBtns).forEach(btn => btn.addEventListener('click', (e)=>{ pagination.doRedirect(e); }));
 
     const pagination ={
         doRedirect : e => {
-            if(e.target.classList.contains("iconChevronEnd")){
-                location.href = document.querySelector('link[rel="next"]').href;
+            if (e.target.classList.contains("iconChevronStart") && pageHandler.currentPage !== 1) {
+                requestSpaceList(pageHandler.currentPage-1, convertDateToPlainDate(convertSlashDateToDate(calendarEl.value)));
             }
-            if (e.target.classList.contains("iconChevronStart")) {
-                location.href = document.querySelector('link[rel="prev"]').href;
+            if(e.target.classList.contains("iconChevronEnd") && pageHandler.currentPage !== pageHandler.totalPage){
+                requestSpaceList(pageHandler.currentPage+1, convertDateToPlainDate(convertSlashDateToDate(calendarEl.value)));
             }
         }
     }
 
-    pnInput.addEventListener("keydown", (e) => {
+    pageInputEl.addEventListener("keydown", (e) => {
         if (e.key === 'Enter') {
-            if(pnInput.value===''||pnInput.value==='${ph.currentPage}'){
+            if(pageInputEl.value===''||pageInputEl.value===`${'${pageHandler.currentPage}'}`){
                 return;
             }
-            if(0<=pnInput.value&& pnInput.value<=${ph.totalPage}){
-                location.href = "<c:url value="/admin-spaces?page="/>"+pnInput.value;
+            if(0<=pageInputEl.value&& pageInputEl.value<=`${'${pageHandler.totalPage}'}`){
+                requestSpaceList(pageInputEl.value, convertDateToPlainDate(convertSlashDateToDate(calendarEl.value)));
             }
         }
-    })
+    });
+
+    //// Convert ////
+
+    function getPlainDate(){
+        return `\${myDatePicker.jsCalendar._now.getFullYear()}\${String(myDatePicker.jsCalendar._now.getMonth()+1).padStart(2,'0')}\${String(myDatePicker.jsCalendar._now.getDate()).padStart(2,'0')}`
+    }
+
+    function reverseSlashDate(slashDate) {
+        const dateArr = slashDate.split('/');
+        return `\${dateArr[2]}/\${dateArr[1]}/\${dateArr[0]}`;
+    }
+
+    function convertDateToSlashDate(date) {
+        const year = date.getFullYear();
+        const month = (date.getMonth()+1).toString().padStart(2, '0');
+        const day = date.getDate().toString().padStart(2, '0');
+        return `\${year}/\${month}/\${day}`;
+    }
+
+    function convertDateToPlainDate(date) {
+        const year = date.getFullYear();
+        const month = (date.getMonth()+1).toString().padStart(2, '0');
+        const day = date.getDate().toString().padStart(2, '0');
+        return `\${year}\${month.toString().padStart(2, '0')}\${day.toString().padStart(2, '0')}`;
+    }
+
+    function convertPlainDateToSlahDate(plainDate) {
+        const date = convertPlainDateToDate(plainDate);
+        return convertDateToSlashDate(date);
+    }
+
+    function convertSlashDateToDate(date) {
+        const dateArr = date.split('/');
+        return new Date(parseInt(dateArr[0]), parseInt(dateArr[1])-1, parseInt(dateArr[2]));
+    }
+
+    function convertPlainDateToDate(plainDate) {
+        const year = plainDate.substring(0,4)
+        const monthIndex = parseInt(plainDate.substring(4, 6)) - 1;
+        const day = plainDate.substring(6);
+
+        return new Date(year, monthIndex, day);
+    }
 </script>
 </body>
 </html>

@@ -14,6 +14,12 @@
     <title>roombook | 공간 상세</title>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/spaceDetail.css"/>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/customTag.css"/>
+    <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/space.css"/>
+    <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/jsCalendar/jsCalendar.css">
+    <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/jsCalendar/jsCalendar.micro.css">
+    <script type="text/javascript" src="${pageContext.request.contextPath}/js/jsCalendar/jsCalendar.js"></script>
+    <script type="text/javascript" src="${pageContext.request.contextPath}/js/jsCalendar/jsCalendar.datepicker.js"></script>
+    <script type="text/javascript" src="${pageContext.request.contextPath}/js/jsCalendar/jsCalendar.lang.ko.js"></script>
 </head>
 <body>
 <h1>공간 상세 정보</h1>
@@ -27,42 +33,52 @@
         </div>
     </div>
     <div>
+        <button type="button" id="bookBtn">예약하기</button>
+    </div>
+    <div>
         <div>
             <span>공간명</span>
-            <span>${space.spaceNm}</span>
+            <span id="name"></span>
         </div>
         <div>
             <span>위치(20자 이내)</span>
-            <span>${space.spaceLocDesc}</span>
+            <span id="location"></span>
         </div>
         <div>
             <span>공간 설명(100자)</span>
-            <span>${space.spaceAdtnDesc}</span>
+            <span id="description"></span>
         </div>
         <div>
             <span>최대 연속 예약 가능 시간(시간 단위)</span>
-            <span>${space.spaceMaxRsvdTms}</span>
+            <span id="maxTime"></span>
         </div>
         <div>
             <span>공간 주말 이용 가능 여부</span>
-            <span>${space.spaceWkendUsgPosblYn.toString()}</span>
+            <span id="weekend"></span>
         </div>
         <div>
             <span>이용시간</span>
-            <span>${space.spaceUsgPosblBgnTm}</span>
-            <span>${space.spaceUsgPosblEndTm}</span>
+            <span id="startTime"></span>
+            <span>-</span>
+            <span id="finishTime"></span>
         </div>
         <div>
             <span>최대 수용인원</span>
-            <span>${space.spaceMaxPsonCnt}</span>
+            <span id="capacity"></span>
         </div>
         <div>
             <span>옵션(facility)</span>
-            <div id="facilities"></div>
+            <div id="resources"></div>
         </div>
         <div>
             <span>목록 숨김 여부</span>
-            <span>${space.spaceHideYn.toString()}</span>
+            <span id="hideYn"></span>
+        </div>
+        <div>
+            <div>
+                <input type="text" name="myCalendar" value="" id="myCalendar" class="myCalendar">
+            </div>
+            <div id="timeTable"></div>
         </div>
         <div>
             <button type="button" id="editBtn">수정</button>
@@ -71,28 +87,161 @@
     </div>
 </div>
 <script>
-    const jsonFiles = '${files}';
+    const jsonData = JSON.parse('${jsonSpace}');
     const imgPath = '${imgPath}';
+
+    const nameEl = document.getElementById('name');
+    const locationEl = document.getElementById('location');
+    const descriptionEl = document.getElementById('description');
+    const maxTimeEl = document.getElementById('maxTime');
+    const weekendEl = document.getElementById('weekend');
+    const startTimeEl = document.getElementById('startTime');
+    const finishTimeEl = document.getElementById('finishTime');
+    const capacityEl = document.getElementById('capacity');
+    const hideYnEl = document.getElementById('hideYn');
+    const timeTableEl = document.getElementById('timeTable');
 
     const editBtn = document.getElementById('editBtn');
     const paths = window.location.pathname.split('/');
-
-    editBtn.addEventListener('click', () => {
-        location.href = '<c:url value="/admin-spaces"/>/'+paths[paths.length-1]+'/edit';
-    })
-
+    const bookBtnEl = document.getElementById('bookBtn');
     const listBtn = document.getElementById('listBtn');
-    listBtn.addEventListener('click', () =>{
-       location.href = '<c:url value="/admin-spaces"/>';
+
+    const timestampAdding90Days = 90 * 24 * 3600 * 1000;
+    const bookingDate = new Date();
+    const bookingDatePickerFormat = reverseSlashDate(convertDateToSlashDate(bookingDate));
+    const after90DaysDatePickerFormat = reverseSlashDate(convertDateToSlashDate(new Date(Date.now() + timestampAdding90Days)));
+    const calendarEl = document.getElementById('myCalendar');
+    const myDatePicker = new jsCalendar.datepicker({
+        target: calendarEl,
+        navigatorPosition : 'right',
+        monthFormat : 'month YYYY',
+        language : 'ko',
+        date: bookingDatePickerFormat,
+        min : bookingDatePickerFormat,
+        max : after90DaysDatePickerFormat,
     });
 
-    const jsonRescs = '${resources}';
-    const rescsObject = JSON.parse(jsonRescs);
-    const resources = document.getElementById('facilities');
+    editBtn.addEventListener('click', () => {
+        location.href = '<c:url value="${editUri}"/>';
+    });
 
-    resources.innerHTML = rescsObject.map((resc, index) => {
-        return `<span class='rescTag'>${'${resc.value}'}</span>`
-    }).join('');
+    bookBtnEl.addEventListener('click', function() {
+        location.href = `<c:url value="${bookingUri}"/>?date=\${getPlainDate()}`;
+    });
+
+    listBtn.addEventListener('click', () =>{
+       location.href = '<c:url value="${spaceListUri}"/>';
+    });
+
+    document.addEventListener('DOMContentLoaded', function(){
+        renderSpaceInfo();
+        renderResources();
+        requestTimeslots();
+    });
+
+    myDatePicker.jsCalendar.onDateClick(function(event, date){
+        requestTimeslots();
+    });
+
+    function renderSpaceInfo(){
+        nameEl.innerText = jsonData.spaceNm;
+        locationEl.innerText = jsonData.spaceLoc;
+        descriptionEl.innerText = jsonData.spaceDesc;
+        maxTimeEl.innerText = jsonData.maxRsvsTms + '시간';
+        weekendEl.innerText = jsonData.weekend;
+        startTimeEl.innerText = `\${jsonData.startTm[0].toString().padStart(2,'0')}:\${jsonData.startTm[1].toString().padStart(2,'0')}`;
+        finishTimeEl.innerText = `\${jsonData.finishTm[0].toString().padStart(2,'0')}:\${jsonData.finishTm[1].toString().padStart(2,'0')}`;
+        capacityEl.innerText = jsonData.maxCapacity;
+        hideYnEl.innerText = jsonData.hide;
+    }
+
+    function renderResources() {
+        const jsonResources = jsonData.resources;
+        const resourcesEl = document.getElementById('resources');
+
+        resourcesEl.innerHTML = jsonResources.map((resc, index) => {
+            return `<span class='rescTag'>${'${resc.value}'}</span>`
+        }).join('');
+    }
+
+    function requestTimeslots(){
+        const date = getPlainDate();
+        fetch(`<c:url value="${requestTimeslots}"/>?date=\${date}`)
+        .then(response => {
+            if (response.ok) {
+                return response.text();
+            }
+        }).then(text => {
+            const slashDate = convertPlainDateToSlahDate(date);
+            const reverseDate = reverseSlashDate(slashDate);
+            myDatePicker.set(reverseDate);
+
+            const timeslots = JSON.parse(text);
+            clearTimeTable();
+            renderTimeTable(timeslots)
+        });
+    }
+
+    function clearTimeTable() {
+        timeTableEl.innerText = '';
+    }
+    function renderTimeTable(timeslots) {
+        const timeslotWrapper = document.createElement('div');
+        timeslotWrapper.classList.add('timeslotWrapper');
+
+        for (let time = jsonData.startTm[0]; time < jsonData.finishTm[0]; time++) {
+            const isBooked = timeslots.some((timeslot) => timeslot.beginTime[0] <= time && time < timeslot.endTime[0]);
+            timeslotWrapper.insertAdjacentHTML('beforeend', `
+                <div class="timeslot">
+                <div><span class="time">\${time}</span></div>
+                <div><span class="slot \${isBooked?'booked':''}"></span></div>
+                </div>
+            `);
+        }
+
+        timeTableEl.appendChild(timeslotWrapper);
+    }
+
+    function getPlainDate(){
+        return `\${myDatePicker.jsCalendar._now.getFullYear()}\${String(myDatePicker.jsCalendar._now.getMonth()+1).padStart(2,'0')}\${String(myDatePicker.jsCalendar._now.getDate()).padStart(2,'0')}`
+    }
+
+    function reverseSlashDate(slashDate) {
+        const dateArr = slashDate.split('/');
+        return `\${dateArr[2]}/\${dateArr[1]}/\${dateArr[0]}`;
+    }
+
+    function convertDateToSlashDate(date) {
+        const year = date.getFullYear();
+        const month = (date.getMonth()+1).toString().padStart(2, '0');
+        const day = date.getDate().toString().padStart(2, '0');
+        return `\${year}/\${month}/\${day}`;
+    }
+
+    function convertDateToPlainDate(date) {
+        const year = date.getFullYear();
+        const month = (date.getMonth()+1).toString().padStart(2, '0');
+        const day = date.getDate().toString().padStart(2, '0');
+        return `\${year}\${month.toString().padStart(2, '0')}\${day.toString().padStart(2, '0')}`;
+    }
+
+    function convertPlainDateToSlahDate(plainDate) {
+        const date = convertPlainDateToDate(plainDate);
+        return convertDateToSlashDate(date);
+    }
+
+    function convertSlashDateToDate(date) {
+        const dateArr = date.split('/');
+        return new Date(parseInt(dateArr[0]), parseInt(dateArr[1])-1, parseInt(dateArr[2]));
+    }
+
+    function convertPlainDateToDate(plainDate) {
+        const year = plainDate.substring(0,4)
+        const monthIndex = parseInt(plainDate.substring(4, 6)) - 1;
+        const day = plainDate.substring(6);
+
+        return new Date(year, monthIndex, day);
+    }
 </script>
 <script src="${pageContext.request.contextPath}/js/imgSlider.js"></script>
 </body>

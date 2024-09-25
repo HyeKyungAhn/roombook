@@ -22,7 +22,7 @@ public class RescDto {
     private Integer rescNo;
     @JsonProperty("value")
     private String rescNm;
-    @JsonIgnore
+    @JsonProperty("spaceNo")
     private Integer spaceNo;
     @JsonIgnore
     private Date fstRegDtm;
@@ -45,7 +45,7 @@ public class RescDto {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         RescDto rescDto = (RescDto) o;
-        return Objects.equals(rescNo, rescDto.rescNo) && rescNm.equals(rescDto.rescNm) && spaceNo.equals(rescDto.spaceNo) && Objects.equals(fstRegDtm, rescDto.fstRegDtm) && Objects.equals(fstRegrIdnfNo, rescDto.fstRegrIdnfNo) && Objects.equals(lastUpdDtm, rescDto.lastUpdDtm) && Objects.equals(lastUpdrIdnfNo, rescDto.lastUpdrIdnfNo);
+        return Objects.equals(rescNo, rescDto.rescNo) && Objects.equals(rescNm, rescDto.rescNm) && Objects.equals(spaceNo, rescDto.spaceNo) && Objects.equals(fstRegDtm, rescDto.fstRegDtm) && Objects.equals(fstRegrIdnfNo, rescDto.fstRegrIdnfNo) && Objects.equals(lastUpdDtm, rescDto.lastUpdDtm) && Objects.equals(lastUpdrIdnfNo, rescDto.lastUpdrIdnfNo);
     }
 
     @Override

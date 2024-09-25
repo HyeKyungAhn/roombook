@@ -22,7 +22,7 @@
     <select id="selectOne" parameterType="int" resultType="SpaceDto">
         SELECT * FROM space WHERE SPACE_NO = #{spaceNo}
     </select>
-    <select id="selectSpacesAndRescAndFile" parameterType="Map" resultType="SpaceRescFileDto">
+    <select id="selectSpacesAndRescAndFile" parameterType="Map" resultType="SpaceInfoAndTimeslotDto">
         SELECT s.SPACE_NO, s.SPACE_NM, s.SPACE_MAX_PSON_CNT, s.SPACE_LOC_DESC, s.SPACE_ADTN_DESC,
         s.SPACE_MAX_RSVD_TMS, s.SPACE_USG_POSBL_BGN_TM, s.SPACE_USG_POSBL_END_TM, s.SPACE_WKEND_USG_POSBL_YN,
         s.SPACE_HIDE_YN, f.FILE_NO, f.FILE_NM, f.FILE_ORGL_NM, f.FILE_TYP_NM, f.FILE_SIZE, r.RESC_NO, r.RESC_NM
@@ -52,7 +52,44 @@
         ) f ON s.SPACE_NO = f.ATCH_LOC_NO
         ORDER BY s.FST_REG_DTM DESC, SPACE_NO
     </select>
-    <select id="selectOneSpaceAndRescAndFIle" parameterType="Map" resultType="SpaceRescFileDto">
+    <select id="selectSpaceInfoAndTimeslots" parameterType="SpaceInfoAndTimeslotDto" resultType="SpaceInfoAndTimeslotDto">
+        SELECT s.SPACE_NO, s.SPACE_NM, s.SPACE_MAX_PSON_CNT, s.SPACE_LOC_DESC, s.SPACE_ADTN_DESC
+            , s.SPACE_MAX_RSVD_TMS, s.SPACE_USG_POSBL_BGN_TM, s.SPACE_USG_POSBL_END_TM, s.SPACE_WKEND_USG_POSBL_YN
+            , s.SPACE_HIDE_YN, f.FILE_NO, f.FILE_NM, f.FILE_ORGL_NM, f.FILE_TYP_NM, f.FILE_SIZE, r.RESC_NO, r.RESC_NM
+            , sb.SPACE_BOOK_ID, sb.SPACE_BOOK_DATE, sb.SPACE_BOOK_BGN_TM, sb.SPACE_BOOK_END_TM, sb.SPACE_BOOK_STUS_CD
+        FROM (
+        SELECT * FROM space
+            <if test="isHiddenSpaceInvisible eq true">
+                WHERE SPACE_HIDE_YN = 'N'
+            </if>
+            ORDER BY FST_REG_DTM DESC
+            LIMIT #{spaceCnt} OFFSET #{offset}
+        ) s
+        LEFT JOIN (
+            SELECT SPACE_NO, RESC_NO
+            FROM (
+                SELECT SPACE_NO, RESC_NO, ROW_NUMBER() OVER (PARTITION BY SPACE_NO) AS rn
+                FROM space_resc) sub
+            WHERE rn <![CDATA[<=]]> #{rescCnt}
+        ) sr ON sr.SPACE_NO = s.SPACE_NO
+        LEFT JOIN resc r ON r.RESC_NO = sr.RESC_NO
+        LEFT JOIN (
+            SELECT FILE_NO, ATCH_LOC_NO, FILE_NM, FILE_ORGL_NM, FILE_TYP_NM, FILE_SIZE
+            FROM (
+                SELECT *, ROW_NUMBER() OVER (PARTITION BY ATCH_LOC_NO ORDER BY FILE_NO) AS rn
+                FROM file f
+                WHERE f.ATCH_LOC_CD = #{atchLocCd}) sub
+            WHERE rn = 1
+        ) f ON s.SPACE_NO = f.ATCH_LOC_NO
+        LEFT JOIN (
+            SELECT *
+            FROM space_book
+            WHERE SPACE_BOOK_STUS_CD = #{spaceBookStusCd}
+            AND SPACE_BOOK_DATE = #{spaceBookDate}
+        ) sb ON s.SPACE_NO = sb.SPACE_BOOK_SPACE_NO
+        ORDER BY s.FST_REG_DTM DESC, SPACE_NO
+    </select>
+    <select id="selectOneSpaceAndRescAndFIle" parameterType="Map" resultType="SpaceInfoAndTimeslotDto">
         SELECT s.SPACE_NO, s.SPACE_NM, s.SPACE_MAX_PSON_CNT, s.SPACE_LOC_DESC, s.SPACE_ADTN_DESC,
                s.SPACE_MAX_RSVD_TMS, s.SPACE_USG_POSBL_BGN_TM, s.SPACE_USG_POSBL_END_TM, s.SPACE_WKEND_USG_POSBL_YN,
                s.SPACE_HIDE_YN, r.RESC_NO, r.RESC_NM, f.FILE_NO, f.FILE_NM, f.FILE_ORGL_NM, f.FILE_TYP_NM, f.FILE_SIZE

@@ -1,7 +1,7 @@
 package site.roombook.dao;
 
 import site.roombook.domain.SpaceDto;
-import site.roombook.domain.SpaceRescFileDto;
+import site.roombook.domain.SpaceInfoAndTimeslotDto;
 
 import java.util.List;
 import java.util.Map;
@@ -21,9 +21,9 @@ public interface SpaceDao {
 
     int selectCntAllNotHiddenSpace();
 
-    List<SpaceRescFileDto> selectSpaceList(Map<String, Object> spaceData);
+    List<SpaceInfoAndTimeslotDto> selectSpaceList(SpaceInfoAndTimeslotDto spaceInfoAndTimeslotDto);
 
-    List<SpaceRescFileDto> selectOneSpaceAndRescAndFIle(Map<String, Object> spaceData);
+    List<SpaceInfoAndTimeslotDto> selectOneSpaceAndRescAndFIle(Map<String, Object> spaceData);
 
     int update(SpaceDto spaceDto);
 }

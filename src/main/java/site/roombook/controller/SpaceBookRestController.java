@@ -14,10 +14,12 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
+import site.roombook.annotation.StringDate;
 import site.roombook.domain.*;
 import site.roombook.service.SpaceBookService;
 
 import javax.servlet.http.HttpServletResponse;
+import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
 import java.util.List;
 
@@ -51,7 +53,7 @@ public class SpaceBookRestController {
 
 
     @GetMapping(value = "/spaces/{spaceNo}/timeslots", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<SpaceBookDto>> getTimeslotOfTheDay(@PathVariable("spaceNo") Integer spaceNo, @RequestParam(required = false) String date) {
+    public ResponseEntity<List<SpaceBookDto>> getTimeslotOfTheDay(@PathVariable("spaceNo") Integer spaceNo, @StringDate LocalDate date) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
 
@@ -130,7 +132,7 @@ public class SpaceBookRestController {
 
         if (ph.getTotalCnt() == 0) {
             response.setStatus(HttpStatus.NO_CONTENT.value());
-            String spaceListUri = linkTo(methodOn(SpaceController.class).getSpaceList(1, null)).toUri().toString();
+            String spaceListUri = linkTo(methodOn(SpaceController.class).getSpaceList("1", null)).toUri().toString();
             response.setHeader(HttpHeaders.LOCATION, spaceListUri);
             return EntityModel.of(MyBookDto.Builder().build());
         }
@@ -147,5 +149,4 @@ public class SpaceBookRestController {
         , linkTo(methodOn(SpaceBookController.class).getChangingBookingPage(null)).withRel("modification")
         , linkTo(methodOn(SpaceBookRestController.class).cancelBooking(null)).withRel("cancel"));
     }
-
 }

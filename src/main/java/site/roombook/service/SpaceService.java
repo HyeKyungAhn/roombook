@@ -1,11 +1,10 @@
 package site.roombook.service;
 
-import site.roombook.CmnCode;
+import site.roombook.domain.PageHandler;
 import site.roombook.domain.SpaceDto;
-import site.roombook.domain.SpaceRescFileDto;
+import site.roombook.domain.SpaceInfoAndTimeslotDto;
 
-import java.util.List;
-import java.util.Map;
+import site.roombook.domain.SpaceListDto;
 
 public interface SpaceService {
 
@@ -17,9 +16,9 @@ public interface SpaceService {
 
     boolean updateSpace(int spaceNo, String lastUpdrIdnfNo, SpaceDto spaceDto);
 
-    List<SpaceRescFileDto> getSpaceList(int spaceCnt, int offset, int rescCnt, CmnCode atchLocCd, boolean isHiddenSpaceInvisible);
+    SpaceListDto getSpaceList(PageHandler ph, SpaceInfoAndTimeslotDto spaceInfoAndTimeslotDto);
 
-    Map<String, Object> getOneSpaceAndDetails(int spaceNo, CmnCode atchLocCd, boolean isHiddenSpaceInvisible);
+    SpaceDto getOneSpaceAndDetails(int spaceNo, boolean isHiddenSpaceInvisible);
 
     int getSpaceAllCnt();
 

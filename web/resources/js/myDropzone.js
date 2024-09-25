@@ -25,7 +25,7 @@ const dropzone = new Dropzone("div.dropzone", {
     acceptedFiles: '.jpeg,.jpg,.png,.jfif,.JPEG,.JPG,.PNG,.JFIF', // 이미지 파일 포맷만 허용
 
     init: function () {
-        const files = JSON.parse(jsonFiles);
+        const files = jsonFiles;
 
         files.forEach((file) => {
             let callback = null;

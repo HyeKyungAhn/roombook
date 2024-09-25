@@ -9,8 +9,7 @@ const myTagify = {
     clickDebounce: '',
     init(){
         if(jsonRescs!==''){
-            const rescsObject = JSON.parse(jsonRescs);
-            tagify.addTags(rescsObject);
+            tagify.addTags(jsonData.resources);
         }
     }
     ,
@@ -35,11 +34,6 @@ const myTagify = {
             myTagify.printFacilityInfo('');
             myTagify.hasFacilityInfo = false;
         }
-    },
-
-    onAddHandler(e){
-        // e.detail.data.isNew = true;
-        console.log(e.detail)
     },
 
     onInvalidTag(e){

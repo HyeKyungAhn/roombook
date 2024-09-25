@@ -4,7 +4,7 @@ import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import site.roombook.domain.SpaceDto;
-import site.roombook.domain.SpaceRescFileDto;
+import site.roombook.domain.SpaceInfoAndTimeslotDto;
 
 import java.util.List;
 import java.util.Map;
@@ -53,12 +53,12 @@ public class SpaceDaoImpl implements SpaceDao{
     }
 
     @Override
-    public List<SpaceRescFileDto> selectSpaceList(Map<String, Object> spaceData) {
-        return session.selectList(namespace+"selectSpacesAndRescAndFile", spaceData);
+    public List<SpaceInfoAndTimeslotDto> selectSpaceList(SpaceInfoAndTimeslotDto spaceInfoAndTimeslotDto) {
+        return session.selectList(namespace+"selectSpaceInfoAndTimeslots", spaceInfoAndTimeslotDto);
     }
 
     @Override
-    public List<SpaceRescFileDto> selectOneSpaceAndRescAndFIle(Map<String, Object> spaceData) {
+    public List<SpaceInfoAndTimeslotDto> selectOneSpaceAndRescAndFIle(Map<String, Object> spaceData) {
         return session.selectList(namespace+"selectOneSpaceAndRescAndFIle", spaceData);
     }
 

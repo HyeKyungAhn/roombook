@@ -1,3 +1,7 @@
+a {
+    text-decoration: none;
+}
+
 body {
     background: #EEE;
     font-family: 'Roboto', sans-serif;
@@ -73,4 +77,57 @@ span.plus {
     height: 120px;
     width: 120px;
     object-fit: cover;
+}
+
+/* Space List */
+.spaceList {
+
+}
+
+.spaceList .item {
+    min-width: 600px;
+    width: 60%;
+}
+
+.spaceList .spaceContent {
+    display: flex;
+}
+
+.spaceContent .info {
+
+}
+
+.spaceContent .thumbnailImg {
+    height: 120px;
+    width: 120px;
+    object-fit: cover;
+}
+
+.timeslotWrapper {
+    display: flex;
+    justify-content: space-between;
+}
+
+.timeslotWrapper .timeslot {
+    width: 100%;
+}
+
+.timeslot .time {
+
+}
+
+.timeslot .slot {
+    width: 100%;
+    display: inline-block;
+    height: 15px;
+    background-color: gray;
+    border-radius: 20px;
+}
+
+.timeslot .booked {
+    background-color: blue;
+}
+
+.show {
+
 }

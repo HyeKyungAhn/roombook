@@ -1,8 +1,8 @@
 const slider = {
     showcaseEl: document.getElementById('imgShowcase'),
     selectEl: document.getElementById('imgSelect'),
-    init() {
-        const files = JSON.parse(jsonFiles);
+    init(files) {
+        if(!files) return;
 
         slider.addShowcase(files);
         slider.addSelect(files);
@@ -43,4 +43,4 @@ const slider = {
     }
 }
 
-slider.init();
+slider.init(jsonData.files);

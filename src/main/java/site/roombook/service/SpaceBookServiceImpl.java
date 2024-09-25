@@ -21,12 +21,10 @@ public class SpaceBookServiceImpl implements SpaceBookService{
     SpaceBookDao spaceBookDao;
 
     @Override
-    public List<SpaceBookDto> getBookedTimeslotsOfTheDay(int spaceNo, String date, String emplId) {
-        LocalDate localDate = convertStringToLocalDate(date);
-
+    public List<SpaceBookDto> getBookedTimeslotsOfTheDay(int spaceNo, LocalDate date, String emplId) {
         SpaceBookDto spaceBookDto = SpaceBookDto.spaceBookDtoBuilder()
                 .spaceBookSpaceNo(spaceNo)
-                .spaceBookDate(localDate)
+                .spaceBookDate(date)
                 .spaceBookStusCd(CmnCode.SPACE_BOOK_COMPLETE.getCode())
                 .build();
 
@@ -146,15 +144,5 @@ public class SpaceBookServiceImpl implements SpaceBookService{
                     .build());
         }
         return newList;
-    }
-
-    private LocalDate convertStringToLocalDate(String date) {
-        if (date == null || date.length() != 8) return LocalDate.now();
-
-        int year = Integer.parseInt(date.substring(0, 4));
-        int month = Integer.parseInt(date.substring(4, 6));
-        int day = Integer.parseInt(date.substring(6));
-
-        return LocalDate.of(year, month, day);
     }
 }
