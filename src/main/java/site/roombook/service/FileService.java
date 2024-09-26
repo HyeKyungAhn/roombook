@@ -10,7 +10,7 @@ import java.io.IOException;
 import java.util.List;
 
 public interface FileService {
-    FileServiceResult saveFiles(MultipartFile[] files, int atchLocNum, String regrEmplNo) throws IOException;
+    FileServiceResult saveFiles(MultipartFile[] files, int atchLocNum, String emplId) throws IOException;
     List<FileDto> getFileData(int spaceNo, CmnCode code);
     FileServiceResult deleteFiles(List<String> deletedFileNames) throws IOException, MultipartException;
     FileDto getFile(int ATCH_LOC_NO, CmnCode atchLocCd);

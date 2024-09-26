@@ -50,7 +50,7 @@ public class FileServiceImpl implements FileService{
 
     @Override
     @Transactional(propagation = Propagation.REQUIRED)
-    public FileServiceResult saveFiles(MultipartFile[] newFiles, int atchLocNum, String regrEmplNo) throws MultipartException, IllegalStateException {
+    public FileServiceResult saveFiles(MultipartFile[] newFiles, int atchLocNum, String emplId) throws MultipartException, IllegalStateException {
         FileServiceResult result = new FileServiceResult();
 
         if(Objects.isNull(newFiles) || newFiles.length==0){
@@ -73,9 +73,9 @@ public class FileServiceImpl implements FileService{
         }
 
         for (MultipartFile file : newFiles) {
-            //TODO: 파일 검증(파일 형식 및 내용 검증, 파일 경로 검증, 파일 크기 제한, 바이러스 및 악성 코드 스캔(ClamAV)
             String extension = FilenameUtils.getExtension(file.getOriginalFilename());
-            if(extension.equals("jfif")) extension = "jpg";
+            if(extension != null && extension.equals("jfif")) extension = "jpg";
+
             String uniqueFileName = UUID.randomUUID() + "." + extension;
             boolean isSaveSuccess;
 
@@ -93,7 +93,7 @@ public class FileServiceImpl implements FileService{
                         .fileOrglNm(file.getOriginalFilename())
                         .fileTypNm(file.getContentType())
                         .fileSize(file.getSize())
-                        .fstRegrIdnfNo(regrEmplNo)
+                        .emplId(emplId)
                         .build();
 
             fileDtoList.add(fileDto);

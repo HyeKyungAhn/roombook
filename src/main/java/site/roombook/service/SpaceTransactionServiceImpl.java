@@ -32,11 +32,11 @@ public class SpaceTransactionServiceImpl implements SpaceTransactionService{
 
     @Override
     @Transactional(propagation = Propagation.REQUIRED, rollbackFor = {Exception.class})
-    public SpaceTransactionServiceResult saveSpace(SpaceDto spaceDto, MultipartFile[] files, String fstRegrIdnfNo, List<RescDto> rescs) throws DuplicateKeyException, IllegalArgumentException, IOException {
+    public SpaceTransactionServiceResult saveSpace(SpaceDto spaceDto, MultipartFile[] files, String emplId, List<RescDto> rescs) throws DuplicateKeyException, IllegalArgumentException, IOException {
         SpaceTransactionServiceResult saveResult = new SpaceTransactionServiceResult();
         int spaceNo = generateSpaceNo();
 
-        if(spaceService.saveSpace(spaceDto, spaceNo, fstRegrIdnfNo)){
+        if(spaceService.saveSpace(spaceDto, spaceNo, emplId)){
             saveResult.setSpaceSaved(true);
         } else {
             saveResult.setSpaceSaved(false);
@@ -46,7 +46,7 @@ public class SpaceTransactionServiceImpl implements SpaceTransactionService{
         FileServiceResult fileSaveResult;
 
         if(!Objects.isNull(files) && files.length!=0){
-            fileSaveResult = fileService.saveFiles(files, spaceNo, fstRegrIdnfNo);
+            fileSaveResult = fileService.saveFiles(files, spaceNo, emplId);
         } else {
             fileSaveResult = new FileServiceResult();
             fileSaveResult.setSaved(true);
@@ -55,7 +55,7 @@ public class SpaceTransactionServiceImpl implements SpaceTransactionService{
         saveResult.setFileSaveResult(fileSaveResult);
 
         if(Objects.nonNull(rescs) && !rescs.isEmpty()){
-            rescService.saveRescs(rescs, spaceNo, fstRegrIdnfNo);
+            rescService.saveRescs(rescs, spaceNo, emplId);
         }
 
         return saveResult;
@@ -64,15 +64,14 @@ public class SpaceTransactionServiceImpl implements SpaceTransactionService{
     @Override
     @Transactional(propagation = Propagation.REQUIRES_NEW, rollbackFor = {IOException.class})
     public SpaceTransactionServiceResult modifySpace(int spaceNo,
-                                                     String idnfNo,
+                                                     String emplId,
                                                      SpaceDto space,
                                                      MultipartFile[] newFiles,
                                                      ArrayList<String> deletedFilesNames,
                                                      List<RescDto> rescs) throws MultipartException, IllegalArgumentException, IOException{
         SpaceTransactionServiceResult modifyResult = new SpaceTransactionServiceResult();
 
-
-        if (spaceService.updateSpace(spaceNo, idnfNo, space)) {
+        if (spaceService.updateSpace(spaceNo, emplId, space)) {
             modifyResult.setSpaceSaved(true);
         } else {
             modifyResult.setSpaceSaved(false);
@@ -83,7 +82,7 @@ public class SpaceTransactionServiceImpl implements SpaceTransactionService{
         FileServiceResult deleteResult;
 
         if (Objects.nonNull(newFiles) && newFiles.length != 0) {
-            saveResult = fileService.saveFiles(newFiles, spaceNo, idnfNo);
+            saveResult = fileService.saveFiles(newFiles, spaceNo, emplId);
         } else {
             saveResult = new FileServiceResult();
             saveResult.setSaved(true);
@@ -100,7 +99,7 @@ public class SpaceTransactionServiceImpl implements SpaceTransactionService{
         modifyResult.setFileDeleteResult(deleteResult);
 
         if(Objects.nonNull(rescs) && !rescs.isEmpty()){
-            rescService.updateRescs(spaceNo, idnfNo, rescs);
+            rescService.updateRescs(spaceNo, emplId, rescs);
         }
 
         return modifyResult;

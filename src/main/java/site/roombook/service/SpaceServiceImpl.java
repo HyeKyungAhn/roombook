@@ -23,7 +23,7 @@ public class SpaceServiceImpl implements SpaceService {
 
     @Override
     @Transactional(propagation = Propagation.REQUIRED, rollbackFor = DuplicateKeyException.class)
-    public boolean saveSpace(SpaceDto spaceDto, int spaceNo, String fstRegrIdnfNo) {
+    public boolean saveSpace(SpaceDto spaceDto, int spaceNo, String emplId) {
         SpaceDto space = new SpaceDto.Builder().spaceNo(spaceNo)
                 .spaceNm(spaceDto.getSpaceNm())
                 .spaceMaxPsonCnt(spaceDto.getSpaceMaxPsonCnt())
@@ -34,7 +34,7 @@ public class SpaceServiceImpl implements SpaceService {
                 .spaceUsgPosblEndTm(spaceDto.getSpaceUsgPosblEndTm())
                 .spaceWkendUsgPosblYn(spaceDto.getSpaceWkendUsgPosblYn())
                 .spaceHideYn(spaceDto.getSpaceHideYn())
-                .fstRegrIdnfNo(fstRegrIdnfNo).build();
+                .emplId(emplId).build();
 
         return spaceDao.insertSpace(space)==1;
     }
@@ -63,7 +63,7 @@ public class SpaceServiceImpl implements SpaceService {
 
     @Override
     @Transactional(propagation = Propagation.REQUIRED)
-    public boolean updateSpace(int spaceNo, String lastUpdrIdnfNo, SpaceDto spaceDto){
+    public boolean updateSpace(int spaceNo, String emplId, SpaceDto spaceDto){
         SpaceDto space = new SpaceDto.Builder().spaceNo(spaceNo)
                 .spaceNm(spaceDto.getSpaceNm())
                 .spaceMaxPsonCnt(spaceDto.getSpaceMaxPsonCnt())
@@ -74,7 +74,7 @@ public class SpaceServiceImpl implements SpaceService {
                 .spaceUsgPosblEndTm(spaceDto.getSpaceUsgPosblEndTm())
                 .spaceWkendUsgPosblYn(spaceDto.getSpaceWkendUsgPosblYn())
                 .spaceHideYn(spaceDto.getSpaceHideYn())
-                .lastUpdrIdnfNo(lastUpdrIdnfNo).build();
+                .emplId(emplId).build();
 
         return spaceDao.update(space) == 1;
     }

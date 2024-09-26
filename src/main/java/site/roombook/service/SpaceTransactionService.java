@@ -12,6 +12,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public interface SpaceTransactionService {
-    SpaceTransactionServiceResult saveSpace(SpaceDto spaceDto, MultipartFile[] files, String fstRegrIdnfNo, List<RescDto> rescs) throws DuplicateKeyException, IllegalArgumentException, IOException;
+    SpaceTransactionServiceResult saveSpace(SpaceDto spaceDto, MultipartFile[] files, String emplId, List<RescDto> rescs) throws DuplicateKeyException, IllegalArgumentException, IOException;
     SpaceTransactionServiceResult modifySpace(int spaceNo, String lastUpdrIdnfNo, SpaceDto spaceDto, MultipartFile[] files, ArrayList<String> deletedFileNames, List<RescDto> rescs) throws MultipartException, IllegalArgumentException, IOException;
 }

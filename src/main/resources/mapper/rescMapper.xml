@@ -20,10 +20,13 @@
         FROM space_resc s INNER JOIN resc r
         WHERE s.RESC_NO = r.RESC_NO AND SPACE_NO = #{spaceNo}
     </select>
-    <insert id="insertRescs" parameterType="RescDto">
+    <insert id="insertRescs" parameterType="java.util.List">
+        <selectKey keyProperty="fstRegrIdnfNo" resultType="String" order="BEFORE">
+            SELECT EMPL_NO FROM empl WHERE EMPL_ID = #{list[0].emplId}
+        </selectKey>
         INSERT IGNORE INTO resc(RESC_NM, FST_REGR_IDNF_NO, LAST_UPDR_IDNF_NO)
         VALUES <foreach item="item" collection="list" separator=",">
-                    (#{item.rescNm}, #{item.fstRegrIdnfNo}, #{item.fstRegrIdnfNo})
+                    (#{item.rescNm}, #{fstRegrIdnfNo}, #{fstRegrIdnfNo})
                 </foreach>
     </insert>
     <delete id="deleteAll">

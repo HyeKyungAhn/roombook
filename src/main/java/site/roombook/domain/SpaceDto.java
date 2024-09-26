@@ -46,6 +46,8 @@ public class SpaceDto {
     private LocalDateTime lastUpdDtm;
     @JsonIgnore
     private String lastUpdrIdnfNo;
+    @JsonIgnore
+    private String emplId;
 
     @JsonProperty("files")
     private List<FileDto> files;
@@ -67,6 +69,7 @@ public class SpaceDto {
         this.fstRegrIdnfNo = builder.fstRegrIdnfNo;
         this.lastUpdDtm = builder.lastUpdDtm;
         this.lastUpdrIdnfNo = builder.lastUpdrIdnfNo;
+        this.emplId = builder.emplId;
         this.files = builder.files;
         this.resources = builder.resources;
     }
@@ -86,6 +89,7 @@ public class SpaceDto {
         private String fstRegrIdnfNo;
         private LocalDateTime lastUpdDtm;
         private String lastUpdrIdnfNo;
+        private String emplId;
         private List<FileDto> files;
         private List<RescDto> resources;
 
@@ -159,6 +163,11 @@ public class SpaceDto {
             return this;
         }
 
+        public Builder emplId(String emplId) {
+            this.emplId = emplId;
+            return this;
+        }
+
         public Builder files(List<FileDto> files) {
             this.files = files;
             return this;
@@ -179,11 +188,11 @@ public class SpaceDto {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         SpaceDto spaceDto = (SpaceDto) o;
-        return Objects.equals(spaceNo, spaceDto.spaceNo) && Objects.equals(spaceNm, spaceDto.spaceNm) && Objects.equals(spaceMaxPsonCnt, spaceDto.spaceMaxPsonCnt) && Objects.equals(spaceLocDesc, spaceDto.spaceLocDesc) && Objects.equals(spaceAdtnDesc, spaceDto.spaceAdtnDesc) && Objects.equals(spaceMaxRsvdTms, spaceDto.spaceMaxRsvdTms) && Objects.equals(spaceUsgPosblBgnTm, spaceDto.spaceUsgPosblBgnTm) && Objects.equals(spaceUsgPosblEndTm, spaceDto.spaceUsgPosblEndTm) && Objects.equals(spaceWkendUsgPosblYn, spaceDto.spaceWkendUsgPosblYn) && Objects.equals(spaceHideYn, spaceDto.spaceHideYn) && Objects.equals(fstRegDtm, spaceDto.fstRegDtm) && Objects.equals(fstRegrIdnfNo, spaceDto.fstRegrIdnfNo) && Objects.equals(lastUpdDtm, spaceDto.lastUpdDtm) && Objects.equals(lastUpdrIdnfNo, spaceDto.lastUpdrIdnfNo) && Objects.equals(files, spaceDto.files) && Objects.equals(resources, spaceDto.resources);
+        return Objects.equals(spaceNo, spaceDto.spaceNo) && Objects.equals(spaceNm, spaceDto.spaceNm) && Objects.equals(spaceMaxPsonCnt, spaceDto.spaceMaxPsonCnt) && Objects.equals(spaceLocDesc, spaceDto.spaceLocDesc) && Objects.equals(spaceAdtnDesc, spaceDto.spaceAdtnDesc) && Objects.equals(spaceMaxRsvdTms, spaceDto.spaceMaxRsvdTms) && Objects.equals(spaceUsgPosblBgnTm, spaceDto.spaceUsgPosblBgnTm) && Objects.equals(spaceUsgPosblEndTm, spaceDto.spaceUsgPosblEndTm) && Objects.equals(spaceWkendUsgPosblYn, spaceDto.spaceWkendUsgPosblYn) && Objects.equals(spaceHideYn, spaceDto.spaceHideYn) && Objects.equals(fstRegDtm, spaceDto.fstRegDtm) && Objects.equals(fstRegrIdnfNo, spaceDto.fstRegrIdnfNo) && Objects.equals(lastUpdDtm, spaceDto.lastUpdDtm) && Objects.equals(lastUpdrIdnfNo, spaceDto.lastUpdrIdnfNo) && Objects.equals(emplId, spaceDto.emplId) && Objects.equals(files, spaceDto.files) && Objects.equals(resources, spaceDto.resources);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(spaceNo, spaceNm, spaceMaxPsonCnt, spaceLocDesc, spaceAdtnDesc, spaceMaxRsvdTms, spaceUsgPosblBgnTm, spaceUsgPosblEndTm, spaceWkendUsgPosblYn, spaceHideYn, fstRegDtm, fstRegrIdnfNo, lastUpdDtm, lastUpdrIdnfNo, files, resources);
+        return Objects.hash(spaceNo, spaceNm, spaceMaxPsonCnt, spaceLocDesc, spaceAdtnDesc, spaceMaxRsvdTms, spaceUsgPosblBgnTm, spaceUsgPosblEndTm, spaceWkendUsgPosblYn, spaceHideYn, fstRegDtm, fstRegrIdnfNo, lastUpdDtm, lastUpdrIdnfNo, emplId, files, resources);
     }
 }

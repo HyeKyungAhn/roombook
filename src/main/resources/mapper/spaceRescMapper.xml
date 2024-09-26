@@ -2,15 +2,18 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="site.roombook.dao.spaceRescMapper">
-    <insert id="insertSpaceResc" parameterType="RescDto">
+    <insert id="insertSpaceResc" parameterType="java.util.List">
+        <selectKey keyProperty="fstRegrIdnfNo" resultType="String" order="BEFORE">
+            SELECT EMPL_NO FROM empl WHERE EMPL_ID = #{list[0].emplId}
+        </selectKey>
         INSERT ignore INTO space_resc(SPACE_NO, RESC_NO, FST_REGR_IDNF_NO, LAST_UPDR_IDNF_NO)
         VALUES <foreach item="item" collection="list" separator=",">
                     (#{item.spaceNo},
                     (SELECT RESC_NO
                         FROM resc
                         WHERE RESC_NM = #{item.rescNm}),
-                    #{item.fstRegrIdnfNo},
-                    #{item.fstRegrIdnfNo})
+                    #{fstRegrIdnfNo},
+                    #{fstRegrIdnfNo})
                 </foreach>
     </insert>
     <select id="selectAll" resultType="SpaceRescDto">

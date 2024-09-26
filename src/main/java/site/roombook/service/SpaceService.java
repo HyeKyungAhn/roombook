@@ -8,7 +8,7 @@ import site.roombook.domain.SpaceListDto;
 
 public interface SpaceService {
 
-    boolean saveSpace(SpaceDto spaceDto, int spaceNo, String fstRegrIdnfNo);
+    boolean saveSpace(SpaceDto spaceDto, int spaceNo, String emplId);
 
     SpaceDto getOneSpace(int spaceNo);
 

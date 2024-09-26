@@ -35,6 +35,8 @@ public class FileDto {
     private LocalDateTime lastUpdDtm;
     @JsonIgnore
     private String lastUpdrIdnfNo;
+    @JsonIgnore
+    private String emplId;
 
     @JsonIgnore
     private Integer maxFileCnt;

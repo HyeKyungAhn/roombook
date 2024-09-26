@@ -3,6 +3,9 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="site.roombook.dao.spaceMapper">
     <insert id="insertSpace" parameterType="SpaceDto">
+        <selectKey keyProperty="fstRegrIdnfNo" resultType="String" order="BEFORE">
+            SELECT EMPL_NO FROM empl WHERE EMPL_ID = #{emplId}
+        </selectKey>
         INSERT INTO space(SPACE_NO, SPACE_NM, SPACE_MAX_PSON_CNT, SPACE_LOC_DESC, SPACE_ADTN_DESC, SPACE_MAX_RSVD_TMS,
             SPACE_USG_POSBL_BGN_TM, SPACE_USG_POSBL_END_TM, SPACE_WKEND_USG_POSBL_YN, SPACE_HIDE_YN,
             FST_REGR_IDNF_NO, LAST_UPDR_IDNF_NO)
@@ -109,7 +112,7 @@
                          SPACE_ADTN_DESC=#{spaceAdtnDesc}, SPACE_MAX_RSVD_TMS=#{spaceMaxRsvdTms},
                          SPACE_USG_POSBL_BGN_TM=#{spaceUsgPosblBgnTm}, SPACE_USG_POSBL_END_TM=#{spaceUsgPosblEndTm},
                          SPACE_WKEND_USG_POSBL_YN=#{spaceWkendUsgPosblYn}, SPACE_HIDE_YN=#{spaceHideYn},
-                         LAST_UPD_DTM=CURRENT_TIMESTAMP, LAST_UPDR_IDNF_NO=#{lastUpdrIdnfNo}
+                         LAST_UPD_DTM=CURRENT_TIMESTAMP, LAST_UPDR_IDNF_NO=(SELECT EMPL_NO FROM empl WHERE EMPL_ID = #{emplId})
         WHERE SPACE_NO = #{spaceNo}
     </update>
     <delete id="deleteAll">

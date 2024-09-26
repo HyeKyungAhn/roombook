@@ -25,19 +25,19 @@ public class RescServiceImpl implements RescService{
 
     @Override
     @Transactional(propagation = Propagation.REQUIRED)
-    public void saveRescs(List<RescDto> rescs, int spaceNo, String fstRegrIdnfNo){
-        List<RescDto> rescsWithSpaceNoAndIdnfNo = new ArrayList<>();
+    public void saveRescs(List<RescDto> rescs, int spaceNo, String emplId){
+        List<RescDto> rescsAndMetaData = new ArrayList<>();
 
         for(RescDto resc : rescs){
-            rescsWithSpaceNoAndIdnfNo.add(RescDto
+            rescsAndMetaData.add(RescDto
                     .builder(resc.getRescNm())
                     .rescNo(resc.getRescNo()) // TODO 없으면?
-                    .fstRegrIdnfNo(fstRegrIdnfNo)
+                    .emplId(emplId)
                     .spaceNo(spaceNo).build());
         }
 
-        rescDao.insertRescs(rescsWithSpaceNoAndIdnfNo);
-        spaceRescDao.insertSpaceRescs(rescsWithSpaceNoAndIdnfNo);
+        rescDao.insertRescs(rescsAndMetaData);
+        spaceRescDao.insertSpaceRescs(rescsAndMetaData);
     }
 
     @Override
@@ -47,14 +47,14 @@ public class RescServiceImpl implements RescService{
 
     @Override
     @Transactional(propagation = Propagation.REQUIRED)
-    public void updateRescs(int spaceNo, String idnfNo, List<RescDto> rescs){
+    public void updateRescs(int spaceNo, String emplId, List<RescDto> rescs){
         List<RescDto> rescsWithSpaceData = new ArrayList<>();
 
         for (RescDto resc : rescs) {
             rescsWithSpaceData.add(RescDto
                     .builder(resc.getRescNm())
                     .spaceNo(spaceNo)
-                    .fstRegrIdnfNo(idnfNo).build());
+                    .emplId(emplId).build());
         }
 
         rescDao.insertRescs(rescsWithSpaceData);

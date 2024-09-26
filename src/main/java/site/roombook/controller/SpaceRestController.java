@@ -11,6 +11,9 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 import org.springframework.web.multipart.MultipartException;
@@ -89,12 +92,14 @@ public class SpaceRestController {
         }
 
         SpaceTransactionServiceResult saveResult;
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
 
         try {
             SpaceDto space = parseJson(spaceData, SpaceDto.class);
             List<RescDto> rescs = parseJson(resc, new TypeReference<>(){});
 
-            saveResult = spaceTransactionService.saveSpace(space, newFiles, "admin", rescs); //TODO: admin 바꾸기
+            saveResult = spaceTransactionService.saveSpace(space, newFiles, userDetails.getUsername(), rescs);
         } catch (DuplicateKeyException e){
             return createErrorResponse("같은 이름의 공간이 있습니다.\n공간명을 변경해주세요.");
         } catch (JsonProcessingException e){
@@ -131,6 +136,9 @@ public class SpaceRestController {
         ArrayList<String> fileNameArray;
         SpaceTransactionServiceResult modifyResult;
 
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+
         try {
             space = parseJson(spaceData, SpaceDto.class);
             rescs = parseJson(resc, new TypeReference<>() {
@@ -138,7 +146,7 @@ public class SpaceRestController {
             fileNameArray = parseJson(deletedFileNames, new TypeReference<>() {
             });
 
-            modifyResult = spaceTransactionService.modifySpace(spaceNo, "admin", space, newFiles, fileNameArray, rescs);
+            modifyResult = spaceTransactionService.modifySpace(spaceNo, userDetails.getUsername(), space, newFiles, fileNameArray, rescs);
         } catch (JsonProcessingException e) {
             return createErrorResponse("유효하지 않은 값입니다. 다시 입력하세요.");
         } catch (DateTimeParseException e) {

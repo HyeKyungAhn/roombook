@@ -108,6 +108,7 @@
     const finishTimeEl = document.getElementById('finishTime');
     const capacityEl = document.getElementById('capacity');
     const hideYnEl = document.getElementById('hideYn');
+    const cancelBtnEl = document.getElementById('cancelBtn');
 
     const spaceForm = document.getElementById("spaceForm");
 
@@ -115,7 +116,7 @@
         renderSpaceInfo();
     });
 
-    document.addEventListener('click', function() {
+    cancelBtnEl.addEventListener('click', function() {
         history.back();
     });
 

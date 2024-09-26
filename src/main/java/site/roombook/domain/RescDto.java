@@ -32,6 +32,8 @@ public class RescDto {
     private Date lastUpdDtm;
     @JsonIgnore
     private String lastUpdrIdnfNo;
+    @JsonIgnore
+    private String emplId;
 
     public static RescDtoBuilder builder(String rescNm) {
         if (rescNm == null) {
@@ -45,11 +47,11 @@ public class RescDto {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         RescDto rescDto = (RescDto) o;
-        return Objects.equals(rescNo, rescDto.rescNo) && Objects.equals(rescNm, rescDto.rescNm) && Objects.equals(spaceNo, rescDto.spaceNo) && Objects.equals(fstRegDtm, rescDto.fstRegDtm) && Objects.equals(fstRegrIdnfNo, rescDto.fstRegrIdnfNo) && Objects.equals(lastUpdDtm, rescDto.lastUpdDtm) && Objects.equals(lastUpdrIdnfNo, rescDto.lastUpdrIdnfNo);
+        return Objects.equals(rescNo, rescDto.rescNo) && Objects.equals(rescNm, rescDto.rescNm) && Objects.equals(spaceNo, rescDto.spaceNo) && Objects.equals(fstRegDtm, rescDto.fstRegDtm) && Objects.equals(fstRegrIdnfNo, rescDto.fstRegrIdnfNo) && Objects.equals(lastUpdDtm, rescDto.lastUpdDtm) && Objects.equals(lastUpdrIdnfNo, rescDto.lastUpdrIdnfNo) && Objects.equals(emplId, rescDto.emplId);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(rescNo, rescNm, spaceNo, fstRegDtm, fstRegrIdnfNo, lastUpdDtm, lastUpdrIdnfNo);
+        return Objects.hash(rescNo, rescNm, spaceNo, fstRegDtm, fstRegrIdnfNo, lastUpdDtm, lastUpdrIdnfNo, emplId);
     }
 }

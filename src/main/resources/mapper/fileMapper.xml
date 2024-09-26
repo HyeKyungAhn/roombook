@@ -2,11 +2,14 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="site.roombook.dao.fileMapper">
-    <insert id="insertFiles" parameterType="FileDto">
+    <insert id="insertFiles" parameterType="java.util.List">
+        <selectKey keyProperty="emplNo" resultType="String" order="BEFORE">
+            SELECT EMPL_NO FROM empl WHERE EMPL_ID = #{list[0].emplId}
+        </selectKey>
         INSERT INTO file(ATCH_LOC_NO, ATCH_LOC_CD, FILE_NM, FILE_ORGL_NM, FILE_TYP_NM, FILE_SIZE, FST_REGR_IDNF_NO, LAST_UPDR_IDNF_NO)
         VALUES
         <foreach item="item" collection="list" separator=",">
-            (#{item.atchLocNo},#{item.atchLocCd},#{item.fileNm},#{item.fileOrglNm},#{item.fileTypNm},#{item.fileSize},#{item.fstRegrIdnfNo},#{item.fstRegrIdnfNo})
+            (#{item.atchLocNo},#{item.atchLocCd},#{item.fileNm},#{item.fileOrglNm},#{item.fileTypNm},#{item.fileSize},#{emplNo},#{emplNo})
         </foreach>
     </insert>
     <select id="selectAll" resultType="FileDto">
