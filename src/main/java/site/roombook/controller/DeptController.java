@@ -32,16 +32,10 @@ public class DeptController {
     @Autowired
     DeptService deptService;
 
-    @ExceptionHandler(IllegalArgumentException.class)
+    @ExceptionHandler({IllegalArgumentException.class, NoSuchElementException.class})
     public String catcher(IllegalArgumentException e){
         return "error";
     }
-
-    @ExceptionHandler(NoSuchElementException.class)
-    public String catcher2(NoSuchElementException e){
-        return "error";
-    }
-
 
     @GetMapping("/dept")
     public String getDeptDetailPage(@RequestParam String deptCd, Model m){
@@ -57,7 +51,7 @@ public class DeptController {
 
         m.addAttribute("deptAndMngrData", deptAndMngrData);
         m.addAttribute("memberInfo", deptService.getDeptMembers(deptCd));
-        return "dept/deptDetail";
+        return "dept/deptDetail.adminFullTiles";
     }
 
     @GetMapping("/mod")
@@ -79,17 +73,17 @@ public class DeptController {
         }
 
         m.addAttribute("deptInfo", deptDto);
-        return "dept/deptMod";
+        return "dept/deptMod.adminFullTiles";
     }
 
     @GetMapping("/list")
     public String getDeptListPage(){
-        return "dept/deptList";
+        return "dept/deptList.adminFullTiles";
     }
 
     @GetMapping("/move")
     public String getDeptMovePage(){
-        return "dept/deptMove";
+        return "dept/deptMove.adminFullTiles";
     }
 
     @GetMapping(value = "/tree", produces = "application/json;charset=UTF-8")
@@ -180,7 +174,7 @@ public class DeptController {
         List<DeptDto> result = deptService.getDeptCdAndNm();
 
         m.addAttribute("CdAndNm", result);
-        return "/dept/deptInsert";
+        return "/dept/deptInsert.adminFullTiles";
     }
 
     @PostMapping("/save")
@@ -302,7 +296,7 @@ public class DeptController {
     public String getDeptMemPage(String deptCd, RedirectAttributes rattr, Model m){
         if(Strings.isEmpty(deptCd)){
             rattr.addFlashAttribute("msg", "INVALID_REQUEST");
-            return "error";
+            return "error.adminFullTiles";
         }
 
         List<DeptAndEmplDto> deptMembersAndName = deptService.getProfilesOfMemberAndDeptName(deptCd);
@@ -313,7 +307,7 @@ public class DeptController {
         if (!(deptMembersAndName.size() == 1 && deptMembersAndName.get(0).getEmplId() == null)) {
             m.addAttribute("deptMemAndDeptNm", deptMembersAndName);
         }
-        return "/dept/deptMemMod";
+        return "/dept/deptMemMod.adminFullTiles";
     }
 
     @PostMapping("/mem")

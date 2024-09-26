@@ -17,7 +17,7 @@ public class HomeController {
 
     @GetMapping("/")
     public ModelAndView getHomePage() {
-        return new ModelAndView("home");
+        return new ModelAndView("home.tiles");
     }
 
     @GetMapping("/invalid-access")
@@ -28,7 +28,7 @@ public class HomeController {
         linkMap.put("home", linkTo(methodOn(HomeController.class).getHomePage()).withRel("home").toUri().toString());
 
         mv.addObject("links", stringifyLinkMap(linkMap));
-        mv.setViewName("invalidAccess");
+        mv.setViewName("invalidAccess.tiles");
 
         return mv;
     }
@@ -41,14 +41,14 @@ public class HomeController {
         linkMap.put("home", linkTo(methodOn(HomeController.class).getHomePage()).withRel("home").toUri().toString());
 
         mv.addObject("links", stringifyLinkMap(linkMap));
-        mv.setViewName("notFound");
+        mv.setViewName("notFound.tiles");
 
         return mv;
     }
 
     @GetMapping("/error")
     public ModelAndView getServerErrorPage(){
-        return new ModelAndView("error500");
+        return new ModelAndView("error500.tiles");
     }
 
     private String stringifyLinkMap(Map<String,String> linkMap) {

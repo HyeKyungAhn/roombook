@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE tiles-definitions PUBLIC
+        "-//Apache Software Foundation//DTD Tiles Configuration 2.1//EN"
+        "http://tiles.apache.org/dtds/tiles-config_2_1.dtd">
+<tiles-definitions>
+    <!-- tiles 적용 -->
+    <definition name="tilesLayout" template="/WEB-INF/views/tiles/tilesLayout.jsp">
+        <put-attribute name="header" value="/WEB-INF/views/tiles/header.jsp" />
+        <put-attribute name="content" value="" />
+        <put-attribute name="footer" value="/WEB-INF/views/tiles/footer.jsp" />
+    </definition>
+
+    <definition name="*.tiles" extends="tilesLayout">
+        <put-attribute name="content" value="/WEB-INF/views/{1}.jsp" />
+    </definition>
+    <definition name="*/*.tiles" extends="tilesLayout">
+        <put-attribute name="content" value="/WEB-INF/views/{1}/{2}.jsp" />
+    </definition>
+    <definition name="*/*/*.tiles" extends="tilesLayout">
+        <put-attribute name="content" value="/WEB-INF/views/{1}/{2}/{3}.jsp" />
+    </definition>
+
+    <definition name="tilesAdminFullLayout" template="/WEB-INF/views/tiles/tilesAdminFullLayout.jsp">
+        <put-attribute name="adminPageHeader" value="/WEB-INF/views/tiles/adminPageHeader.jsp"/>
+        <put-attribute name="adminPageAsideNav" value="/WEB-INF/views/tiles/adminPageAsideNav.jsp"/>
+        <put-attribute name="adminPageContent" value=""/>
+        <put-attribute name="adminPageFooter" value="/WEB-INF/views/tiles/adminPageFooter.jsp"/>
+    </definition>
+
+    <definition name="*.adminFullTiles" extends="tilesAdminFullLayout">
+        <put-attribute name="adminPageContent" value="/WEB-INF/views/{1}.jsp" />
+    </definition>
+    <definition name="*/*.adminFullTiles" extends="tilesAdminFullLayout">
+        <put-attribute name="adminPageContent" value="/WEB-INF/views/{1}/{2}.jsp" />
+    </definition>
+    <definition name="*/*/*.adminFullTiles" extends="tilesAdminFullLayout">
+        <put-attribute name="adminPageContent" value="/WEB-INF/views/{1}/{2}/{3}.jsp" />
+    </definition>
+
+    <definition name="tilesAdminMinLayout" template="/WEB-INF/views/tiles/tilesAdminMinLayout.jsp">
+        <put-attribute name="adminPageHeader" value="/WEB-INF/views/tiles/adminPageHeader.jsp"/>
+        <put-attribute name="adminPageContent" value=""/>
+    </definition>
+
+    <definition name="*.adminMinTiles" extends="tilesAdminMinLayout">
+        <put-attribute name="adminPageContent" value="/WEB-INF/views/{1}.jsp" />
+    </definition>
+    <definition name="*/*.adminMinTiles" extends="tilesAdminMinLayout">
+        <put-attribute name="adminPageContent" value="/WEB-INF/views/{1}/{2}.jsp" />
+    </definition>
+    <definition name="*/*/*.adminMinTiles" extends="tilesAdminMinLayout">
+        <put-attribute name="adminPageContent" value="/WEB-INF/views/{1}/{2}/{3}.jsp" />
+    </definition>
+</tiles-definitions>

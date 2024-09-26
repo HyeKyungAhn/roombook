@@ -35,7 +35,7 @@ public class SpaceBookController {
     public ModelAndView getSpaceBookingPage(@PathVariable("space-no") Integer spaceNo, @RequestParam(required = false) String date, ModelAndView mv, HttpServletResponse response) {
         SpaceDto spaceDto = spaceService.getSpaceDataForBooking(spaceNo);
         if (spaceDto == null) {
-            mv.setViewName("redirect:/not-found");
+            mv.setViewName("redirect:/not-found.tiles");
         } else {
             String result;
             ObjectMapper objectMapper = new ObjectMapper();
@@ -44,7 +44,7 @@ public class SpaceBookController {
                 objectMapper.registerModule(new JavaTimeModule());
                 result = objectMapper.writeValueAsString(spaceDto);
             } catch (JsonProcessingException e) {
-                mv.setViewName("redirect:/error");
+                mv.setViewName("redirect:/error.tiles");
                 return mv;
             }
 
@@ -56,7 +56,7 @@ public class SpaceBookController {
             mv.addObject("spaceDetailPageUrl", spaceDetailPageUrl);
             mv.addObject("date", date);
             mv.addObject("spaceData", result);
-            mv.setViewName("spaceBook/book");
+            mv.setViewName("spaceBook/book.tiles");
         }
         return mv;
     }
@@ -69,7 +69,7 @@ public class SpaceBookController {
 
         SpaceBookAndSpaceDto spaceAndBookData = spaceBookService.getTimeslot(spaceBookId, userDetails.getUsername());
         if (spaceAndBookData == null) {
-            mv.setViewName("redirect:/not-found");
+            mv.setViewName("redirect:/not-found.tiles");
             return mv;
         }
         ObjectMapper objectMapper = new ObjectMapper();
@@ -79,7 +79,7 @@ public class SpaceBookController {
         try {
             jsonSpaceAndBookData = objectMapper.writeValueAsString(spaceAndBookData);
         } catch (JsonProcessingException e) {
-            mv.setViewName("redirect:/error");
+            mv.setViewName("redirect:/error.tiles");
             return mv;
         }
 
@@ -90,7 +90,7 @@ public class SpaceBookController {
         mv.addObject("bookedTimeslotsUrl", bookedTimeslotsUrl);
         mv.addObject("spaceDetailPageUrl", spaceDetailPageUrl);
         mv.addObject("spaceAndBookData", jsonSpaceAndBookData);
-        mv.setViewName("spaceBook/bookEdit");
+        mv.setViewName("spaceBook/bookEdit.tiles");
         return mv;
     }
 
@@ -101,7 +101,7 @@ public class SpaceBookController {
         String selfUri = linkTo(methodOn(SpaceBookController.class).getMyBookPage()).toUri().toString();
         mv.addObject("self", selfUri);
         mv.addObject("timeslotsRequestUri", timeslotsRequestUri);
-        mv.setViewName("spaceBook/myBook");
+        mv.setViewName("spaceBook/myBook.tiles");
         return mv;
     }
 }

@@ -48,7 +48,7 @@ public class SpaceController {
 
     @GetMapping("/admin/spaces/new")
     public ModelAndView getSpaceCreationPage(ModelAndView mv){
-        mv.setViewName("space/adminSpaceInsert");
+        mv.setViewName("space/adminSpaceInsert.adminFullTiles");
         mv.addObject("spaceSaveRequestUrl", WebMvcLinkBuilder.linkTo(methodOn(SpaceRestController.class).saveNewSpace(null, null, null)).toUri().toString());
         return mv;
     }
@@ -62,7 +62,7 @@ public class SpaceController {
         String spaceModificationUri = linkTo(methodOn(SpaceRestController.class).modifySpace(spaceNo,null, null, null, null)).toUri().toString();
         mv.addObject("modificationRequestUrl", spaceModificationUri);
         mv.addObject("jsonSpace", stringifiedSpaceDto);
-        mv.setViewName("space/adminSpaceMod");
+        mv.setViewName("space/adminSpaceMod.adminFullTiles");
 
         return mv;
     }
@@ -75,7 +75,7 @@ public class SpaceController {
         mv.addObject("date", convertToBasicIsoDate(date));
         mv.addObject("spaceListRequestUrl"
                 , linkTo(methodOn(SpaceRestController.class).getSpaceListForAdmin(null, null, null)).toUri().toString());
-        mv.setViewName("space/spaceList");
+        mv.setViewName("space/spaceList.adminFullTiles");
         return mv;
     }
 
@@ -85,7 +85,7 @@ public class SpaceController {
         SpaceDto spaceDto = spaceService.getOneSpaceAndDetails(spaceNo, false);
 
         if (spaceDto.getSpaceNo() == null) {
-            mv.setViewName("space/notfound");
+            mv.setViewName("space/notfound.adminFullTiles");
             return mv;
         }
 
@@ -102,7 +102,7 @@ public class SpaceController {
         mv.addObject("spaceListUri", spaceListUri);
         mv.addObject("jsonSpace", stringifiedSpaceDto);
         mv.addObject("requestTimeslots", requestTimeslotsUri);
-        mv.setViewName("space/adminSpaceDetail");
+        mv.setViewName("space/adminSpaceDetail.adminFullTiles");
 
         return mv;
     }
@@ -115,7 +115,7 @@ public class SpaceController {
         mv.addObject("date", convertToBasicIsoDate(date));
         mv.addObject("spaceListRequestUrl"
                 , linkTo(methodOn(SpaceRestController.class).getSpaceList(null, null, null)).toUri().toString());
-        mv.setViewName("space/spaceList");
+        mv.setViewName("space/spaceList.tiles");
         return mv;
     }
 
@@ -125,7 +125,7 @@ public class SpaceController {
         SpaceDto spaceDto = spaceService.getOneSpaceAndDetails(spaceNo, true);
 
         if (spaceDto.getSpaceNo() == null) {
-            mv.setViewName("space/notfound");
+            mv.setViewName("space/notfound.tiles");
             return mv;
         }
 

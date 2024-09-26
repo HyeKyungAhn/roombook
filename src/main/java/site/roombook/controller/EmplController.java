@@ -16,13 +16,13 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 public class EmplController {
     @GetMapping("/signup")
     public ModelAndView getSignupPage() {
-        return new ModelAndView("empl/signup");
+        return new ModelAndView("empl/signup.tiles");
     }
 
     @GetMapping("/signup/success")
     public ModelAndView getSignupSuccessPage() {
         ModelAndView mv = new ModelAndView();
-        mv.setViewName("empl/signupSuccess");
+        mv.setViewName("empl/signupSuccess.tiles");
 
         String signInUri = linkTo(methodOn(EmplController.class).getSignInPage()).toUri().toString();
         String homeUri = linkTo(methodOn(HomeController.class).getHomePage()).toUri().toString();
@@ -44,6 +44,6 @@ public class EmplController {
 
     @GetMapping("/signin")
     public ModelAndView getSignInPage() {
-        return new ModelAndView("empl/signin");
+        return new ModelAndView("empl/signin.tiles");
     }
 }
