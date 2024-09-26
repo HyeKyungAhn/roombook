@@ -1,5 +1,6 @@
 package site.roombook.dao;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -10,13 +11,11 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.transaction.annotation.Transactional;
 import site.roombook.CmnCode;
+import site.roombook.domain.EmplDto;
 import site.roombook.domain.FileDto;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -25,18 +24,34 @@ import static org.junit.jupiter.api.Assertions.*;
 class FileDaoImplTest {
 
     @Autowired
-    FileDao fileDao;
+    private FileDao fileDao;
+
+    @Autowired
+    private EmplDao emplDao;
+
+    private EmplDto dummyEmpl;
+
+    @BeforeEach
+    void setup() {
+        fileDao.deleteAll();
+
+        dummyEmpl = EmplDto.EmplDtoBuilder().emplNo(UUID.randomUUID().toString()).emplId("dummyEmpl").pwd("password").email("dummyEmpl@asdf.com")
+                .pwdErrTms(0).rnm("dummyEmpl").engNm("dummyEmpl").entDt("2024-01-01").emplAuthNm("ROLE_SUPER_ADMIN").brdt("2000-01-01")
+                .wncomTelno("1111111").empno(747586).msgrId(null).prfPhotoPath(null)
+                .subsCertiYn('Y').termsAgreYn('Y').subsAprvYn('Y').secsnYn('N').build();
+
+        assertEquals(1, emplDao.insertEmpl(dummyEmpl));
+    }
 
     @Test
     @Transactional
     @DisplayName("파일 정보 저장 테스트")
     void insertFilesTest(){
-        fileDao.deleteAll();
 
         FileDto fileDto1 = FileDto.builder("파일이름1").atchLocNo(1).atchLocCd("asdf").fileOrglNm("진짜이름")
-                .fileTypNm("img").fileSize(123L).fstRegDtm(LocalDateTime.now()).fstRegrIdnfNo("admin").build();
+                .fileTypNm("img").fileSize(123L).fstRegDtm(LocalDateTime.now()).emplId(dummyEmpl.getEmplId()).build();
         FileDto fileDto2 = FileDto.builder("파일이름2").atchLocNo(1).atchLocCd("asdf").fileOrglNm("진짜이름")
-                .fileTypNm("img").fileSize(123L).fstRegDtm(LocalDateTime.now()).fstRegrIdnfNo("admin").build();
+                .fileTypNm("img").fileSize(123L).fstRegDtm(LocalDateTime.now()).emplId(dummyEmpl.getEmplId()).build();
 
         List<FileDto> list = new ArrayList<>();
         list.add(fileDto1);
@@ -53,8 +68,8 @@ class FileDaoImplTest {
 
         List<FileDto> list = new ArrayList<>();
 
-        Exception exception = assertThrows(BadSqlGrammarException.class, () -> fileDao.insertFiles(list));
-        assertTrue(exception.getMessage().contains("''"));
+        Exception exception = assertThrows(MyBatisSystemException.class, () -> fileDao.insertFiles(list));
+        assertTrue(exception.getMessage().contains("Index 0 out of bounds for length 0"));
     }
 
     @Test
@@ -75,9 +90,9 @@ class FileDaoImplTest {
         fileDao.deleteAll();
 
         FileDto fileDto1 = FileDto.builder("파일이름1").atchLocNo(1).atchLocCd("asdf").fileOrglNm("진짜이름")
-                .fileTypNm("img").fileSize(123L).fstRegDtm(LocalDateTime.now()).fstRegrIdnfNo("admin").build();
+                .fileTypNm("img").fileSize(123L).fstRegDtm(LocalDateTime.now()).emplId(dummyEmpl.getEmplId()).build();
         FileDto fileDto2 = FileDto.builder("파일이름2").atchLocNo(1).atchLocCd("asdf").fileOrglNm("진짜이름")
-                .fileTypNm("img").fileSize(123L).fstRegDtm(LocalDateTime.now()).fstRegrIdnfNo("admin").build();
+                .fileTypNm("img").fileSize(123L).fstRegDtm(LocalDateTime.now()).emplId(dummyEmpl.getEmplId()).build();
 
         List<FileDto> list = new ArrayList<>();
         list.add(fileDto1);
@@ -94,9 +109,9 @@ class FileDaoImplTest {
         fileDao.deleteAll();
 
         FileDto fileDto1 = FileDto.builder("파일이름1").atchLocNo(1).atchLocCd("asdf").fileOrglNm("진짜이름")
-                .fileTypNm("img").fileSize(123L).fstRegDtm(LocalDateTime.now()).fstRegrIdnfNo("admin").build();
+                .fileTypNm("img").fileSize(123L).fstRegDtm(LocalDateTime.now()).emplId(dummyEmpl.getEmplId()).build();
         FileDto fileDto2 = FileDto.builder("파일이름2").atchLocNo(1).atchLocCd("asdf").fileOrglNm("진짜이름")
-                .fileTypNm("img").fileSize(123L).fstRegDtm(LocalDateTime.now()).fstRegrIdnfNo("admin").build();
+                .fileTypNm("img").fileSize(123L).fstRegDtm(LocalDateTime.now()).emplId(dummyEmpl.getEmplId()).build();
 
         List<FileDto> list = new ArrayList<>();
         list.add(fileDto1);
@@ -113,9 +128,9 @@ class FileDaoImplTest {
         fileDao.deleteAll();
 
         FileDto fileDto1 = FileDto.builder("파일이름1").atchLocNo(1).atchLocCd(CmnCode.ATCH_LOC_CD_SPACE.getCode()).fileOrglNm("진짜이름")
-                .fileTypNm("img").fileSize(123L).fstRegDtm(LocalDateTime.now()).fstRegrIdnfNo("admin").build();
+                .fileTypNm("img").fileSize(123L).fstRegDtm(LocalDateTime.now()).emplId(dummyEmpl.getEmplId()).build();
         FileDto fileDto2 = FileDto.builder("파일이름2").atchLocNo(1).atchLocCd(CmnCode.ATCH_LOC_CD_SPACE.getCode()).fileOrglNm("진짜이름")
-                .fileTypNm("img").fileSize(123L).fstRegDtm(LocalDateTime.now()).fstRegrIdnfNo("admin").build();
+                .fileTypNm("img").fileSize(123L).fstRegDtm(LocalDateTime.now()).emplId(dummyEmpl.getEmplId()).build();
 
         List<FileDto> list = new ArrayList<>();
         list.add(fileDto1);
@@ -138,11 +153,11 @@ class FileDaoImplTest {
         fileDao.deleteAll();
 
         FileDto fileDto1 = FileDto.builder("파일이름1").atchLocNo(1).atchLocCd(CmnCode.ATCH_LOC_CD_SPACE.getCode())
-                .fileOrglNm("진짜이름1").fileTypNm("img").fileSize(123L).fstRegDtm(LocalDateTime.now()).fstRegrIdnfNo("admin").build();
+                .fileOrglNm("진짜이름1").fileTypNm("img").fileSize(123L).fstRegDtm(LocalDateTime.now()).emplId(dummyEmpl.getEmplId()).build();
         FileDto fileDto2 = FileDto.builder("파일이름2").atchLocNo(1).atchLocCd(CmnCode.ATCH_LOC_CD_SPACE.getCode())
-                .fileOrglNm("진짜이름2").fileTypNm("img").fileSize(123L).fstRegDtm(LocalDateTime.now()).fstRegrIdnfNo("admin").build();
+                .fileOrglNm("진짜이름2").fileTypNm("img").fileSize(123L).fstRegDtm(LocalDateTime.now()).emplId(dummyEmpl.getEmplId()).build();
         FileDto fileDto3 = FileDto.builder("파일이름3").atchLocNo(1).atchLocCd(CmnCode.ATCH_LOC_CD_SPACE.getCode())
-                .fileOrglNm("진짜이름3").fileTypNm("img").fileSize(123L).fstRegDtm(LocalDateTime.now()).fstRegrIdnfNo("admin").build();
+                .fileOrglNm("진짜이름3").fileTypNm("img").fileSize(123L).fstRegDtm(LocalDateTime.now()).emplId(dummyEmpl.getEmplId()).build();
 
         List<FileDto> list = new ArrayList<>();
         list.add(fileDto1);
@@ -178,9 +193,9 @@ class FileDaoImplTest {
         fileDao.deleteAll();
 
         FileDto fileDto1 = FileDto.builder("파일이름1").atchLocNo(1).atchLocCd(CmnCode.ATCH_LOC_CD_SPACE.getCode()).fileOrglNm("진짜이름")
-                .fileTypNm("img").fileSize(123L).fstRegDtm(LocalDateTime.now()).fstRegrIdnfNo("admin").build();
+                .fileTypNm("img").fileSize(123L).fstRegDtm(LocalDateTime.now()).emplId(dummyEmpl.getEmplId()).build();
         FileDto fileDto2 = FileDto.builder("파일이름2").atchLocNo(1).atchLocCd(CmnCode.ATCH_LOC_CD_SPACE.getCode()).fileOrglNm("진짜이름")
-                .fileTypNm("img").fileSize(123L).fstRegDtm(LocalDateTime.now()).fstRegrIdnfNo("admin").build();
+                .fileTypNm("img").fileSize(123L).fstRegDtm(LocalDateTime.now()).emplId(dummyEmpl.getEmplId()).build();
 
         List<FileDto> list = new ArrayList<>();
         list.add(fileDto1);
@@ -203,9 +218,9 @@ class FileDaoImplTest {
         fileDao.deleteAll();
 
         FileDto fileDto1 = FileDto.builder("파일이름1").atchLocNo(1).atchLocCd(CmnCode.ATCH_LOC_CD_SPACE.getCode()).fileOrglNm("진짜이름")
-                .fileTypNm("img").fileSize(123L).fstRegDtm(LocalDateTime.now()).fstRegrIdnfNo("admin").build();
+                .fileTypNm("img").fileSize(123L).fstRegDtm(LocalDateTime.now()).emplId(dummyEmpl.getEmplId()).build();
         FileDto fileDto2 = FileDto.builder("파일이름2").atchLocNo(1).atchLocCd(CmnCode.ATCH_LOC_CD_SPACE.getCode()).fileOrglNm("진짜이름")
-                .fileTypNm("img").fileSize(123L).fstRegDtm(LocalDateTime.now()).fstRegrIdnfNo("admin").build();
+                .fileTypNm("img").fileSize(123L).fstRegDtm(LocalDateTime.now()).emplId(dummyEmpl.getEmplId()).build();
 
         List<FileDto> list = new ArrayList<>();
         list.add(fileDto1);

@@ -41,9 +41,18 @@ class SpaceDaoImplTest {
     @Autowired
     private SpaceBookDao spaceBookDao;
 
+    private EmplDto dummyEmpl;
+
     @BeforeEach
     void setUp(){
         spaceDao.deleteAll();
+
+        dummyEmpl = EmplDto.EmplDtoBuilder().emplNo(UUID.randomUUID().toString()).emplId("dummyEmpl").pwd("password").email("dummyEmpl@asdf.com")
+                .pwdErrTms(0).rnm("dummyEmpl").engNm("dummyEmpl").entDt("2024-01-01").emplAuthNm("ROLE_SUPER_ADMIN").brdt("2000-01-01")
+                .wncomTelno("1111111").empno(747586).msgrId(null).prfPhotoPath(null)
+                .subsCertiYn('Y').termsAgreYn('Y').subsAprvYn('Y').secsnYn('N').build();
+
+        assertEquals(1, emplDao.insertEmpl(dummyEmpl));
     }
 
     SpaceDto createSpaceDto() {
@@ -64,7 +73,7 @@ class SpaceDaoImplTest {
                 .spaceWkendUsgPosblYn(isWkendPosbl?'Y':'N')
                 .spaceHideYn(isHide?'Y':'N')
                 .fstRegDtm(LocalDateTime.now())
-                .fstRegrIdnfNo("admin").build();
+                .emplId(dummyEmpl.getEmplId()).build();
     }
 
     @Nested
@@ -129,7 +138,7 @@ class SpaceDaoImplTest {
                 .spaceWkendUsgPosblYn('N')
                 .spaceHideYn('N')
                 .fstRegDtm(LocalDateTime.now())
-                .fstRegrIdnfNo("admin").build();
+                .emplId(dummyEmpl.getEmplId()).build();
 
         assertEquals(1, spaceDao.insertSpace(spaceDto1));
 
@@ -144,9 +153,9 @@ class SpaceDaoImplTest {
                 .spaceUsgPosblEndTm(LocalTime.of(12,0))
                 .spaceWkendUsgPosblYn('N')
                 .spaceHideYn('N')
-                .lastUpdrIdnfNo("admin").build();
+                .emplId(dummyEmpl.getEmplId()).build();
 
-        assertEquals(1,spaceDao.update(spaceDto2));
+        assertEquals(1, spaceDao.update(spaceDto2));
         SpaceDto selectedSpace = spaceDao.selectOne(spaceDto2.getSpaceNo());
         assertEquals(spaceDto2.getSpaceMaxPsonCnt(), selectedSpace.getSpaceMaxPsonCnt());
     }
@@ -198,14 +207,14 @@ class SpaceDaoImplTest {
                     .spaceWkendUsgPosblYn('Y')
                     .spaceHideYn('N')
                     .fstRegDtm(LocalDateTime.now())
-                    .fstRegrIdnfNo(dummyRscAdminEmpl.getEmplNo()).build();
+                    .emplId(dummyRscAdminEmpl.getEmplId()).build();
 
             assertEquals(1, spaceDao.insertSpace(dummySpace));
             //물품 저장
 
-            RescDto rescDto1 = RescDto.builder("wifi").spaceNo(dummySpace.getSpaceNo()).fstRegrIdnfNo(dummyRscAdminEmpl.getEmplNo()).lastUpdrIdnfNo(dummyRscAdminEmpl.getEmplNo()).build();
-            RescDto rescDto2 = RescDto.builder("의자").spaceNo(dummySpace.getSpaceNo()).fstRegrIdnfNo(dummyRscAdminEmpl.getEmplNo()).lastUpdrIdnfNo(dummyRscAdminEmpl.getEmplNo()).build();
-            RescDto rescDto3 = RescDto.builder("pc").spaceNo(dummySpace.getSpaceNo()).fstRegrIdnfNo(dummyRscAdminEmpl.getEmplNo()).lastUpdrIdnfNo(dummyRscAdminEmpl.getEmplNo()).build();
+            RescDto rescDto1 = RescDto.builder("wifi").spaceNo(dummySpace.getSpaceNo()).emplId(dummyRscAdminEmpl.getEmplId()).build();
+            RescDto rescDto2 = RescDto.builder("의자").spaceNo(dummySpace.getSpaceNo()).emplId(dummyRscAdminEmpl.getEmplId()).build();
+            RescDto rescDto3 = RescDto.builder("pc").spaceNo(dummySpace.getSpaceNo()).emplId(dummyRscAdminEmpl.getEmplId()).build();
 
             List<RescDto> list = new ArrayList<>();
             list.add(rescDto1);
