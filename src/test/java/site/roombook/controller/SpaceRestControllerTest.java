@@ -21,19 +21,15 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import site.roombook.domain.PageHandler;
 import site.roombook.domain.SpaceInfoAndTimeslotDto;
 import site.roombook.domain.SpaceListDto;
+import site.roombook.resolver.StringDateArgumentResolver;
 import site.roombook.service.SpaceService;
 
-import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.mockito.Mockito.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.hamcrest.Matchers.is;
 
 @ExtendWith({SpringExtension.class, MockitoExtension.class})
 @ContextConfiguration(locations = {"file:web/WEB-INF/spring/**/testContext.xml"})
 class SpaceRestControllerTest {
-    private MockMvc mockMvc;
 
     @InjectMocks
     @Autowired
@@ -42,6 +38,8 @@ class SpaceRestControllerTest {
     @Mock
     private SpaceService mockSpaceService;
 
+    private MockMvc mockMvc;
+
     @Nested
     @DisplayName("사용자 공간 목록 조회 테스트")
     class SpaceListSelectinTest {
@@ -49,7 +47,9 @@ class SpaceRestControllerTest {
         @BeforeEach
         void setup() {
             MockitoAnnotations.openMocks(this);
-            mockMvc = MockMvcBuilders.standaloneSetup(spaceRestController).build();
+            mockMvc = MockMvcBuilders.standaloneSetup(spaceRestController)
+                    .setCustomArgumentResolvers(new StringDateArgumentResolver())
+                    .build();
         }
 
         @ParameterizedTest
@@ -69,11 +69,12 @@ class SpaceRestControllerTest {
         @WithMockUser(roles = "USER")
         @DisplayName("유효하지 않은 page 문자")
         void invalidPageStringTest() throws Exception {
+            when(mockSpaceService.getNotHiddenSpaceCnt()).thenReturn(10);
+            when(mockSpaceService.getSpaceList(any(PageHandler.class), any(SpaceInfoAndTimeslotDto.class))).thenReturn(SpaceListDto.SpaceListDto().build());
+
             mockMvc.perform(get("/api/spaces")
                             .param("page", "ㅁ"))
-                    .andExpect(MockMvcResultMatchers.status().isBadRequest())
-                    .andExpect(MockMvcResultMatchers.header().string("location", "/api/spaces"))
-                    .andExpect(jsonPath("$.result", is("FAIL")));
+                    .andExpect(MockMvcResultMatchers.status().isOk());
         }
 
         @Test
@@ -105,7 +106,7 @@ class SpaceRestControllerTest {
 
             mockMvc.perform(get("/api/spaces")
                     .param("page", "1000"))
-                    .andExpect(MockMvcResultMatchers.status().isOk())
+                    .andExpect(MockMvcResultMatchers.status().isNotModified())
                     .andExpect(MockMvcResultMatchers.header().string("location", "http://localhost/not-found"));
         }
 

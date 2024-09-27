@@ -50,14 +50,11 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 @Transactional
 @ExtendWith({SpringExtension.class, MockitoExtension.class})
-@WebAppConfiguration
+@WebAppConfiguration("web")
 @ContextConfiguration(locations = {"file:web/WEB-INF/spring/**/testContext.xml", "file:web/WEB-INF/spring/**/dispatcher-servlet.xml"})
 class SecurityTest {
 
     private MockMvc mockMvc;
-
-    @Autowired
-    private WebApplicationContext ctx;
 
     @InjectMocks
     @Autowired
@@ -80,10 +77,10 @@ class SecurityTest {
     private static final String PASSWORD = "testpasswordlong";
 
     @BeforeEach
-    void setup() {
+    void setup(WebApplicationContext wac) {
         MockitoAnnotations.openMocks(this);
 
-        mockMvc = MockMvcBuilders.webAppContextSetup(ctx)
+        mockMvc = MockMvcBuilders.webAppContextSetup(wac)
                 .apply(springSecurity())
                 .addFilters(new CharacterEncodingFilter("UTF-8", true))
                 .alwaysDo(print())

@@ -20,7 +20,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.mockito.Mockito.*;
 
 @ExtendWith({SpringExtension.class})
-@ContextConfiguration(locations = {"file:web/WEB-INF/spring/**/applicationContext.xml"})
+@ContextConfiguration(locations = {"file:web/WEB-INF/spring/**/testContext.xml"})
 class SpaceControllerTest {
 
     private MockMvc mockMvc;

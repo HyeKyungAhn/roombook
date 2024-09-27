@@ -18,8 +18,10 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
+import site.roombook.domain.EmplDto;
 import site.roombook.domain.ServiceResult;
 import site.roombook.domain.SpaceBookDto;
+import site.roombook.resolver.UserArgumentResolver;
 import site.roombook.service.SpaceBookService;
 
 import java.time.LocalDate;
@@ -36,19 +38,21 @@ import static org.hamcrest.Matchers.is;
 @ExtendWith({SpringExtension.class, MockitoExtension.class})
 @ContextConfiguration(locations = {"file:web/WEB-INF/spring/**/testContext.xml"})
 class SpaceBookRestControllerTest {
-    private MockMvc mockMvc;
-
     @InjectMocks
     @Autowired
     private SpaceBookRestController spaceBookRestController;
 
     @Mock
     private SpaceBookService mockSpaceBookService;
-    
+
+    private MockMvc mockMvc;
+
     @BeforeEach
     void setup(){
         MockitoAnnotations.openMocks(this);
-        mockMvc = MockMvcBuilders.standaloneSetup(spaceBookRestController).build();
+        mockMvc = MockMvcBuilders.standaloneSetup(spaceBookRestController)
+                .setCustomArgumentResolvers(new UserArgumentResolver())
+                .build();
     }
 
     @Test
@@ -73,7 +77,8 @@ class SpaceBookRestControllerTest {
                 .spaceBookEndTm(LocalTime.of(12, 0))
                 .build();
 
-        when(mockSpaceBookService.bookTimeslot(spaceBookDto, "user", "ROLE_RSC_ADMIN")).thenReturn(new ServiceResult(true));
+        EmplDto emplDto = EmplDto.EmplDtoBuilder().emplId("user").emplAuthNm("ROLE_RSC_ADMIN").build();
+        when(mockSpaceBookService.bookTimeslot(spaceBookDto, emplDto)).thenReturn(new ServiceResult(true));
 
         mockMvc.perform(post("/api/book/timeslots")
                 .content(jsonInput)
