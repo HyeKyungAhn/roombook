@@ -10,6 +10,7 @@
     <annotation-driven>
         <argument-resolvers>
             <beans:bean class="site.roombook.resolver.StringDateArgumentResolver"/>
+            <beans:bean class="site.roombook.resolver.UserArgumentResolver"/>
         </argument-resolvers>
     </annotation-driven>
     <context:component-scan base-package="site.roombook.controller, site.roombook.exception"/>

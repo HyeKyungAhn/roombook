@@ -48,8 +48,8 @@ public class SpaceBookController {
                 return mv;
             }
 
-            String bookingUrl = linkTo(methodOn(SpaceBookRestController.class).bookTimeslot(null)).toUri().toString();
-            String bookedTimeslotsUrl = linkTo(methodOn(SpaceBookRestController.class).getTimeslotOfTheDay(spaceNo, null)).toUri().toString();
+            String bookingUrl = linkTo(methodOn(SpaceBookRestController.class).bookTimeslot(null, null)).toUri().toString();
+            String bookedTimeslotsUrl = linkTo(methodOn(SpaceBookRestController.class).getTimeslotOfTheDay(spaceNo, null, null)).toUri().toString();
             String spaceDetailPageUrl = linkTo(methodOn(SpaceController.class).getSpaceDetailPage(spaceNo)).toUri().toString();
             mv.addObject("bookedTimeslotsUrl", bookedTimeslotsUrl);
             mv.addObject("bookingUrl", bookingUrl);
@@ -83,8 +83,8 @@ public class SpaceBookController {
             return mv;
         }
 
-        String modifyingTimeslotUrl = linkTo(methodOn(SpaceBookRestController.class).modifyTimeslot(spaceBookId, null)).toUri().toString();
-        String bookedTimeslotsUrl = linkTo(methodOn(SpaceBookRestController.class).getTimeslotOfTheDay(spaceAndBookData.getSpaceNo(), null)).toUri().toString();
+        String modifyingTimeslotUrl = linkTo(methodOn(SpaceBookRestController.class).modifyTimeslot(spaceBookId, null, null)).toUri().toString();
+        String bookedTimeslotsUrl = linkTo(methodOn(SpaceBookRestController.class).getTimeslotOfTheDay(spaceAndBookData.getSpaceNo(), null, null)).toUri().toString();
         String spaceDetailPageUrl = linkTo(methodOn(SpaceController.class).getSpaceDetailPage(spaceAndBookData.getSpaceNo())).toUri().toString();
         mv.addObject("modifyingUrl", modifyingTimeslotUrl);
         mv.addObject("bookedTimeslotsUrl", bookedTimeslotsUrl);
@@ -97,7 +97,7 @@ public class SpaceBookController {
     @GetMapping("/mybook")
     public ModelAndView getMyBookPage() {
         ModelAndView mv = new ModelAndView();
-        String timeslotsRequestUri = linkTo(methodOn(SpaceBookRestController.class).getMyTimeslots(null, null)).toUri().toString();
+        String timeslotsRequestUri = linkTo(methodOn(SpaceBookRestController.class).getMyTimeslots(null, null, null)).toUri().toString();
         String selfUri = linkTo(methodOn(SpaceBookController.class).getMyBookPage()).toUri().toString();
         mv.addObject("self", selfUri);
         mv.addObject("timeslotsRequestUri", timeslotsRequestUri);

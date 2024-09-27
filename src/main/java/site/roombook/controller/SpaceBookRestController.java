@@ -10,11 +10,9 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 import site.roombook.annotation.StringDate;
+import site.roombook.annotation.User;
 import site.roombook.domain.*;
 import site.roombook.service.SpaceBookService;
 
@@ -53,19 +51,13 @@ public class SpaceBookRestController {
 
 
     @GetMapping(value = "/spaces/{spaceNo}/timeslots", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<SpaceBookDto>> getTimeslotOfTheDay(@PathVariable("spaceNo") Integer spaceNo, @StringDate LocalDate date) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-
-        List<SpaceBookDto> list = spaceBookService.getBookedTimeslotsOfTheDay(spaceNo, date, userDetails.getUsername());
+    public ResponseEntity<List<SpaceBookDto>> getTimeslotOfTheDay(@PathVariable("spaceNo") Integer spaceNo, @StringDate LocalDate date, @User EmplDto empl) {
+        List<SpaceBookDto> list = spaceBookService.getBookedTimeslotsOfTheDay(spaceNo, date, empl.getEmplId());
         return ResponseEntity.ok(list);
     }
 
     @PostMapping(value = "/book/timeslots", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<ServerState> bookTimeslot(@RequestBody SpaceBookDto body){
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-
+    public ResponseEntity<ServerState> bookTimeslot(@RequestBody SpaceBookDto body, @User EmplDto empl){
         if (body.getSpaceBookSpaceNo() == null) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ServerState.Builder().result("FAIL").errorMessage("예약정보가 잘못되었습니다.\n새로고침 후 다시 예약해주세요.").build());
         } else if (body.getSpaceBookBgnTm() == null || body.getSpaceBookEndTm() == null) {
@@ -76,8 +68,7 @@ public class SpaceBookRestController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ServerState.Builder().result("FAIL").errorMessage("예약 날짜를 선택해주세요.").build());
         }
 
-        String emplRole = userDetails.getAuthorities().toArray()[0].toString();
-        ServiceResult result = spaceBookService.bookTimeslot(body, userDetails.getUsername(), emplRole);
+        ServiceResult result = spaceBookService.bookTimeslot(body, empl);
 
         if(!result.isSuccessful()) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ServerState.Builder().result("FAIL").errorMessage("예약에 실패했습니다. 예약정보를 다시 확인해주세요.").build());
@@ -89,12 +80,9 @@ public class SpaceBookRestController {
     }
 
     @PatchMapping(value = "/book/timeslots/{bookId}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<ServerState> modifyTimeslot(@PathVariable("bookId") String bookId, @RequestBody SpaceBookDto inputs) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-        String emplRole = userDetails.getAuthorities().toArray()[0].toString();
+    public ResponseEntity<ServerState> modifyTimeslot(@PathVariable("bookId") String bookId, @RequestBody SpaceBookDto inputs, @User EmplDto empl) {
 
-        ServiceResult result = spaceBookService.modifyBooking(inputs, bookId, userDetails.getUsername(), emplRole);
+        ServiceResult result = spaceBookService.modifyBooking(inputs, bookId, empl);
 
         if(result.isSuccessful()){
             return ResponseEntity
@@ -109,12 +97,8 @@ public class SpaceBookRestController {
     }
 
     @PatchMapping(value = "/book/timeslots/{bookId}/cancel", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<ServerState> cancelBooking(@PathVariable("bookId") String bookId) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-        String emplRole = userDetails.getAuthorities().toArray()[0].toString();
-
-        ServiceResult result = spaceBookService.cancelBooking(userDetails.getUsername(), emplRole, bookId);
+    public ResponseEntity<ServerState> cancelBooking(@PathVariable("bookId") String bookId, @User EmplDto empl) {
+        ServiceResult result = spaceBookService.cancelBooking(empl, bookId);
 
         if (result.isSuccessful()) {
             return ResponseEntity.status(HttpStatus.OK).body(ServerState.Builder().result("SUCCESS").errorMessage("예약이 취소되었습니다.").build());
@@ -124,11 +108,8 @@ public class SpaceBookRestController {
     }
 
     @GetMapping(value = "/mybook/timeslots", produces = MediaType.APPLICATION_JSON_VALUE)
-    public EntityModel<MyBookDto> getMyTimeslots(@RequestParam(name = "page", required = false, defaultValue = "1") Integer page, HttpServletResponse response) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-
-        PageHandler ph = new PageHandler(spaceBookService.getPersonalTimeslotsCount(userDetails.getUsername()), page, PERSONAL_TIMESLOTS_LIST_LIMIT);
+    public EntityModel<MyBookDto> getMyTimeslots(@RequestParam(name = "page", required = false, defaultValue = "1") Integer page, @User EmplDto empl, HttpServletResponse response) {
+        PageHandler ph = new PageHandler(spaceBookService.getPersonalTimeslotsCount(empl.getEmplId()), page, PERSONAL_TIMESLOTS_LIST_LIMIT);
 
         if (ph.getTotalCnt() == 0) {
             response.setStatus(HttpStatus.NO_CONTENT.value());
@@ -137,7 +118,7 @@ public class SpaceBookRestController {
             return EntityModel.of(MyBookDto.Builder().build());
         }
 
-        List<SpaceBookDto> timeslots = spaceBookService.getPersonalTimeslots(userDetails.getUsername(), ph.getOffset(), PERSONAL_TIMESLOTS_LIST_LIMIT);
+        List<SpaceBookDto> timeslots = spaceBookService.getPersonalTimeslots(empl.getEmplId(), ph.getOffset(), PERSONAL_TIMESLOTS_LIST_LIMIT);
 
         MyBookDto.MyBookDtoBuilder myBookDto = MyBookDto.Builder();
 
@@ -147,6 +128,6 @@ public class SpaceBookRestController {
 
         return EntityModel.of(myBookDto.build()
         , linkTo(methodOn(SpaceBookController.class).getChangingBookingPage(null)).withRel("modification")
-        , linkTo(methodOn(SpaceBookRestController.class).cancelBooking(null)).withRel("cancel"));
+        , linkTo(methodOn(SpaceBookRestController.class).cancelBooking(null, null)).withRel("cancel"));
     }
 }

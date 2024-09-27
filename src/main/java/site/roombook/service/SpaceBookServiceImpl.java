@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import site.roombook.CmnCode;
 import site.roombook.dao.SpaceBookDao;
+import site.roombook.domain.EmplDto;
 import site.roombook.domain.ServiceResult;
 import site.roombook.domain.SpaceBookAndSpaceDto;
 import site.roombook.domain.SpaceBookDto;
@@ -34,13 +35,13 @@ public class SpaceBookServiceImpl implements SpaceBookService{
     }
 
     @Override
-    public ServiceResult bookTimeslot(SpaceBookDto spaceBookDto, String emplId, String emplRole) {
+    public ServiceResult bookTimeslot(SpaceBookDto spaceBookDto, EmplDto emplDto) {
         ServiceResult result = new ServiceResult();
         SpaceBookDto spaceBookDtoWithEmplDetails = SpaceBookDto.spaceBookDtoBuilder()
                 .spaceBookId(UUID.randomUUID().toString())
                 .spaceBookSpaceNo(spaceBookDto.getSpaceBookSpaceNo())
-                .emplId(emplId)
-                .emplRole(emplRole)
+                .emplId(emplDto.getEmplId())
+                .emplRole(emplDto.getEmplAuthNm())
                 .spaceBookCn(spaceBookDto.getSpaceBookCn())
                 .spaceBookDate(spaceBookDto.getSpaceBookDate())
                 .spaceBookBgnTm(spaceBookDto.getSpaceBookBgnTm())
@@ -87,13 +88,13 @@ public class SpaceBookServiceImpl implements SpaceBookService{
     }
 
     @Override
-    public ServiceResult modifyBooking(SpaceBookDto inputs, String bookId, String emplId, String emplRole) {
+    public ServiceResult modifyBooking(SpaceBookDto inputs, String bookId, EmplDto emplDto) {
         ServiceResult result = new ServiceResult();
 
         SpaceBookDto spaceBookDto = SpaceBookDto.spaceBookDtoBuilder()
                 .spaceBookId(bookId)
-                .emplId(emplId)
-                .emplRole(emplRole)
+                .emplId(emplDto.getEmplId())
+                .emplRole(emplDto.getEmplAuthNm())
                 .spaceBookSpaceNo(inputs.getSpaceBookSpaceNo())
                 .spaceBookDate(inputs.getSpaceBookDate())
                 .spaceBookBgnTm(inputs.getSpaceBookBgnTm())
@@ -109,13 +110,13 @@ public class SpaceBookServiceImpl implements SpaceBookService{
     }
 
     @Override
-    public ServiceResult cancelBooking(String emplId, String emplRole, String bookId) {
+    public ServiceResult cancelBooking(EmplDto emplDto, String bookId) {
         ServiceResult result = new ServiceResult();
         SpaceBookDto spaceBookDto = SpaceBookDto.spaceBookDtoBuilder()
-                .emplId(emplId)
+                .emplId(emplDto.getEmplId())
                 .spaceBookStusCd(CmnCode.SPACE_BOOK_CANCEL.getCode())
                 .lastUpdDtm(LocalDateTime.now())
-                .emplRole(emplRole)
+                .emplRole(emplDto.getEmplAuthNm())
                 .spaceBookId(bookId)
                 .build();
 

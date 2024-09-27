@@ -1,5 +1,6 @@
 package site.roombook.service;
 
+import site.roombook.domain.EmplDto;
 import site.roombook.domain.ServiceResult;
 import site.roombook.domain.SpaceBookAndSpaceDto;
 import site.roombook.domain.SpaceBookDto;
@@ -11,7 +12,7 @@ public interface SpaceBookService {
 
     List<SpaceBookDto> getBookedTimeslotsOfTheDay(int spaceNo, LocalDate date, String emplId);
 
-    ServiceResult bookTimeslot(SpaceBookDto spaceBookDto, String emplId, String emplRole);
+    ServiceResult bookTimeslot(SpaceBookDto spaceBookDto, EmplDto emplDto);
 
     SpaceBookAndSpaceDto getTimeslot(String spaceBookId, String emplId);
 
@@ -19,7 +20,7 @@ public interface SpaceBookService {
 
     int getPersonalTimeslotsCount(String emplId);
 
-    ServiceResult modifyBooking(SpaceBookDto spaceBookDto, String bookId, String emplId, String emplRole);
+    ServiceResult modifyBooking(SpaceBookDto spaceBookDto, String bookId, EmplDto emplDto);
 
-    ServiceResult cancelBooking(String emplId, String emplRole, String bookId);
+    ServiceResult cancelBooking(EmplDto emplDto, String bookId);
 }

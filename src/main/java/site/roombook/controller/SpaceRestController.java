@@ -11,9 +11,6 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 import org.springframework.web.multipart.MultipartException;
@@ -21,6 +18,7 @@ import org.springframework.web.multipart.MultipartFile;
 import site.roombook.CmnCode;
 import site.roombook.FileStorageProperties;
 import site.roombook.annotation.StringDate;
+import site.roombook.annotation.User;
 import site.roombook.domain.*;
 import site.roombook.service.FileService;
 import site.roombook.service.RescService;
@@ -84,22 +82,21 @@ public class SpaceRestController {
     }
 
     @PostMapping("/admin/spaces")
-    public ResponseEntity<String> saveNewSpace(@RequestPart(required = false, value = "files") MultipartFile[] newFiles,
-                                               @RequestParam(required = false, value = "spaceFacility") String resc,
-                                               @RequestParam(required = false, value = "space") String spaceData) {
+    public ResponseEntity<String> saveNewSpace(@RequestPart(required = false, value = "files") MultipartFile[] newFiles
+                                                , @RequestParam(required = false, value = "spaceFacility") String resc
+                                                , @RequestParam(required = false, value = "space") String spaceData
+                                                , @User EmplDto empl) {
         if (spaceData == null || spaceData.equals("")) {
             return createErrorResponse("공간 정보를 입력해주세요.");
         }
 
         SpaceTransactionServiceResult saveResult;
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
 
         try {
             SpaceDto space = parseJson(spaceData, SpaceDto.class);
             List<RescDto> rescs = parseJson(resc, new TypeReference<>(){});
 
-            saveResult = spaceTransactionService.saveSpace(space, newFiles, userDetails.getUsername(), rescs);
+            saveResult = spaceTransactionService.saveSpace(space, newFiles, empl.getEmplId(), rescs);
         } catch (DuplicateKeyException e){
             return createErrorResponse("같은 이름의 공간이 있습니다.\n공간명을 변경해주세요.");
         } catch (JsonProcessingException e){
@@ -129,15 +126,13 @@ public class SpaceRestController {
             , @RequestPart(required = false, value = "newFiles") MultipartFile[] newFiles
             , @RequestParam(required = false, value = "deletedFileNames") String deletedFileNames
             , @RequestParam(required = false, value = "spaceFacility") String resc
-            , @RequestParam(required = false, value = "space") String spaceData) {
+            , @RequestParam(required = false, value = "space") String spaceData
+            , @User EmplDto empl) {
 
         SpaceDto space;
         List<RescDto> rescs;
         ArrayList<String> fileNameArray;
         SpaceTransactionServiceResult modifyResult;
-
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
 
         try {
             space = parseJson(spaceData, SpaceDto.class);
@@ -146,7 +141,7 @@ public class SpaceRestController {
             fileNameArray = parseJson(deletedFileNames, new TypeReference<>() {
             });
 
-            modifyResult = spaceTransactionService.modifySpace(spaceNo, userDetails.getUsername(), space, newFiles, fileNameArray, rescs);
+            modifyResult = spaceTransactionService.modifySpace(spaceNo, empl.getEmplId(), space, newFiles, fileNameArray, rescs);
         } catch (JsonProcessingException e) {
             return createErrorResponse("유효하지 않은 값입니다. 다시 입력하세요.");
         } catch (DateTimeParseException e) {

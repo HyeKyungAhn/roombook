@@ -49,7 +49,7 @@ public class SpaceController {
     @GetMapping("/admin/spaces/new")
     public ModelAndView getSpaceCreationPage(ModelAndView mv){
         mv.setViewName("space/adminSpaceInsert.adminFullTiles");
-        mv.addObject("spaceSaveRequestUrl", WebMvcLinkBuilder.linkTo(methodOn(SpaceRestController.class).saveNewSpace(null, null, null)).toUri().toString());
+        mv.addObject("spaceSaveRequestUrl", WebMvcLinkBuilder.linkTo(methodOn(SpaceRestController.class).saveNewSpace(null, null, null, null)).toUri().toString());
         return mv;
     }
 
@@ -59,7 +59,7 @@ public class SpaceController {
         SpaceDto spaceDto = spaceService.getOneSpaceAndDetails(spaceNo, false);
         String stringifiedSpaceDto = stringifyObject(spaceDto);
 
-        String spaceModificationUri = linkTo(methodOn(SpaceRestController.class).modifySpace(spaceNo,null, null, null, null)).toUri().toString();
+        String spaceModificationUri = linkTo(methodOn(SpaceRestController.class).modifySpace(spaceNo,null, null, null, null, null)).toUri().toString();
         mv.addObject("modificationRequestUrl", spaceModificationUri);
         mv.addObject("jsonSpace", stringifiedSpaceDto);
         mv.setViewName("space/adminSpaceMod.adminFullTiles");
@@ -94,7 +94,7 @@ public class SpaceController {
         String editUri = linkTo(methodOn(SpaceController.class).getModifySpacePage(spaceNo)).toUri().toString();
         String spaceListUri = linkTo(methodOn(SpaceController.class).getAdminSpaceList(null, null)).toUri().toString();
         String bookingUri = linkTo(methodOn(SpaceBookController.class).getSpaceBookingPage(spaceNo, null, null, null)).toUri().toString();
-        String requestTimeslotsUri = linkTo(methodOn(SpaceBookRestController.class).getTimeslotOfTheDay(spaceNo, null)).toUri().toString();
+        String requestTimeslotsUri = linkTo(methodOn(SpaceBookRestController.class).getTimeslotOfTheDay(spaceNo, null, null)).toUri().toString();
 
         mv.addObject("imgPath", properties.getOriginalUploadPath());
         mv.addObject("bookingUri", bookingUri);
@@ -133,7 +133,7 @@ public class SpaceController {
 
         String bookingUri = linkTo(methodOn(SpaceBookController.class).getSpaceBookingPage(spaceNo, null, null, null)).toUri().toString();
         String spaceListUri = linkTo(methodOn(SpaceController.class).getSpaceList(null, null)).toUri().toString();
-        String requestTimeslotsUri = linkTo(methodOn(SpaceBookRestController.class).getTimeslotOfTheDay(spaceNo, null)).toUri().toString();
+        String requestTimeslotsUri = linkTo(methodOn(SpaceBookRestController.class).getTimeslotOfTheDay(spaceNo, null, null)).toUri().toString();
 
         mv.addObject("imgPath", properties.getOriginalUploadPath());
         mv.addObject("bookingUri", bookingUri);

@@ -6,10 +6,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.time.LocalDateTime;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 @NoArgsConstructor
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
@@ -75,5 +72,18 @@ public class EmplDto implements UserDetails {
     @Override
     public boolean isEnabled() {
         return true;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        EmplDto emplDto = (EmplDto) o;
+        return pwdErrTms == emplDto.pwdErrTms && empno == emplDto.empno && subsCertiYn == emplDto.subsCertiYn && termsAgreYn == emplDto.termsAgreYn && subsAprvYn == emplDto.subsAprvYn && secsnYn == emplDto.secsnYn && Objects.equals(emplNo, emplDto.emplNo) && Objects.equals(emplId, emplDto.emplId) && Objects.equals(pwd, emplDto.pwd) && Objects.equals(email, emplDto.email) && Objects.equals(rnm, emplDto.rnm) && Objects.equals(engNm, emplDto.engNm) && Objects.equals(subsDtm, emplDto.subsDtm) && Objects.equals(emplAuthNm, emplDto.emplAuthNm) && Objects.equals(entDt, emplDto.entDt) && Objects.equals(brdt, emplDto.brdt) && Objects.equals(wncomTelno, emplDto.wncomTelno) && Objects.equals(msgrId, emplDto.msgrId) && Objects.equals(prfPhotoPath, emplDto.prfPhotoPath) && Objects.equals(acctSecsnDtm, emplDto.acctSecsnDtm) && Objects.equals(fstRegDtm, emplDto.fstRegDtm) && Objects.equals(fstRegrIdnfNo, emplDto.fstRegrIdnfNo) && Objects.equals(lastUpdDtm, emplDto.lastUpdDtm) && Objects.equals(lastUpdrIdnfNo, emplDto.lastUpdrIdnfNo);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(emplNo, emplId, pwd, email, pwdErrTms, rnm, engNm, subsDtm, emplAuthNm, entDt, brdt, wncomTelno, empno, msgrId, prfPhotoPath, subsCertiYn, termsAgreYn, subsAprvYn, secsnYn, acctSecsnDtm, fstRegDtm, fstRegrIdnfNo, lastUpdDtm, lastUpdrIdnfNo);
     }
 }
