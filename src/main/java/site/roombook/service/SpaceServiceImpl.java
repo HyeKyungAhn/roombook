@@ -16,10 +16,10 @@ import java.util.*;
 public class SpaceServiceImpl implements SpaceService {
 
     @Autowired
-    SpaceDao spaceDao;
+    private SpaceDao spaceDao;
 
     @Autowired
-    FileStorageProperties properties;
+    private FileStorageProperties properties;
 
     @Override
     @Transactional(propagation = Propagation.REQUIRED, rollbackFor = DuplicateKeyException.class)
@@ -147,6 +147,11 @@ public class SpaceServiceImpl implements SpaceService {
                 .noImgPath("/img/noImg.png")
                 .pageHandler(ph)
                 .build();
+    }
+
+    @Override
+    public List<SpaceInfoAndTimeslotDto> getSpaceList(SpaceInfoAndTimeslotDto spaceInfoAndTimeslotDto) {
+        return spaceDao.selectLimitedSpaces(spaceInfoAndTimeslotDto);
     }
 
     @Override

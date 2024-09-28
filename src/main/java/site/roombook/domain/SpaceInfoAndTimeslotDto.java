@@ -18,7 +18,7 @@ import java.util.Objects;
 @Builder(builderMethodName = "SpaceRescFileDtoBuilder")
 public class SpaceInfoAndTimeslotDto {
     //space
-    @JsonIgnore
+    @JsonProperty("spaceNo")
     private Integer spaceNo;
     @JsonProperty("spaceNm")
     private String spaceNm;
@@ -44,19 +44,19 @@ public class SpaceInfoAndTimeslotDto {
     @JsonProperty("value")
     private String rescNm;
     //file
-    @JsonProperty("no")
+    @JsonProperty("fileNo")
     private Integer fileNo;
-    @JsonProperty("loc_no")
+    @JsonProperty("fileLocNo")
     private Integer atchLocNo;
-    @JsonProperty("loc_cd")
+    @JsonProperty("fileLocCd")
     private String atchLocCd;
-    @JsonProperty("rename")
+    @JsonProperty("fileName")
     private String fileNm;
-    @JsonProperty("name")
+    @JsonProperty("fileOrgName")
     private String fileOrglNm;
-    @JsonProperty("typ")
+    @JsonProperty("fileTyp")
     private String fileTypNm;
-    @JsonProperty("size")
+    @JsonProperty("fileSize")
     private Long fileSize;
     //spaceBook
     @JsonProperty("bookId")
@@ -70,7 +70,7 @@ public class SpaceInfoAndTimeslotDto {
     private LocalTime spaceBookEndTm;
     @JsonProperty("statusCode")
     private String spaceBookStusCd;
-
+    //pagination
     @JsonIgnore
     private Integer spaceCnt;
     @JsonIgnore
@@ -79,7 +79,7 @@ public class SpaceInfoAndTimeslotDto {
     private Integer rescCnt;
     @JsonIgnore
     private Boolean isHiddenSpaceInvisible;
-    //common
+
     @JsonIgnore
     private LocalDateTime fstRegDtm;
     @JsonIgnore

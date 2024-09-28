@@ -6,6 +6,8 @@ import site.roombook.domain.SpaceInfoAndTimeslotDto;
 
 import site.roombook.domain.SpaceListDto;
 
+import java.util.List;
+
 public interface SpaceService {
 
     boolean saveSpace(SpaceDto spaceDto, int spaceNo, String emplId);
@@ -17,6 +19,8 @@ public interface SpaceService {
     boolean updateSpace(int spaceNo, String lastUpdrIdnfNo, SpaceDto spaceDto);
 
     SpaceListDto getSpaceList(PageHandler ph, SpaceInfoAndTimeslotDto spaceInfoAndTimeslotDto);
+
+    List<SpaceInfoAndTimeslotDto> getSpaceList(SpaceInfoAndTimeslotDto spaceInfoAndTimeslotDto);
 
     SpaceDto getOneSpaceAndDetails(int spaceNo, boolean isHiddenSpaceInvisible);
 

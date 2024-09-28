@@ -107,6 +107,26 @@
                             ON sr.RESC_NO = r.RESC_NO
                  LEFT JOIN file f ON s.SPACE_NO = f.ATCH_LOC_NO AND f.ATCH_LOC_CD = #{atchLocCd}
     </select>
+    <select id="selectSpacesAndFiles" parameterType="SpaceInfoAndTimeslotDto" resultType="SpaceInfoAndTimeslotDto">
+        SELECT s.SPACE_NO, s.SPACE_NM, s.SPACE_MAX_PSON_CNT, s.SPACE_LOC_DESC, s.SPACE_ADTN_DESC, s.SPACE_MAX_RSVD_TMS
+             , s.SPACE_USG_POSBL_BGN_TM, s.SPACE_USG_POSBL_END_TM, s.SPACE_WKEND_USG_POSBL_YN
+             , f.FILE_NO, f.ATCH_LOC_NO, f.FILE_NM, f.FILE_ORGL_NM, f.FILE_TYP_NM, f.FILE_SIZE
+        FROM (
+            SELECT *
+            FROM space
+            WHERE SPACE_HIDE_YN = #{spaceHideYn}
+            ORDER BY FST_REG_DTM DESC
+            LIMIT #{spaceCnt} OFFSET #{offset}
+        ) s
+        LEFT JOIN (
+            SELECT FILE_NO, ATCH_LOC_NO, FILE_NM, FILE_ORGL_NM, FILE_TYP_NM, FILE_SIZE
+            FROM (
+                     SELECT *, ROW_NUMBER() OVER (PARTITION BY ATCH_LOC_NO ORDER BY FILE_NO) AS rowNumber
+                     FROM file f
+                     WHERE f.ATCH_LOC_CD = #{atchLocCd}) sub
+            WHERE rowNumber = 1
+        ) f ON s.SPACE_NO = f.ATCH_LOC_NO
+    </select>
     <update id="updateSpace" parameterType="SpaceDto">
         UPDATE space SET SPACE_NM = #{spaceNm}, SPACE_MAX_PSON_CNT = #{spaceMaxPsonCnt}, SPACE_LOC_DESC = #{spaceLocDesc},
                          SPACE_ADTN_DESC=#{spaceAdtnDesc}, SPACE_MAX_RSVD_TMS=#{spaceMaxRsvdTms},

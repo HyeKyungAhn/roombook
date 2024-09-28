@@ -2,11 +2,18 @@ package site.roombook.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.servlet.ModelAndView;
+import site.roombook.CmnCode;
+import site.roombook.FileStorageProperties;
+import site.roombook.domain.SpaceInfoAndTimeslotDto;
+import site.roombook.service.SpaceService;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
@@ -15,9 +22,41 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 @Controller
 public class HomeController {
 
+    @Autowired
+    private SpaceService spaceService;
+
+    @Autowired
+    private FileStorageProperties properties;
+
     @GetMapping("/")
     public ModelAndView getHomePage() {
-        return new ModelAndView("home.tiles");
+        ModelAndView mv = new ModelAndView();
+        ObjectMapper objectMapper = new ObjectMapper();
+        objectMapper.registerModule(new JavaTimeModule());
+        String spaceList;
+
+        try {
+            SpaceInfoAndTimeslotDto spaceInfoAndTimeslotDto = SpaceInfoAndTimeslotDto.SpaceRescFileDtoBuilder()
+                    .atchLocCd(CmnCode.ATCH_LOC_CD_SPACE.getCode())
+                    .spaceHideYn('N')
+                    .spaceCnt(6)
+                    .offset(0)
+                    .build();
+            List<SpaceInfoAndTimeslotDto> list = spaceService.getSpaceList(spaceInfoAndTimeslotDto);
+            spaceList = objectMapper.writeValueAsString(list);
+        } catch (JsonProcessingException e) {
+            spaceList = "";
+        }
+
+        String spaceDetailUri = linkTo(methodOn(SpaceController.class).getSpaceDetailPage(null)).toString();
+        String moreSpaceUri = linkTo(methodOn(SpaceController.class).getSpaceList(null, null)).toString().replace("{?page}", "");
+        mv.addObject("spaceDetailUri", spaceDetailUri);
+        mv.addObject("moreSpaceUri", moreSpaceUri);
+        mv.addObject("imgPath", properties.getThumbnailUploadPath());
+        mv.addObject("noImgPath", "/img/noImg.png");
+        mv.addObject("spaces", spaceList);
+        mv.setViewName("home.tiles");
+        return mv;
     }
 
     @GetMapping("/invalid-access")

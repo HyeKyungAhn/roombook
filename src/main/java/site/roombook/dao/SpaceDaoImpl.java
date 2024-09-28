@@ -58,6 +58,11 @@ public class SpaceDaoImpl implements SpaceDao{
     }
 
     @Override
+    public List<SpaceInfoAndTimeslotDto> selectLimitedSpaces(SpaceInfoAndTimeslotDto spaceInfoAndTimeslotDto) {
+        return session.selectList(namespace+"selectSpacesAndFiles", spaceInfoAndTimeslotDto);
+    }
+
+    @Override
     public List<SpaceInfoAndTimeslotDto> selectOneSpaceAndRescAndFIle(Map<String, Object> spaceData) {
         return session.selectList(namespace+"selectOneSpaceAndRescAndFIle", spaceData);
     }

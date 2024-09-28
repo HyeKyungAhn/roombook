@@ -23,6 +23,8 @@ public interface SpaceDao {
 
     List<SpaceInfoAndTimeslotDto> selectSpaceList(SpaceInfoAndTimeslotDto spaceInfoAndTimeslotDto);
 
+    List<SpaceInfoAndTimeslotDto> selectLimitedSpaces(SpaceInfoAndTimeslotDto spaceInfoAndTimeslotDto);
+
     List<SpaceInfoAndTimeslotDto> selectOneSpaceAndRescAndFIle(Map<String, Object> spaceData);
 
     int update(SpaceDto spaceDto);
