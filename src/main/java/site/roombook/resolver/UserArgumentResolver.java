@@ -21,6 +21,11 @@ public class UserArgumentResolver implements HandlerMethodArgumentResolver {
     @Override
     public Object resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer, NativeWebRequest webRequest, WebDataBinderFactory binderFactory) throws Exception {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        if (authentication.getPrincipal().equals("anonymousUser")) {
+            return EmplDto.EmplDtoBuilder().build();
+        }
+
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
 
         return EmplDto.EmplDtoBuilder().emplId(userDetails.getUsername())
