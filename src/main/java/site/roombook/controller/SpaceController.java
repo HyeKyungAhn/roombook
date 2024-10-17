@@ -48,7 +48,7 @@ public class SpaceController {
 
     @GetMapping("/admin/spaces/new")
     public ModelAndView getSpaceCreationPage(ModelAndView mv){
-        mv.setViewName("space/adminSpaceInsert.adminFullTiles");
+        mv.setViewName("space/adminSpaceInsert.adminTiles");
         mv.addObject("spaceSaveRequestUrl", WebMvcLinkBuilder.linkTo(methodOn(SpaceRestController.class).saveNewSpace(null, null, null, null)).toUri().toString());
         return mv;
     }
@@ -62,7 +62,7 @@ public class SpaceController {
         String spaceModificationUri = linkTo(methodOn(SpaceRestController.class).modifySpace(spaceNo,null, null, null, null, null)).toUri().toString();
         mv.addObject("modificationRequestUrl", spaceModificationUri);
         mv.addObject("jsonSpace", stringifiedSpaceDto);
-        mv.setViewName("space/adminSpaceMod.adminFullTiles");
+        mv.setViewName("space/adminSpaceMod.adminTiles");
 
         return mv;
     }
@@ -75,7 +75,7 @@ public class SpaceController {
         mv.addObject("date", convertToBasicIsoDate(date));
         mv.addObject("spaceListRequestUrl"
                 , linkTo(methodOn(SpaceRestController.class).getSpaceListForAdmin(null, null, null)).toUri().toString());
-        mv.setViewName("space/spaceList.adminFullTiles");
+        mv.setViewName("space/spaceList.adminTiles");
         return mv;
     }
 
@@ -85,7 +85,7 @@ public class SpaceController {
         SpaceDto spaceDto = spaceService.getOneSpaceAndDetails(spaceNo, false);
 
         if (spaceDto.getSpaceNo() == null) {
-            mv.setViewName("space/notfound.adminFullTiles");
+            mv.setViewName("space/notfound.adminTiles");
             return mv;
         }
 
@@ -102,7 +102,7 @@ public class SpaceController {
         mv.addObject("spaceListUri", spaceListUri);
         mv.addObject("jsonSpace", stringifiedSpaceDto);
         mv.addObject("requestTimeslots", requestTimeslotsUri);
-        mv.setViewName("space/adminSpaceDetail.adminFullTiles");
+        mv.setViewName("space/adminSpaceDetail.adminTiles");
 
         return mv;
     }

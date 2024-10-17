@@ -9,6 +9,6 @@ public class AdminEmplController {
 
     @GetMapping("/admin/empls")
     public ModelAndView getAdminEmplListPage() {
-        return new ModelAndView("admin/empl/list.adminFullTiles");
+        return new ModelAndView("admin/empl/list.adminTiles");
     }
 }

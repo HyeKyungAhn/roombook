@@ -48,13 +48,13 @@ public class DeptController {
     @GetMapping("/dept")
     public String getDeptDetailPage(@RequestParam String deptCd, Model m){
         if(Strings.isEmpty(deptCd)){
-            return "notFound.adminFullTIles";
+            return "notFound.adminTiles";
         }
 
         DeptAndEmplDto deptAndMngrData = deptService.getDeptDetailInfo(deptCd);
 
         if(Objects.isNull(deptAndMngrData)){
-            return "notFound.adminFullTIles";
+            return "notFound.adminTiles";
         }
 
         String deptList = linkTo(methodOn(DeptController.class).getDeptListPage()).toUri().toString();
@@ -62,7 +62,7 @@ public class DeptController {
         m.addAttribute("noImgPath", properties.getNoImgPath());
         m.addAttribute("deptAndMngrData", deptAndMngrData);
         m.addAttribute("memberInfo", deptService.getDeptMembers(deptCd));
-        return "dept/deptDetail.adminFullTiles";
+        return "dept/deptDetail.adminTiles";
     }
 
     @GetMapping("/mod")
@@ -85,17 +85,17 @@ public class DeptController {
 
         m.addAttribute("noImgPath", properties.getNoImgPath());
         m.addAttribute("deptInfo", deptDto);
-        return "dept/deptMod.adminFullTiles";
+        return "dept/deptMod.adminTiles";
     }
 
     @GetMapping("/list")
     public ModelAndView getDeptListPage(){
-        return new ModelAndView("dept/deptList.adminFullTiles");
+        return new ModelAndView("dept/deptList.adminTiles");
     }
 
     @GetMapping("/move")
     public String getDeptMovePage(){
-        return "dept/deptMove.adminFullTiles";
+        return "dept/deptMove.adminTiles";
     }
 
     @GetMapping(value = "/tree", produces = "application/json;charset=UTF-8")
@@ -186,7 +186,7 @@ public class DeptController {
         List<DeptDto> result = deptService.getDeptCdAndNm();
 
         m.addAttribute("CdAndNm", result);
-        return "dept/deptInsert.adminFullTiles";
+        return "dept/deptInsert.adminTiles";
     }
 
     @PostMapping("/save")
@@ -209,7 +209,7 @@ public class DeptController {
         }
 
         m.addAttribute("noImgPath", properties.getNoImgPath());
-        return "dept/deptInsert2.adminFullTiles";
+        return "dept/deptInsert2.adminTiles";
     }
 
     @PostMapping(value = "/save2", produces = "application/json;charset=UTF-8")
@@ -311,7 +311,7 @@ public class DeptController {
     public String getDeptMemPage(String deptCd, RedirectAttributes rattr, Model m){
         if(Strings.isEmpty(deptCd)){
             rattr.addFlashAttribute("msg", "INVALID_REQUEST");
-            return "error.adminFullTiles";
+            return "error.adminTiles";
         }
 
         List<DeptAndEmplDto> deptMembersAndName = deptService.getProfilesOfMemberAndDeptName(deptCd);
@@ -323,7 +323,7 @@ public class DeptController {
         if (!(deptMembersAndName.size() == 1 && deptMembersAndName.get(0).getEmplId() == null)) {
             m.addAttribute("deptMemAndDeptNm", deptMembersAndName);
         }
-        return "/dept/deptMemMod.adminFullTiles";
+        return "/dept/deptMemMod.adminTiles";
     }
 
     @PostMapping("/mem")
