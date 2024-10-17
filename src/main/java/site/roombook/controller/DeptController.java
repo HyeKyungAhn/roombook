@@ -15,8 +15,10 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import site.roombook.ExceptionMsg;
+import site.roombook.FileStorageProperties;
 import site.roombook.domain.DeptAndEmplDto;
 import site.roombook.domain.DeptDto;
 import site.roombook.domain.EmplDto;
@@ -26,11 +28,17 @@ import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDateTime;
 import java.util.*;
 
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
+
 @Controller
 @RequestMapping("/dept")
 public class DeptController {
     @Autowired
     DeptService deptService;
+
+    @Autowired
+    private FileStorageProperties properties;
 
     @ExceptionHandler({IllegalArgumentException.class, NoSuchElementException.class})
     public String catcher(IllegalArgumentException e){
@@ -40,15 +48,18 @@ public class DeptController {
     @GetMapping("/dept")
     public String getDeptDetailPage(@RequestParam String deptCd, Model m){
         if(Strings.isEmpty(deptCd)){
-            throw new IllegalArgumentException("/dept/dept GET method, no DeptCd");
+            return "notFound.adminFullTIles";
         }
 
         DeptAndEmplDto deptAndMngrData = deptService.getDeptDetailInfo(deptCd);
 
         if(Objects.isNull(deptAndMngrData)){
-            throw new NoSuchElementException("Not Existing dept");
+            return "notFound.adminFullTIles";
         }
 
+        String deptList = linkTo(methodOn(DeptController.class).getDeptListPage()).toUri().toString();
+        m.addAttribute("deptListUri", deptList);
+        m.addAttribute("noImgPath", properties.getNoImgPath());
         m.addAttribute("deptAndMngrData", deptAndMngrData);
         m.addAttribute("memberInfo", deptService.getDeptMembers(deptCd));
         return "dept/deptDetail.adminFullTiles";
@@ -72,13 +83,14 @@ public class DeptController {
             m.addAttribute("mngr", deptService.getDeptMngr(mngrEmplNo));
         }
 
+        m.addAttribute("noImgPath", properties.getNoImgPath());
         m.addAttribute("deptInfo", deptDto);
         return "dept/deptMod.adminFullTiles";
     }
 
     @GetMapping("/list")
-    public String getDeptListPage(){
-        return "dept/deptList.adminFullTiles";
+    public ModelAndView getDeptListPage(){
+        return new ModelAndView("dept/deptList.adminFullTiles");
     }
 
     @GetMapping("/move")
@@ -174,7 +186,7 @@ public class DeptController {
         List<DeptDto> result = deptService.getDeptCdAndNm();
 
         m.addAttribute("CdAndNm", result);
-        return "/dept/deptInsert.adminFullTiles";
+        return "dept/deptInsert.adminFullTiles";
     }
 
     @PostMapping("/save")
@@ -183,7 +195,8 @@ public class DeptController {
             , String parent
             , String mngrId
             , HttpServletRequest req
-            , RedirectAttributes rattr){
+            , RedirectAttributes rattr
+            , Model m){
 
         if(deptNm.isEmpty() || engDeptNm.isEmpty()){
             rattr.addFlashAttribute("msg", "NO_INPUT");
@@ -194,7 +207,9 @@ public class DeptController {
             addAttribute(deptNm, engDeptNm, parent, mngrId, rattr);
             return "redirect:"+req.getHeader("Referer");
         }
-        return "dept/deptInsert2";
+
+        m.addAttribute("noImgPath", properties.getNoImgPath());
+        return "dept/deptInsert2.adminFullTiles";
     }
 
     @PostMapping(value = "/save2", produces = "application/json;charset=UTF-8")
@@ -303,6 +318,7 @@ public class DeptController {
         m.addAttribute("deptCd", deptMembersAndName.get(0).getDeptCd());
         m.addAttribute("deptNm", deptMembersAndName.get(0).getDeptNm());
         m.addAttribute("engDeptNm", deptMembersAndName.get(0).getEngDeptNm());
+        m.addAttribute("noImgPath", properties.getNoImgPath());
 
         if (!(deptMembersAndName.size() == 1 && deptMembersAndName.get(0).getEmplId() == null)) {
             m.addAttribute("deptMemAndDeptNm", deptMembersAndName);

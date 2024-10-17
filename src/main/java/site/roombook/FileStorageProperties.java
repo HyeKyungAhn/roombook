@@ -14,6 +14,9 @@ public class FileStorageProperties {
     @Value("${file.original.path}")
     private String originalUploadPath;
 
+    @Value("${file.noimg.path}")
+    private String noImgPath;
+
     public String getUploadDir() {
         return uploadDir;
     }
@@ -21,4 +24,6 @@ public class FileStorageProperties {
     public String getThumbnailUploadPath() { return thumbnailUploadPath; }
 
     public String getOriginalUploadPath() { return originalUploadPath; }
+
+    public String getNoImgPath() { return noImgPath; }
 }
