@@ -144,7 +144,7 @@ public class SpaceServiceImpl implements SpaceService {
                 .files(files)
                 .resources(resources)
                 .thumbnailPath(properties.getThumbnailUploadPath())
-                .noImgPath("/img/noImg.png")
+                .noImgPath(properties.getNoImgPath())
                 .pageHandler(ph)
                 .build();
     }

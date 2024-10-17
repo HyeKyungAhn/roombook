@@ -140,7 +140,7 @@ public class SpaceController {
         mv.addObject("spaceListUri", spaceListUri);
         mv.addObject("jsonSpace", stringifiedSpaceDto);
         mv.addObject("requestTimeslots", requestTimeslotsUri);
-        mv.setViewName("space/spaceDetail");
+        mv.setViewName("space/spaceDetail.tiles");
         return mv;
     }
 
