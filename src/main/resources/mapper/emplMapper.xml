@@ -20,7 +20,7 @@
     </select>
 
     <select id="selectEmplProfiles" parameterType="String" resultType="EmplDto">
-        SELECT EMPL_ID, PRF_PHOTO_PATH, RNM, EMPNO, EMAIL
+        SELECT EMPL_ID, PRF_PHOTO_PATH, RNM, EMAIL
         FROM empl
         WHERE RNM LIKE CONCAT('%', #{keyword}, '%') OR EMAIL LIKE CONCAT('%', #{keyword}, '%');
     </select>
@@ -59,16 +59,16 @@
         WHERE true
         <choose>
             <when test="option eq 'name'">
-                AND RNM = #{optionValue}
+                AND RNM LIKE CONCAT('%',#{optionValue},'%')
             </when>
             <when test="option eq 'email'">
-                AND EMAIL = #{optionValue}
+                AND EMAIL LIKE CONCAT('%',#{optionValue},'%')
             </when>
             <when test="option eq 'id'">
-                AND EMPL_ID = #{optionValue}
+                AND EMPL_ID LIKE CONCAT('%',#{optionValue},'%')
             </when>
             <when test="option eq 'emplno'">
-                AND EMPNO = #{optionValue}
+                AND EMPNO LIKE CONCAT('%',#{optionValue},'%')
             </when>
             <when test="option eq 'authName'">
                 AND EMPL_AUTH_NM LIKE CONCAT('%',#{optionValue},'%')
