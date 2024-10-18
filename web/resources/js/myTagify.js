@@ -8,7 +8,7 @@ const myTagify = {
     hasFacilityInfo: false,
     clickDebounce: '',
     init(){
-        if(jsonRescs!==''){
+        if(jsonRescs){
             tagify.addTags(jsonData.resources);
         }
     }
