@@ -1,0 +1,32 @@
+.loginRootWrapper {
+    padding: 70px 0;
+    font-family: "Noto Sans KR Medium", sans-serif;
+}
+.loginWrapper {
+    display: flex;
+    justify-content: center;
+}
+
+.loginInputsWrapper {
+    position: relative;
+    display: inline-block;
+}
+
+.loginContent {
+
+}
+.loginHeaderTextWrapper {
+    margin: 0 0 44px 0;
+    text-align: center;
+}
+
+.loginHeaderText {
+    margin: 0;
+}
+
+.loginHelpWrapper {
+    display: flex;
+    justify-content: space-between;
+    font-size: 15px;
+    font-family: "Noto Sans KR Light", sans-serif;
+}

@@ -10,29 +10,42 @@
 <html lang="kr">
 <head>
     <title>roombook | 로그인</title>
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/login.css">
 </head>
 <body>
-<div>
-    <div>
-        <h1>로그인</h1>
+<div class="loginRootWrapper">
+    <div class="loginHeaderTextWrapper">
+        <h1 class="loginHeaderText">로그인</h1>
     </div>
-    <div>
-        <div>
-            <label for="idInput">아이디</label>
-            <input id="idInput" placeholder="아이디를 입력하세요">
-            <div>
-                <p id="idMsg"></p>
+    <div class="loginWrapper">
+        <div class="loginContent">
+            <div class="loginInputsWrapper">
+                <div class="inputBox">
+                    <label for="idInput" class="inputLabel">아이디</label>
+                    <input id="idInput" class="textInput" placeholder="아이디를 입력하세요">
+                    <div>
+                        <p id="idMsg" class="textInputMsg"></p>
+                    </div>
+                </div>
+                <div class="inputBox">
+                    <label for="passwordInput" class="inputLabel">비밀번호</label>
+                    <input type="password" id="passwordInput" class="textInput" placeholder="비밀번호를 입력하세요">
+                    <div>
+                        <p id="passwordMsg" class="textInputMsg"></p>
+                    </div>
+                </div>
             </div>
-        </div>
-        <div>
-            <label for="passwordInput">비밀번호</label>
-            <input type="password" id="passwordInput" placeholder="비밀번호를 입력하세요">
             <div>
-                <p id="passwordMsg"></p>
+                <button id="signInBtn" class="btnL bg_yellow" type="button">로그인</button>
             </div>
-        </div>
-        <div>
-            <button id="signInBtn" type="button">로그인</button>
+            <div class="loginHelpWrapper">
+                <div class="linkBtn">
+                    <a href="${pageContext.request.contextPath}/signup">회원가입</a>
+                </div>
+                <div class="linkBtn">
+                    <a href="#">계정 찾기</a>
+                </div>
+            </div>
         </div>
     </div>
 </div>
