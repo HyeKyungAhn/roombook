@@ -113,8 +113,9 @@
     </div>
 <script>
     const listBtnEl = document.getElementById('listBtn');
-
+    const deptAndMngrData = "${deptAndMngrData}";
     let msg = '${msg}';
+
     switch (msg){
         case "MOD_SUCCESS": alert("수정이 완료되었습니다."); break;
     }
@@ -129,7 +130,8 @@
     }
 
     document.getElementById("deptDelBtn").onclick = function(){
-        const hasChildren = ${deptAndMngrData.cdrDeptCnt eq 0 ? false : true};
+        const hasChildren = ${deptAndMngrData.cdrDeptCnt eq 0 || empty deptAndMngrData.cdrDeptCnt ? false : true};
+
         if(hasChildren){
             alert("하위 부서가 있는 부서는 삭제할 수 없습니다\n하위 부서를 이동한 후 다시 시도하세요.");
             return false;

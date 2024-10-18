@@ -125,8 +125,8 @@ public class DeptController {
                 .deptNm(deptNm)
                 .deptMngrEmplNo(mngrId).build();
 
-        int max = getMaxOdrInSameParent(newDept.getUppDeptCd(), deptDtoList);
-        newDept = modifyDeptSortOdr(newDept, max + 1);
+        int newDeptSortOrder = getNewOrder(newDept.getUppDeptCd(), deptDtoList);
+        newDept = modifyDeptSortOdr(newDept, newDeptSortOrder);
 
         deptDtoList.add(newDept);
 
@@ -376,15 +376,29 @@ public class DeptController {
     }
 
     private int getMaxOdrInSameParent(String parent, List<DeptDto> deptDtoList) {
-        int max = 0;
-        int odr;
+        int maxOrder = 0;
+
         for (DeptDto deptDto : deptDtoList) {
             if(deptDto.getUppDeptCd().equals(parent)){
-                odr = deptDto.getDeptSortOdr();
-                max = Math.max(odr, max);
+                int odr = deptDto.getDeptSortOdr();
+                maxOrder = Math.max(odr, maxOrder);
             }
         }
 
-        return max;
+        return maxOrder;
+    }
+
+    private int getNewOrder(String parentDeptCode, List<DeptDto> deptDtoList) {
+        int newOrder;
+        boolean hasSiblings = deptDtoList.stream().anyMatch(deptDto -> deptDto.getUppDeptCd().equals(parentDeptCode));
+
+        if(hasSiblings) {
+            int maxOrder = getMaxOdrInSameParent(parentDeptCode, deptDtoList);
+            newOrder = maxOrder + 1;
+        } else {
+            newOrder = 0;
+        }
+
+        return newOrder;
     }
 }

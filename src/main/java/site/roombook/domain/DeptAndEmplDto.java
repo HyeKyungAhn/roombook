@@ -13,7 +13,7 @@ public class DeptAndEmplDto {
     private String engNm;
     private String empno;
     private String email;
-    private int cdrDeptCnt;
+    private Integer cdrDeptCnt;
     private Date fstRegDtm;
     private String fstRegrIdnfNo;
     private Date lastUpdDtm;
@@ -25,7 +25,7 @@ public class DeptAndEmplDto {
         this.emplId = emplId;
     }
 
-    public DeptAndEmplDto(String deptCd, String deptNm, String engDeptNm, String emplId, String prfPhotoPath, String rnm, String engNm, String empno, String email, int cdrDeptCnt, Date fstRegDtm, String fstRegrIdnfNo, Date lastUpdDtm, String lastUpdrIdnfNo) {
+    public DeptAndEmplDto(String deptCd, String deptNm, String engDeptNm, String emplId, String prfPhotoPath, String rnm, String engNm, String empno, String email, Integer cdrDeptCnt, Date fstRegDtm, String fstRegrIdnfNo, Date lastUpdDtm, String lastUpdrIdnfNo) {
         this.deptCd = deptCd;
         this.deptNm = deptNm;
         this.engDeptNm = engDeptNm;
@@ -114,8 +114,12 @@ public class DeptAndEmplDto {
         this.email = email;
     }
 
-    public int getCdrDeptCnt() {
+    public Integer getCdrDeptCnt() {
         return cdrDeptCnt;
+    }
+
+    public void setCdrDeptCnt(Integer cdrDeptCnt) {
+        this.cdrDeptCnt = cdrDeptCnt;
     }
 
     public Date getFstRegDtm() {
@@ -150,10 +154,6 @@ public class DeptAndEmplDto {
         this.lastUpdrIdnfNo = lastUpdrIdnfNo;
     }
 
-    public void setCdrDeptCnt(int cdrDeptCnt) {
-        this.cdrDeptCnt = cdrDeptCnt;
-    }
-
     @Override
     public String toString() {
         return "DeptAndEmplDto{" +
@@ -179,7 +179,7 @@ public class DeptAndEmplDto {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         DeptAndEmplDto that = (DeptAndEmplDto) o;
-        return cdrDeptCnt == that.cdrDeptCnt && deptCd.equals(that.deptCd) && deptNm.equals(that.deptNm) && Objects.equals(engDeptNm, that.engDeptNm) && emplId.equals(that.emplId) && Objects.equals(prfPhotoPath, that.prfPhotoPath) && rnm.equals(that.rnm) && Objects.equals(engNm, that.engNm) && Objects.equals(empno, that.empno) && email.equals(that.email) && Objects.equals(fstRegDtm, that.fstRegDtm) && Objects.equals(fstRegrIdnfNo, that.fstRegrIdnfNo) && Objects.equals(lastUpdDtm, that.lastUpdDtm) && Objects.equals(lastUpdrIdnfNo, that.lastUpdrIdnfNo);
+        return Objects.equals(cdrDeptCnt, that.cdrDeptCnt) && deptCd.equals(that.deptCd) && deptNm.equals(that.deptNm) && Objects.equals(engDeptNm, that.engDeptNm) && emplId.equals(that.emplId) && Objects.equals(prfPhotoPath, that.prfPhotoPath) && rnm.equals(that.rnm) && Objects.equals(engNm, that.engNm) && Objects.equals(empno, that.empno) && email.equals(that.email) && Objects.equals(fstRegDtm, that.fstRegDtm) && Objects.equals(fstRegrIdnfNo, that.fstRegrIdnfNo) && Objects.equals(lastUpdDtm, that.lastUpdDtm) && Objects.equals(lastUpdrIdnfNo, that.lastUpdrIdnfNo);
     }
 
     @Override
