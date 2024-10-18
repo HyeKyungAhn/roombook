@@ -1,11 +1,16 @@
 const slider = {
     showcaseEl: document.getElementById('imgShowcase'),
     selectEl: document.getElementById('imgSelect'),
-    init(files) {
-        if(!files) return;
 
-        slider.addShowcase(files);
-        slider.addSelect(files);
+    init(imgPath, noImgPath, files) {
+        if(files && files.length !== 0) {
+            slider.addShowcase(imgPath, files);
+            slider.addSelect(imgPath, files);
+        } else {
+            const noImgFileArray = [{'rename': noImgPath}];
+            slider.addShowcase(null, noImgFileArray);
+            slider.addSelect(null, noImgFileArray);
+        }
 
         const imgs = document.querySelectorAll('.img-select a');
         const imgBtns = [...imgs];
@@ -21,17 +26,16 @@ const slider = {
 
         window.addEventListener('resize', slider.slideImage);
     },
-
-    addShowcase(files) {
+    addShowcase(imgPath, files) {
         slider.showcaseEl.innerHTML = files.map((file, index)=>{
-            return `<img alt='공간 사진' src='${imgPath}/${file.rename}'/>`
+            return `<img alt='공간 사진' src='${imgPath?imgPath+"/":''}${file.rename}'/>`
         }).join('');
     },
-    addSelect(files){
+    addSelect(imgPath, files){
         slider.selectEl.innerHTML = files.map((file, index) => {
             return `<div class = 'img-item'>
                             <a href = '#' data-id = '${index+1}'>
-                                <img alt='공간 사진' src='${imgPath}/${file.rename}'/>
+                                <img alt='공간 사진' src='${imgPath?imgPath+"/":''}${file.rename}'/>
                             </a>
                         </div>`
         }).join('');
@@ -43,4 +47,4 @@ const slider = {
     }
 }
 
-slider.init(jsonData.files);
+slider.init(imgPath, noImgPath, jsonData.files);

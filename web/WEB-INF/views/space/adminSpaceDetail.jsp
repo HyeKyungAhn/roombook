@@ -105,6 +105,7 @@
         </div>
     </div>
 </div>
+<script type="text/javascript" src="${pageContext.request.contextPath}/js/dateTimeConverter.js"></script>
 <script>
     const jsonData = JSON.parse('${jsonSpace}');
     const imgPath = '${imgPath}';
@@ -127,17 +128,17 @@
     const listBtn = document.getElementById('listBtn');
 
     const timestampAdding90Days = 90 * 24 * 3600 * 1000;
-    const bookingDate = new Date();
-    const bookingDatePickerFormat = reverseSlashDate(convertDateToSlashDate(bookingDate));
-    const after90DaysDatePickerFormat = reverseSlashDate(convertDateToSlashDate(new Date(Date.now() + timestampAdding90Days)));
+    const todayDate = new Date();
+    const todayDatePickerFormat = DateTimeConverter.reverseSlashDate(DateTimeConverter.convertDateToSlashDate(todayDate));
+    const after90DaysDatePickerFormat = DateTimeConverter.reverseSlashDate(DateTimeConverter.convertDateToSlashDate(new Date(Date.now() + timestampAdding90Days)));
     const calendarEl = document.getElementById('myCalendar');
     const myDatePicker = new jsCalendar.datepicker({
         target: calendarEl,
         navigatorPosition : 'right',
         monthFormat : 'month YYYY',
         language : 'ko',
-        date: bookingDatePickerFormat,
-        min : bookingDatePickerFormat,
+        date: todayDatePickerFormat,
+        min : todayDatePickerFormat,
         max : after90DaysDatePickerFormat,
     });
 
@@ -146,7 +147,7 @@
     });
 
     bookBtnEl.addEventListener('click', function() {
-        location.href = `<c:url value="${bookingUri}"/>?date=\${getPlainDate()}`;
+        location.href = `<c:url value="${bookingUri}"/>?date=\${DateTimeConverter.getPlainDate()}`;
     });
 
     listBtn.addEventListener('click', () =>{
@@ -190,15 +191,15 @@
     }
 
     function requestTimeslots(){
-        const date = getPlainDate();
+        const date = DateTimeConverter.getPlainDate();
         fetch(`<c:url value="${requestTimeslots}"/>?date=\${date}`)
         .then(response => {
             if (response.ok) {
                 return response.text();
             }
         }).then(text => {
-            const slashDate = convertPlainDateToSlahDate(date);
-            const reverseDate = reverseSlashDate(slashDate);
+            const slashDate = DateTimeConverter.convertPlainDateToSlashDate(date);
+            const reverseDate = DateTimeConverter.reverseSlashDate(slashDate);
             myDatePicker.set(reverseDate);
 
             const timeslots = JSON.parse(text);
@@ -225,47 +226,6 @@
         }
 
         timeTableEl.appendChild(timeslotWrapper);
-    }
-
-    function getPlainDate(){
-        return `\${myDatePicker.jsCalendar._now.getFullYear()}\${String(myDatePicker.jsCalendar._now.getMonth()+1).padStart(2,'0')}\${String(myDatePicker.jsCalendar._now.getDate()).padStart(2,'0')}`
-    }
-
-    function reverseSlashDate(slashDate) {
-        const dateArr = slashDate.split('/');
-        return `\${dateArr[2]}/\${dateArr[1]}/\${dateArr[0]}`;
-    }
-
-    function convertDateToSlashDate(date) {
-        const year = date.getFullYear();
-        const month = (date.getMonth()+1).toString().padStart(2, '0');
-        const day = date.getDate().toString().padStart(2, '0');
-        return `\${year}/\${month}/\${day}`;
-    }
-
-    function convertDateToPlainDate(date) {
-        const year = date.getFullYear();
-        const month = (date.getMonth()+1).toString().padStart(2, '0');
-        const day = date.getDate().toString().padStart(2, '0');
-        return `\${year}\${month.toString().padStart(2, '0')}\${day.toString().padStart(2, '0')}`;
-    }
-
-    function convertPlainDateToSlahDate(plainDate) {
-        const date = convertPlainDateToDate(plainDate);
-        return convertDateToSlashDate(date);
-    }
-
-    function convertSlashDateToDate(date) {
-        const dateArr = date.split('/');
-        return new Date(parseInt(dateArr[0]), parseInt(dateArr[1])-1, parseInt(dateArr[2]));
-    }
-
-    function convertPlainDateToDate(plainDate) {
-        const year = plainDate.substring(0,4)
-        const monthIndex = parseInt(plainDate.substring(4, 6)) - 1;
-        const day = plainDate.substring(6);
-
-        return new Date(year, monthIndex, day);
     }
 </script>
 <script src="${pageContext.request.contextPath}/js/imgSlider.js"></script>

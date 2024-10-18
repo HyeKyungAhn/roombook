@@ -60,8 +60,8 @@
             </div>
         </div>
     </div>
-    <button id="bookingBtn" type="button">예약하기</button>
 </div>
+<script type="text/javascript" src="${pageContext.request.contextPath}/js/dateTimeConverter.js"></script>
 <script>
     const spaceData = JSON.parse('${spaceData}');
     let timeslots;
@@ -79,18 +79,19 @@
     const bookingBtnEl = document.getElementById('bookingBtn');
 
     const timestampAdding90Days = 90 * 24 * 3600 * 1000;
-    const bookingDate = '${date}' ? convertPlainDateToDate('${date}') : new Date();
-    const bookingDatePickerFormat = reverseSlashDate(convertDateToSlashDate(bookingDate));
-    const after90DaysDatePickerFormat = reverseSlashDate(convertDateToSlashDate(new Date(bookingDate.getTime() + timestampAdding90Days)));
+    const todayDatePickerFormat = DateTimeConverter.reverseSlashDate(DateTimeConverter.convertDateToSlashDate(new Date()));
+    const bookingDate = '${date}' ? DateTimeConverter.convertPlainDateToDate('${date}') : new Date();
+    const bookingDatePickerFormat = DateTimeConverter.reverseSlashDate(DateTimeConverter.convertDateToSlashDate(bookingDate));
+    const after90DaysDatePickerFormat = DateTimeConverter.reverseSlashDate(DateTimeConverter.convertDateToSlashDate(new Date(Date.now() + timestampAdding90Days)));
 
-    const element = document.getElementById('myCalendar');
+    const myCalendar = document.getElementById('myCalendar');
     const myDatePicker = new jsCalendar.datepicker({
-        target: element,
+        target: myCalendar,
         navigatorPosition : 'right',
         monthFormat : 'month YYYY',
         language : 'ko',
         date: bookingDatePickerFormat,
-        min : bookingDatePickerFormat,
+        min : todayDatePickerFormat,
         max : after90DaysDatePickerFormat,
     });
 
@@ -105,7 +106,7 @@
     document.addEventListener('DOMContentLoaded', function(){
         init();
 
-        requestTimeslots('${date}'?'${date}':convertDateToPlainDate(new Date()));
+        requestTimeslots('${date}'?'${date}':DateTimeConverter.convertDateToPlainDate(new Date()));
     });
 
     bookingBeginTimeEl.addEventListener('change', function() {
@@ -126,7 +127,7 @@
     });
 
     myDatePicker.jsCalendar.onDateClick(function(event, date){
-        const formedDate = convertDateToPlainDate(date);
+        const formedDate = DateTimeConverter.convertDateToPlainDate(date);
         requestTimeslots(formedDate);
     });
 
@@ -136,9 +137,9 @@
         const bookingData = {
             'spaceNo': spaceData.spaceNo,
             'spaceBookCn': bookingContentEl.value,
-            'date': element.value,
-            'beginTime': convertTimeArrToString([bookingBeginTimeEl.value,0]),
-            'endTime': convertTimeArrToString([bookingEndTimeEl.value,0]),
+            'date': myCalendar.value,
+            'beginTime': DateTimeConverter.convertTimeArrToString([bookingBeginTimeEl.value,0]),
+            'endTime': DateTimeConverter.convertTimeArrToString([bookingEndTimeEl.value,0]),
         }
 
         if(!validateBookingData(bookingData)) return false;
@@ -175,7 +176,7 @@
         }).then(text => {
             timeslots = JSON.parse(text);
 
-            const bookingDate = convertPlainDateToDate(date);
+            const bookingDate = DateTimeConverter.convertPlainDateToDate(date);
             const bookingStartHour = spaceData.startTm[0];
             const bookingFinishHour = spaceData.finishTm[0];
 
@@ -262,14 +263,13 @@
         spaceNameEl.innerText = spaceData.spaceNm;
         maxCapacityEl.innerText = spaceData.maxCapacity + '명';
         maxBookingTimeEl.innerText = spaceData.maxRsvsTms + '시간';
-        startTimeEl.innerText = convertTimeArrToString(spaceData.startTm);
-        endTimeEl.innerText = convertTimeArrToString(spaceData.finishTm);
-        weekendYnEl.innerText = spaceData.weekend === 'Y' ? '주말 예약 가능' : '주말 예약 불가';
+        startTimeEl.innerText = DateTimeConverter.convertTimeArrToString(spaceData.startTm);
+        endTimeEl.innerText = DateTimeConverter.convertTimeArrToString(spaceData.finishTm);
     }
 
     function initInputs(){
         myDatePicker.set('now');
-        requestTimeslots(convertDateToPlainDate(new Date()));
+        requestTimeslots(DateTimeConverter.convertDateToPlainDate(new Date()));
         bookingContentEl.value = '';
     }
 
@@ -286,8 +286,14 @@
             bookingStartHour = adjustBookingStartTime(today, bookingStartHour);
         }
 
-        printOptions(bookingBeginTimeEl, timeslots, bookingStartHour, bookingFinishHour);
-        printOptions(bookingEndTimeEl, timeslots, parseInt(bookingBeginTimeEl.value) + 1, parseInt(bookingFinishHour) + 1);
+        if((bookingDate.getDay()===0||bookingDate.getDay()===6)
+            && spaceData.weekend === 'N') {
+            printOptions(bookingBeginTimeEl, null, null, null);
+            printOptions(bookingEndTimeEl, null, null, null);
+        } else {
+            printOptions(bookingBeginTimeEl, timeslots, bookingStartHour, bookingFinishHour);
+            printOptions(bookingEndTimeEl, timeslots, parseInt(bookingBeginTimeEl.value) + 1, parseInt(bookingFinishHour) + 1);
+        }
     }
 
     /** 현재 시간이 예약 시작 시간 이후일 때
@@ -302,6 +308,12 @@
 
     function printOptions(element, timeslots, bookingStartHour, bookingFinishHour) {
         element.innerHTML = "";
+
+        if (!timeslots) {
+            element.insertAdjacentHTML('beforeend',
+                `<option name='time' value="" disabled selected>주말 예약 불가</option>`);
+            return;
+        }
 
         for(let time = bookingStartHour; time < bookingFinishHour; time++){
             let stringBeginTime = time.toString().padStart(2, '0');
@@ -326,39 +338,6 @@
 
         element.insertAdjacentHTML('beforeend',
             `<option selected value="예약불가" disabled>예약 불가</option>`);
-    }
-
-    ////Date Conversion////
-    function convertTimeArrToString(timeArr) {
-        return `\${timeArr[0].toString().padStart(2, '0')}:\${timeArr[1].toString().padStart(2, '0')}`;
-    }
-
-    function convertDateToPlainDate(date) {
-        const year = date.getFullYear();
-        const month = (date.getMonth()+1).toString().padStart(2, '0');
-        const day = date.getDate().toString().padStart(2, '0');
-
-        return `\${year}\${month.toString().padStart(2, '0')}\${day.toString().padStart(2, '0')}`;
-    }
-
-    function convertPlainDateToDate(plainDate) {
-        const year = plainDate.substring(0,4)
-        const monthIndex = parseInt(plainDate.substring(4, 6)) - 1;
-        const day = plainDate.substring(6);
-
-        return new Date(year, monthIndex, day);
-    }
-
-    function convertDateToSlashDate(date) {
-        const year = date.getFullYear();
-        const month = (date.getMonth()+1).toString().padStart(2, '0');
-        const day = date.getDate().toString().padStart(2, '0');
-        return `\${year}/\${month}/\${day}`;
-    }
-
-    function reverseSlashDate(slashDate) {
-        const dateArr = slashDate.split('/');
-        return `\${dateArr[2]}/\${dateArr[1]}/\${dateArr[0]}`;
     }
 </script>
 </body>

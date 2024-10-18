@@ -493,7 +493,7 @@
         style = window.getComputedStyle(element);
         while (element){
             left += element.offsetLeft - element.scrollLeft;
-            top += element.offsetTop - element.scrollTop;
+            top += element.offsetTop;
             if (style.position == 'fixed') {
                 position = 'fixed';
                 top += window.scrollY;

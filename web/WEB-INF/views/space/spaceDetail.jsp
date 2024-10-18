@@ -117,8 +117,8 @@
     const bookBtnEl = document.getElementById('bookBtn');
 
     const timestampAdding90Days = 90 * 24 * 3600 * 1000;
-    const bookingDate = new Date();
-    const bookingDatePickerFormat = reverseSlashDate(convertDateToSlashDate(bookingDate));
+    const todayDate = new Date();
+    const todayDatePickerFormat = reverseSlashDate(convertDateToSlashDate(todayDate));
     const after90DaysDatePickerFormat = reverseSlashDate(convertDateToSlashDate(new Date(Date.now() + timestampAdding90Days)));
     const calendarEl = document.getElementById('myCalendar');
     const myDatePicker = new jsCalendar.datepicker({
@@ -126,8 +126,8 @@
         navigatorPosition : 'right',
         monthFormat : 'month YYYY',
         language : 'ko',
-        date: bookingDatePickerFormat,
-        min : bookingDatePickerFormat,
+        date: todayDatePickerFormat,
+        min : todayDatePickerFormat,
         max : after90DaysDatePickerFormat,
     });
 

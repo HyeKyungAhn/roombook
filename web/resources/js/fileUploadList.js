@@ -26,7 +26,7 @@ const fileUpload = {
         fileUpload.fileStore.set(id, file);
 
         fileUpload.fileListHeaderEl.insertAdjacentHTML("afterend",
-            `<tr id='${id}'><td>${file.name}</td><td>${file.size}</td><td><button type='button' class='removeFileBtn'>x</button></td></tr>`);
+            `<tr id='${id}' class="fileUploadTableRow"><td>${file.name}</td><td>${file.size}</td><td><button type='button' class='removeFileBtn'>x</button></td></tr>`);
     },
     removeFile(id){
         document.getElementById(id).remove();

@@ -81,6 +81,8 @@
     </div>
 <script>
     const spaceForm = document.getElementById("spaceForm");
+    let jsonRescs;
+
     spaceForm.addEventListener('submit', function(e){
         e.preventDefault();
 

@@ -60,8 +60,8 @@
             </div>
         </div>
     </div>
-    <button id="bookingBtn" type="button">예약하기</button>
 </div>
+<script type="text/javascript" src="${pageContext.request.contextPath}/js/dateTimeConverter.js"></script>
 <script>
     const spaceAndBookData = JSON.parse('${spaceAndBookData}');
     let timeslots;
@@ -80,18 +80,21 @@
     let bookingEndTimeOptions = document.querySelector('select[name=bookingEndTime]').options;
 
     const timestampAdding90Days = 90 * 24 * 3600 * 1000;
-    const todayDate = reverseSlashDate(convertDateToSlashDate(new Date()));
-    const after90DaysDate = reverseSlashDate(convertDateToSlashDate(new Date(Date.now() + timestampAdding90Days)));
+    const bookingDate = spaceAndBookData.date ? DateTimeConverter.convertDateArrayToDate(spaceAndBookData.date) : new Date();
+    const bookingDatePickerFormat = DateTimeConverter.reverseSlashDate(DateTimeConverter.convertDateToSlashDate(bookingDate));
+    const todayDatePickerFormat = DateTimeConverter.reverseSlashDate(DateTimeConverter.convertDateToSlashDate(new Date()));
+    const after90DaysDatePickerFormat = DateTimeConverter.reverseSlashDate(DateTimeConverter.convertDateToSlashDate(new Date(Date.now() + timestampAdding90Days)));
 
-    const element = document.getElementById('myCalendar');
+    const calendarEl = document.getElementById('myCalendar');
+
     const myDatePicker = new jsCalendar.datepicker({
-        target: element,
+        target: calendarEl,
         navigatorPosition : 'right',
         monthFormat : 'month YYYY',
         language : 'ko',
-        date: todayDate,
-        min : todayDate,
-        max : after90DaysDate,
+        date: bookingDatePickerFormat,
+        min : todayDatePickerFormat,
+        max : after90DaysDatePickerFormat,
     });
 
     ////Initialization////
@@ -107,16 +110,12 @@
         spaceNameEl.innerText = spaceAndBookData.spaceNm;
         maxCapacityEl.innerText = spaceAndBookData.maxCapacity + '명';
         maxBookingTimeEl.innerText = spaceAndBookData.maxRsvsTms + '시간';
-        startTimeEl.innerText = convertTimeArrToString(spaceAndBookData.startTm);
-        endTimeEl.innerText = convertTimeArrToString(spaceAndBookData.finishTm);
-        weekendYnEl.innerText = spaceAndBookData.weekend === 'Y' ? '주말 예약 가능' : '주말 예약 불가';
+        startTimeEl.innerText = DateTimeConverter.convertTimeArrToString(spaceAndBookData.startTm);
+        endTimeEl.innerText = DateTimeConverter.convertTimeArrToString(spaceAndBookData.finishTm);
+        bookingContentEl.innerText = spaceAndBookData.content;
     }
 
     function initBookingData() {
-        bookingContentEl.value = spaceAndBookData.content;
-        const slashDate = convertDateArrayToSlashDate(spaceAndBookData.date);
-        const reverseDate = reverseSlashDate(slashDate);
-        myDatePicker.set(reverseDate);
         changeSelectedOption(bookingBeginTimeEl.name, spaceAndBookData.beginTime[0]);
         changeSelectedOption(bookingEndTimeEl.name, spaceAndBookData.endTime[0]);
     }
@@ -133,12 +132,12 @@
 
     ////Event Listener////
     myDatePicker.jsCalendar.onDateClick(function(event, date){
-        const plainDate = convertDateToPlainDate(date);
+        const plainDate = DateTimeConverter.convertDateToPlainDate(date);
         requestTimeslots(plainDate);
     });
 
     document.addEventListener('DOMContentLoaded', async function () {
-        const plainDate = convertDateArrayToPlainDate(spaceAndBookData.date);
+        const plainDate = DateTimeConverter.convertDateArrayToPlainDate(spaceAndBookData.date);
 
         initSpaceData();
         await requestTimeslots(plainDate);
@@ -146,7 +145,7 @@
         calendarEl.readOnly = true;
     });
 
-    bookingBeginTimeEl.addEventListener('change', function() { //e.target.value로 parseInt(bookingBeginTimeEl.value)대체?
+    bookingBeginTimeEl.addEventListener('change', function() {
         const bookingFinishHour = spaceAndBookData.finishTm[0];
         printOptions(bookingEndTimeEl, timeslots, parseInt(bookingBeginTimeEl.value)+1, parseInt(bookingFinishHour)+1);
     });
@@ -168,9 +167,9 @@
         const bookingData = {
             'spaceNo': spaceAndBookData.spaceNo,
             'spaceBookCn': bookingContentEl.value,
-            'date': element.value,
-            'beginTime': convertTimeArrToString([bookingBeginTimeEl.value,0]),
-            'endTime': convertTimeArrToString([bookingEndTimeEl.value,0]),
+            'date': calendarEl.value,
+            'beginTime': DateTimeConverter.convertTimeArrToString([bookingBeginTimeEl.value,0]),
+            'endTime': DateTimeConverter.convertTimeArrToString([bookingEndTimeEl.value,0]),
         }
 
         if(!validateBookingData(bookingData)) return false;
@@ -291,12 +290,25 @@
             bookingStartHour = adjustBookingStartTime(today, bookingStartHour);
         }
 
-        printOptions(bookingBeginTimeEl, timeslots, bookingStartHour, bookingFinishHour);
-        printOptions(bookingEndTimeEl, timeslots, parseInt(bookingBeginTimeEl.value) + 1, parseInt(bookingFinishHour) + 1);
+        if((bookingDate.getDay()===0||bookingDate.getDay()===6)
+            && spaceAndBookData.weekend === 'N') {
+            printOptions(bookingBeginTimeEl, null, null, null);
+            printOptions(bookingEndTimeEl, null, null, null);
+        } else {
+            printOptions(bookingBeginTimeEl, timeslots, bookingStartHour, bookingFinishHour);
+            printOptions(bookingEndTimeEl, timeslots, parseInt(bookingBeginTimeEl.value) + 1, parseInt(bookingFinishHour) + 1);
+        }
     }
 
     function printOptions(element, timeslots, bookingStartHour, bookingFinishHour) {
         element.innerHTML = "";
+
+        if (!timeslots) {
+            element.insertAdjacentHTML('beforeend',
+                `<option name='time' value="" disabled selected>주말 예약 불가</option>`);
+            return;
+        }
+
         const editingBookingBeginHour = spaceAndBookData.beginTime[0];
         const editingBookingEndHour = spaceAndBookData.endTime[0];
 
@@ -356,45 +368,6 @@
         }
 
         return result;
-    }
-
-    ////Date/Time Conversion////
-
-    function convertTimeArrToString(timeArr) {
-        return `\${timeArr[0].toString().padStart(2, '0')}:\${timeArr[1].toString().padStart(2, '0')}`;
-    }
-
-    function convertDateArrayToSlashDate(dateArr) {
-        return `\${dateArr[0]}/\${dateArr[1].toString().padStart(2, '0')}/\${dateArr[2].toString().padStart(2, '0')}`;
-    }
-
-    function convertDateArrayToPlainDate(dateArr) {
-        return `\${dateArr[0]}\${dateArr[1].toString().padStart(2, '0')}\${dateArr[2].toString().padStart(2, '0')}`;
-    }
-
-    function convertDateToPlainDate(date) {
-        const year = date.getFullYear();
-        const month = (date.getMonth()+1).toString().padStart(2, '0');
-        const day = date.getDate().toString().padStart(2, '0');
-
-        return `\${year}\${month.toString().padStart(2, '0')}\${day.toString().padStart(2, '0')}`;
-    }
-
-    function convertDateToSlashDate(date) {
-        const year = date.getFullYear();
-        const month = (date.getMonth()+1).toString().padStart(2, '0');
-        const day = date.getDate().toString().padStart(2, '0');
-        return `\${year}/\${month.toString().padStart(2, '0')}/\${day.toString().padStart(2, '0')}`;
-    }
-
-    function reverseSlashDate(slashDate) {
-        const dateArr = slashDate.split('/');
-        return `\${dateArr[2]}/\${dateArr[1]}/\${dateArr[0]}`;
-    }
-
-    function getPlainDateFromSlashDate(slashDate) {
-        const dateArr = slashDate.split('');
-        return `\${dateArr[0]}\${dateArr[1]}\${dateArr[2]}`;
     }
 </script>
 </body>
