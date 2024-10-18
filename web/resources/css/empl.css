@@ -1,46 +1,71 @@
-.listContainer {
+.emplListContainer {
     width: 1000px;
+    margin: 30px 0 50px 0;
 }
 
-.listHeader {
+.emplListHeader
+, .emplRowSub {
     display: flex;
+    flex-direction: row;
+    justify-content: space-between;
 }
 
-.listContent {
+.emplListHeader {
+    font-weight: 600;
+    background-color: #f8df93;
+    padding: 8px 11px;
+}
+
+.emplListContent {
     display: flex;
     flex-direction: column;
 }
 
-.toggleBox {
-
+.emplListContainer .toggleBox {
+    background-color: #fff5d6;
+    padding: 20px 20px;
 }
 
-.emplColumn {
+.emplListContainer .emplColumn {
 
 }
-.emplRow {
-    /*display: flex;*/
+.emplListContainer .emplRow {
+
 }
-.emplRowSub {
-    display: flex;
-    flex-direction: row;
+.emplListContainer .emplRowSub {
+    padding: 10px 7px;
+    cursor: pointer;
 }
-.emplName {
+.emplListContainer .emplName {
     width: 17%;
 }
 
-.emplEmail {
-    width: 30%;
+.emplListContainer .emplEmail {
+    width: 26%;
 }
 
-.emplId {
-    width: 17%;
-}
-
-.emplno{
-    width: 16%;
-}
-
-.emplAuthName {
+.emplListContainer .emplId {
     width: 20%;
+}
+
+.emplListContainer .emplno{
+    width: 9%;
+}
+
+.emplListContainer .emplAuthName {
+    width: 12%;
+}
+
+.emplListContainer .emplToggleBoxHeader {
+    font-size: 17px;
+    font-weight: 600;
+}
+
+
+.inputLabel {
+
+}
+
+.inputRow {
+
 }

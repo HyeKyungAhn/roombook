@@ -14,59 +14,59 @@
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/pagination.css">
 </head>
 <body>
-<div class="rootContainer">
-    <div>
-        <h1>권한 관리 페이지</h1>
-    </div>
-    <div>
-        <div>
-            <select id="searchSelect">
-                <option value="">전체</option>
-                <option value="name">이름</option>
-                <option value="email">이메일</option>
-                <option value="id">아이디</option>
-                <option value="emplno">사원번호</option>
-                <option value="authName">권한명</option>
-            </select>
-            <input id="searchInput" type="text" id="search">
-            <button id="searchBtn" type="button">검색</button>
+    <div class="horizontalCenter1000 paddingTop40">
+        <div class="headerWrapper">
+            <h1>권한 관리 페이지</h1>
         </div>
-        <div>
-            <div id="listRoot" class="listContainer">
-                <div id="listHeader" class="listHeader">
-                    <div class="emplName emplColumn">이름</div>
-                    <div class="emplEmail emplColumn">이메일</div>
-                    <div class="emplId emplColumn">아이디</div>
-                    <div class="emplno emplColumn">사원번호</div>
-                    <div class="emplAuthName emplColumn">권한명</div>
-                </div>
-                <div id="listContent" class="listContent">
+        <div class="">
+            <div class="flexRow">
+                <select id="searchSelect" class="roundInputWidth140 marginRight10">
+                    <option value="">전체</option>
+                    <option value="name">이름</option>
+                    <option value="email">이메일</option>
+                    <option value="id">아이디</option>
+                    <option value="emplno">사원번호</option>
+                    <option value="authName">권한명</option>
+                </select>
+                <input id="searchInput" type="text" id="search" class="roundInputWidth200">
+                <button id="searchBtn" class="btnS2" type="button">검색</button>
+            </div>
+            <div>
+                <div id="listRoot" class="emplListContainer">
+                    <div id="emplListHeader" class="emplListHeader">
+                        <div class="emplName emplColumn">이름</div>
+                        <div class="emplEmail emplColumn">이메일</div>
+                        <div class="emplId emplColumn">아이디</div>
+                        <div class="emplno emplColumn">사원번호</div>
+                        <div class="emplAuthName emplColumn">권한명</div>
+                    </div>
+                    <div id="emplListContent" class="emplListContent">
 
+                    </div>
                 </div>
             </div>
         </div>
+        <nav id="paginationNav" class="paginationContainer" aria-label="pagination">
+            <div class="paginationArrow">
+                <button type="button" id="prevBtn" class="chevronBtn iconChevronStart" aria-label="previous" aria-disabled="">
+                </button>
+            </div>
+            <div class="paginationPageNumber">
+                <input id="pageInput" class="currentPageInput" type="number" value=""><span class="pageSlash">/</span><span id="totalPage" class="totalPageNumber"></span>
+            </div>
+            <div class="paginationArrow">
+                <button type="button" id="nextBtn" class="chevronBtn iconChevronEnd" aria-label="next" aria-disabled="">
+                </button>
+            </div>
+        </nav>
     </div>
-    <nav id="paginationNav" class="paginationContainer" aria-label="pagination">
-        <div class="paginationArrow">
-            <button type="button" id="prevBtn" class="chevronBtn iconChevronStart" aria-label="previous" aria-disabled="">
-            </button>
-        </div>
-        <div class="paginationPageNumber">
-            <input id="pageInput" class="currentPageInput" type="number" value=""><span class="pageSlash">/</span><span id="totalPage" class="totalPageNumber"></span>
-        </div>
-        <div class="paginationArrow">
-            <button type="button" id="nextBtn" class="chevronBtn iconChevronEnd" aria-label="next" aria-disabled="">
-            </button>
-        </div>
-    </nav>
-</div>
 <script>
     const searchSelectEl = document.getElementById('searchSelect');
     const searchInputEl = document.getElementById('searchInput');
     const searchBtnEl = document.getElementById('searchBtn');
     const listRootEl = document.getElementById('listRoot');
-    const listHeaderEl = document.getElementById('listHeader');
-    const listContentEl = document.getElementById('listContent');
+    const listHeaderEl = document.getElementById('emplListHeader');
+    const listContentEl = document.getElementById('emplListContent');
 
     let authSelectEl = document.getElementById('authSelect');
     let authModBtnEl = document.getElementById('authModBtn');
@@ -216,19 +216,17 @@
         row.insertAdjacentHTML('beforeend', `
                 <div class="toggleBox">
                     <div>
-                        <p>권한 변경</p>
-                        <p>권한을 선택해주세요. 변경하기 전 권한 변경 대상을 다시 한 번 확인해주세요.</p>
+                        <p class="emplToggleBoxHeader marginBottom5">권한 변경</p>
+                        <p class="marginBottom5">권한을 선택해주세요. 변경하기 전 <strong>권한 변경 대상</strong>을 다시 한 번 확인해주세요.</p>
                     </div>
-                    <div>
-                        <select id="authSelect">
+                    <div class="flexRow">
+                        <select id="authSelect" class="roundInputWidth200 marginRight10">
                             <option value="사원">사원</option>
                             <option value="공간예약관리자">공간예약관리자</option>
                             <option value="사원관리자">사원관리자</option>
                             <option value="슈퍼관리자">슈퍼관리자</option>
                         </select>
-                    </div>
-                    <div>
-                        <button type="button" id="authModBtn" data-id="${'${emplId}'}">권한 변경</button>
+                        <button type="button" id="authModBtn" class="btnS2" data-id="${'${emplId}'}">권한 변경</button>
                     </div>
                 <div>
             `);
