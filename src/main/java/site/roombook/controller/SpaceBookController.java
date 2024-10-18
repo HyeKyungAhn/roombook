@@ -19,6 +19,9 @@ import site.roombook.service.SpaceService;
 
 import javax.servlet.http.HttpServletResponse;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
+
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
@@ -72,6 +75,16 @@ public class SpaceBookController {
             mv.setViewName("redirect:/not-found.tiles");
             return mv;
         }
+
+        LocalDate bookDate = spaceAndBookData.getSpaceBookDate();
+        LocalTime bookTime = spaceAndBookData.getSpaceBookBgnTm();
+
+        if (LocalDate.now().isAfter(bookDate)
+                || LocalDate.now().isEqual(bookDate) && LocalTime.now().isAfter(bookTime)) {
+            mv.setViewName("redirect:/invalid-access");
+            return mv;
+        }
+
         ObjectMapper objectMapper = new ObjectMapper();
         objectMapper.registerModule(new JavaTimeModule());
         String jsonSpaceAndBookData;
