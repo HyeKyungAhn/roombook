@@ -7,28 +7,84 @@ select::-ms-expand {
     appearance: none;
 }
 
-.myCalendar {
-}
-
-.rootWrapper {
-    width: 60%;
-    min-width: 600px;
+.bookEditRootWrapper {
+    width: 800px;
+    margin: 0 auto;
+    padding: 40px 0 60px 0;
 }
 
 .spaceInfo {
     display: flex;
+    margin: 10px 0;
+}
+
+.spaceInfo > * {
+    margin-right: 7px;
+}
+
+.spaceInfoRow {
+    margin: 10px 0;
+}
+
+.maxCapacity {
+    display: flex;
+    align-items: center;
+    line-height: 18px;
 }
 
 .maxCapacity::before {
-    content: '\1F464';
+    content: '';
+    display: inline-block;
+    background: url(../img/icon_person.svg);
+    background-size: cover;
+    filter: contrast(0.2);
+    width: 16px;
+    height: 16px;
+    margin-right: 3px;
+}
+
+.maxBookingTime {
+    display: flex;
+    align-items: center;
+    line-height: 18px;
 }
 
 .maxBookingTime::before {
-    content: '\23F1';
+    content: '';
+    display: inline-block;
+    background: url(../img/icon_lock_clock.svg);
+    background-size: cover;
+    filter: contrast(0.2);
+    width: 16px;
+    height: 16px;
+    margin-right: 3px;
+}
+
+.weekendYn {
+    display: inline-block;
+    background-color: #0000008a;
+    border-radius: 3px;
+    padding: 3px 5px;
+    text-align: center;
+    color: white;
+    font-size: 13px;
+}
+
+.bookingAvailableTime {
+    display: flex;
+    align-items: center;
+    line-height: 18px;
 }
 
 .bookingAvailableTime::before {
-    content: '\1F559';
+    content: '';
+    display: inline-block;
+    background: url(../img/icon_clock.svg);
+    background-size: cover;
+    filter: contrast(0.2);
+    width: 16px;
+    height: 16px;
+    margin-right: 3px;
 }
 
 .timeSelectBtn {
@@ -50,62 +106,96 @@ select::-ms-expand {
     color: red;
 }
 
+.bookingBeginTime,
+.bookingEndTime{
+    width: 150px;
+    height: 28px;
+    border-radius: 9px;
+    border: 1px solid #afafaf;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+.bookingContent {
+    width: 800px;
+    height: 100px;
+    border-radius: 10px;
+    padding: 13px;
+    font-size: 15px;
+}
+
+.bookingBtnWrapper {
+    display: flex;
+    flex-direction: row-reverse;
+    margin: 30px 0 0 0;
+}
 
 /* myBook */
+.myBookRoot {
+    width: 800px;
+    margin: 0 auto;
+    padding: 30px 0;
+}
+
+.myBookList {
+    width: 800px;
+    margin: 0 auto;
+}
 
 .loadMoreTrigger {
     width: 800px;
-    height: 300px;
+    height: 150px;
 }
 
-.myBookWrapper .dropBtn::before {
+.myBookHeader {
+    width: 800px;
+    margin: 0 auto;
+}
+
+.myBookHeader h1 {
+
+}
+
+.myBookItem .dropBtn::before {
     content: '\22EE';
 }
 
-.myBookWrapper {
+.myBookItem {
     display: flex;
     flex-direction: initial;
     justify-content: space-between;
-    width: 600px;
+    padding: 20px 18px;
+    margin: 11px auto;
+    box-shadow: 0 4px 7px 4px rgba(16, 39, 112, 0.07);
+    border-radius: 6px;
 }
 
-.myBookWrapper .dateTimeWrapper{
+.myBookItem .dateTimeWrapper{
     display: flex;
     justify-content: space-between;
-    width: 570px;
+    width: 100%;
     font-size: 18px;
 }
 
-.myBookWrapper .content {
-
+.myBookItem .myBookContent {
+    width: 95%;
 }
 
-.myBookWrapper .date {
-
+.myBookItem .myBookContent>div:not(:last-child) {
+    margin-bottom: 7px;
 }
 
-.myBookWrapper .beginTime {
-
-}
-
-.myBookWrapper .endTime {
-
-}
-
-.myBookWrapper .spaceName {
+.myBookItem .spaceName {
     font-size: 20px;
+    font-weight: 600;
 }
 
-.myBookWrapper .spaceLocation {
-
-}
-
-.myBookWrapper .menuDropdown {
+.myBookItem .menuDropdown {
     position: relative;
     display: inline-block;
 }
 
-.myBookWrapper .dropBtn {
+.myBookItem .dropBtn {
     display: inline-block;
     width: 20px;
     height: 24px;
@@ -113,29 +203,20 @@ select::-ms-expand {
     cursor: pointer;
 }
 
-.myBookWrapper .dropdownContent {
-    display: none;
-    position: absolute;
-    background-color: #f1f1f1;
-    min-width: 160px;
-    box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
-    z-index: 1;
-}
-
-.myBookWrapper .dropdownContent div {
-    padding: 12px 16px;
-    display: block;
-}
-
-.myBookWrapper a {
+.myBookItem a {
     color: black;
     text-decoration: none;
 }
 
-.myBookWrapper .show {
-    display: block;
+.myBookItem .show {
+    display: flex;
 }
 
-.myBookWrapper .cancelBooking {
+.myBookItem .cancelBooking {
     cursor: pointer;
+}
+
+.myBookRoot .outdatedBook {
+    pointer-events: none;
+    opacity: 0.4;
 }

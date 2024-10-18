@@ -10,7 +10,7 @@
 <!DOCTYPE>
 <html lang="kr">
 <head>
-    <title>roombook | 공간 예약 수정</title>
+    <title></title>
     <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/jsCalendar/jsCalendar.css">
     <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/jsCalendar/jsCalendar.micro.css">
     <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/spaceBook.css"/>
@@ -20,36 +20,52 @@
 </head>
 <body>
 <div>
-    <div class="rootWrapper">
-        <div>
-            <h1>회의실 이름</h1>
+    <div class="bookEditRootWrapper">
+        <div class="breadScrumbContainer">
+            <span class="breadScrumb">
+                <a href="${pageContext.request.contextPath}/mybook">내 예약</a>
+            </span>
+            <span class="breadScrumbCurrentPage">공간 예약 수정</span>
         </div>
         <div>
-            <div class="spaceInfo">
-                <span id="maxCapacity" class="maxCapacity"></span>
-                <span id="maxBookingTime" class="maxBookingTime"></span>
-                <div id="bookingAvailableTime" class="bookingAvailableTime">
-                    <span id="startTime"></span>
-                    <span>~</span>
-                    <span id="endTime"></span>
+            <div>
+                <h1 id="spaceName" class="spaceName"></h1>
+            </div>
+            <div>
+                <div class="spaceInfo spaceInfoRow">
+                    <span id="maxCapacity" class="maxCapacity"></span>
+                    <div id="bookingAvailableTime" class="bookingAvailableTime">
+                        <span id="startTime"></span>
+                        <span>~</span>
+                        <span id="endTime"></span>
+                    </div>
+                    <span id="maxBookingTime" class="maxBookingTime"></span>
+                    <span id="weekendYn" class="spaceWeekend"></span>
                 </div>
-                <span id="weekendYn" class="weekendYn"></span>
+                <div class="spaceInfoRow">
+                    <label for="myCalendar" class="hidden">예약 날짜 입력</label>
+                    <input type="text" name="myCalendar" value="" id="myCalendar" class="myCalendar">
+                    <label for="bookingBeginTime" class="hidden">예약 시작 시간</label>
+                    <select id="bookingBeginTime" class="bookingBeginTime" name="bookingBeginTime"></select>
+                    <label for="bookingEndTime" class="hidden">예약 종료 시간</label>
+                    <select id="bookingEndTime" class="bookingEndTime" name="bookingEndTime"></select>
+                </div>
+                <div class="spaceInfoRow">
+                    <label for="bookingContent" class="hidden">예약 내용</label>
+                    <textarea id="bookingContent" class="bookingContent" name="bookCn" rows="2" cols="50"></textarea>
+                </div>
+                <div class="spaceInfoRow bookingBtnWrapper">
+                    <button id="bookingBtn" class="btnM bg_yellow color_lightBlack" type="button">예약하기</button>
+                </div>
             </div>
         </div>
-    </div>
-    <input type="text" name="myCalendar" value="" id="myCalendar" class="myCalendar">
-    <select id="bookingBeginTime" name="bookingBeginTime"></select>
-    <select id="bookingEndTime" name="bookingEndTime"></select>
-
-    <div>
-        <textarea id="bookingContent" name="bookCn" rows="2" cols="50"></textarea>
     </div>
     <button id="bookingBtn" type="button">예약하기</button>
 </div>
 <script>
     const spaceAndBookData = JSON.parse('${spaceAndBookData}');
     let timeslots;
-
+    const spaceNameEl = document.getElementById('spaceName');
     const maxCapacityEl = document.getElementById('maxCapacity');
     const maxBookingTimeEl = document.getElementById('maxBookingTime');
     const bookingAvailableTimeEl = document.getElementById('bookingAvailableTime');
@@ -80,6 +96,15 @@
 
     ////Initialization////
     function initSpaceData() {
+        if (spaceAndBookData.weekend === 'Y') {
+            weekendYnEl.innerText = '주말 예약 가능';
+            weekendYnEl.classList.add('bookable');
+        } else {
+            weekendYnEl.innerText = '주말 예약 불가';
+            weekendYnEl.classList.add('unbookable');
+        }
+
+        spaceNameEl.innerText = spaceAndBookData.spaceNm;
         maxCapacityEl.innerText = spaceAndBookData.maxCapacity + '명';
         maxBookingTimeEl.innerText = spaceAndBookData.maxRsvsTms + '시간';
         startTimeEl.innerText = convertTimeArrToString(spaceAndBookData.startTm);
@@ -118,6 +143,7 @@
         initSpaceData();
         await requestTimeslots(plainDate);
         initBookingData();
+        calendarEl.readOnly = true;
     });
 
     bookingBeginTimeEl.addEventListener('change', function() { //e.target.value로 parseInt(bookingBeginTimeEl.value)대체?
@@ -221,8 +247,8 @@
     }
 
     function isBookingAfterOwn(){
-        for (const element of timeslots) {
-            if(element.selfBook && parseInt(bookingBeginTimeEl.value) === (element.endTime[3] + 1)){
+        for (const timeslot of timeslots) {
+            if(timeslot.selfBook && parseInt(bookingBeginTimeEl.value) === (timeslot.endTime[3] + 1)){
                 alert('본인 예약 바로 뒤에 새로운 예약을 할 수 없습니다.\n기존 예약을 삭제/수정 후 다시 시도해주세요.');
                 return true;
             }
@@ -280,14 +306,14 @@
             let isSelfBooking = false;
             let isEditingBooking = false;
 
-            for (const element of timeslots) {
-                if (element.beginTime[0] <= time && time < element.endTime[0]) {
+            for (const timeslot of timeslots) {
+                if (timeslot.beginTime[0] <= time && time < timeslot.endTime[0]) {
                     if(editingBookingBeginHour <= time && time < editingBookingEndHour) {
                         isEditingBooking = true;
                     } else {
                         isDisabled = true;
                     }
-                    isSelfBooking = element.selfBook;
+                    isSelfBooking = timeslot.selfBook;
                     break;
                 }
             }
@@ -303,7 +329,6 @@
         element.insertAdjacentHTML('beforeend',
             `<option selected value="예약불가" disabled>예약 불가</option>`);
     }
-
 
     ////Validation////
     function validateBookingData(bookingData) {

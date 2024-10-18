@@ -20,29 +20,45 @@
 </head>
 <body>
 <div>
-    <div class="rootWrapper">
-        <div>
-            <h1>회의실 이름</h1>
+    <div class="horizontalCenter800 paddingTop40">
+        <div class="breadScrumbContainer">
+            <span class="breadScrumb">
+                <a href="${pageContext.request.contextPath}/spaces">공간 목록</a>
+            </span>
+            <span class="breadScrumbCurrentPage">공간 예약</span>
         </div>
         <div>
-            <div class="spaceInfo">
-                <span id="maxCapacity" class="maxCapacity"></span>
-                <span id="maxBookingTime" class="maxBookingTime"></span>
-                <div id="bookingAvailableTime" class="bookingAvailableTime">
-                    <span id="startTime"></span>
-                    <span>~</span>
-                    <span id="endTime"></span>
+            <div>
+                <h1 id="spaceName" class="spaceName"></h1>
+            </div>
+            <div>
+                <div class="spaceInfo spaceInfoRow">
+                    <span id="maxCapacity" class="maxCapacity"></span>
+                    <div id="bookingAvailableTime" class="bookingAvailableTime">
+                        <span id="startTime"></span>
+                        <span>~</span>
+                        <span id="endTime"></span>
+                    </div>
+                    <span id="maxBookingTime" class="maxBookingTime"></span>
+                    <span id="weekendYn" class="spaceWeekend"></span>
                 </div>
-                <span id="weekendYn" class="weekendYn"></span>
+                <div class="spaceInfoRow">
+                    <label for="myCalendar" class="hidden">예약 날짜 입력</label>
+                    <input type="text" name="myCalendar" value="" id="myCalendar" class="myCalendar">
+                    <label for="bookingBeginTime" class="hidden">예약 시작 시간</label>
+                    <select id="bookingBeginTime" class="bookingBeginTime" name="bookingBeginTime"></select>
+                    <label for="bookingEndTime" class="hidden">예약 종료 시간</label>
+                    <select id="bookingEndTime" class="bookingEndTime" name="bookingEndTime"></select>
+                </div>
+                <div class="spaceInfoRow">
+                    <label for="bookingContent" class="hidden">예약 내용</label>
+                    <textarea id="bookingContent" class="bookingContent" name="bookCn" rows="2" cols="50"></textarea>
+                </div>
+                <div class="spaceInfoRow bookingBtnWrapper">
+                    <button id="bookingBtn" class="btnM bg_yellow color_lightBlack" type="button">예약하기</button>
+                </div>
             </div>
         </div>
-    </div>
-    <input type="text" name="myCalendar" value="" id="myCalendar" class="myCalendar">
-    <select id="bookingBeginTime" name="bookingBeginTime"></select>
-    <select id="bookingEndTime" name="bookingEndTime"></select>
-
-    <div>
-        <textarea id="bookingContent" name="bookCn" rows="2" cols="50"></textarea>
     </div>
     <button id="bookingBtn" type="button">예약하기</button>
 </div>
@@ -50,6 +66,7 @@
     const spaceData = JSON.parse('${spaceData}');
     let timeslots;
 
+    const spaceNameEl = document.getElementById('spaceName');
     const maxCapacityEl = document.getElementById('maxCapacity');
     const maxBookingTimeEl = document.getElementById('maxBookingTime');
     const bookingAvailableTimeEl = document.getElementById('bookingAvailableTime');
@@ -234,6 +251,15 @@
 
     ////Initialization////
     function init() {
+        if (spaceData.weekend === 'Y') {
+            weekendYnEl.innerText = '주말 예약 가능';
+            weekendYnEl.classList.add('bookable');
+        } else {
+            weekendYnEl.innerText = '주말 예약 불가';
+            weekendYnEl.classList.add('unbookable');
+        }
+
+        spaceNameEl.innerText = spaceData.spaceNm;
         maxCapacityEl.innerText = spaceData.maxCapacity + '명';
         maxBookingTimeEl.innerText = spaceData.maxRsvsTms + '시간';
         startTimeEl.innerText = convertTimeArrToString(spaceData.startTm);
