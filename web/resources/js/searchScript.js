@@ -1,6 +1,6 @@
 const search = {
     CLASSES: {
-        HIDE: 'hide',
+        HIDE: 'hidden',
         INPUT: 'searchInput',
         MODAL: 'searchResult',
     },
@@ -113,15 +113,17 @@ const search = {
             return;
         }
         search.modalEl.innerHTML = objs.map((r, index) => {
-            return `<div id='searchedEmpl${index}' class='searchedEmpl emplProfile' data-id='${r.emplId}'>
-                                <div class='imgContainer'>
-                                    <img src=${r.prfPhotoPath?r.prfPhotoPath:''} class='emplImg profileImg' alt="프로필 사진"/>
-                                </div>
-                                <div>
-                                    <p class='profileNm'><span class='emplNm'>${r.rnm}</span><span class='emplEngNm'>${r.engNm?'('+r.engNm+')':''}</span></p>
-                                    <p class='emplEmail profileEmail'>${r.email}</p>
-                                </div>
-                            </div>`
+            return `<div id='searchedEmpl${index}' class='searchedEmpl emplProfile searchedProfile' data-id='${r.emplId}'>
+                        <div class="searchedProfileImageContent">
+                            <div class='imgContainer searchedProfileImageWrapper'>
+                                <img src='${r.prfPhotoPath?r.prfPhotoPath:"/img/noImg.png"}' class='emplImg profileImg searchedProfileImage' alt="프로필 사진"/>
+                            </div>
+                        </div>
+                        <div class="searchedProfileInfoContent">
+                            <p class='profileNm searchedProfileName'><span class='emplNm'>${r.rnm}</span><span class=\'emplEngNm\'>${r.engNm?'('+r.engNm+')':''}</span></p>
+                            <p class='emplEmail profileEmail searchedProfileEmail'>${r.email}</p>
+                        </div>
+                    </div>`
         }).join('');
 
         search.showModal();
@@ -136,7 +138,7 @@ const profile = {
         PHOTO: 'profilePhoto',
         CLOSE: 'closeBtn',
         MANAGER_NAME: 'nm',
-        HIDE: 'hide'
+        HIDE: 'hidden'
     },
     hasMngr: false,
     isVisible: false,
