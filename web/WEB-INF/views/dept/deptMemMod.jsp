@@ -12,41 +12,51 @@
 <html lang="kr">
 <head>
     <title>roombook | 구성원 수정</title>
-    <link rel="stylesheet" type="text/css" href="/css/style.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/deptStyle.css">
     <link rel="stylesheet" href="https://unpkg.com/ionicons@4.5.10-0/dist/css/ionicons.min.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Montserrat:500,700&amp;display=swap">
 </head>
 <body>
-    <div>
-        <h1>부서 구성원 수정</h1>
-        <div>${deptCd}</div>
-        <div>${deptNm}</div>
-        <div>${engDeptNm}</div>
-        <div>
-            <div id="searchContainer" class="">
-                <input type="text" id="searchInput" placeholder="이름 또는 이메일을 입력하세요">
-                <div id="searchResult" class="searchResult hide"></div>
+    <div class="horizontalCenter800">
+        <div class="headerWrapper">
+            <h1>부서 구성원 수정</h1>
+        </div>
+        <div class="infoSection">
+            <div class="infoRow">
+                <span class="infoName">부서명</span>
+                <span class="infoContent">${deptNm}(${engDeptNm})</span>
             </div>
-            <div id="memProfileContainer" class="memProfileContainer">
-                <c:if test="${deptMemAndDeptNm ne null}">
-                <c:forEach var="mem" items="${deptMemAndDeptNm}" varStatus="status">
-                    <div class="memProfile" data-id="${mem.emplId}">
-                        <span id="closeBtn" class="closeBtn">&times;</span>
-                        <div>
-                            <img src="${mem.prfPhotoPath}" class="profilePhoto" alt="프로필 사진"/>
+            <div class="infoRow">
+                <span class="infoName">멤버 검색</span>
+            </div>
+            <div class="infoRow">
+                <div id="searchContainer" class="searchInputWrapper">
+                    <input type="text" id="searchInput" class="searchInput" placeholder="이름 또는 이메일을 입력하세요">
+                    <div id="searchResult" class="searchResult searchList hidden"></div>
+                </div>
+                <div id="memProfileContainer" class="memProfileContainer">
+                    <c:if test="${deptMemAndDeptNm ne null}">
+                    <c:forEach var="mem" items="${deptMemAndDeptNm}" varStatus="status">
+                        <div class="memProfile selectProfile marginBottom10" data-id="${mem.emplId}">
+                            <div class="selectProfileImgWrapper">
+                                <img src="${mngr.prfPhotoPath?profileImgPath+'/'+mngr.prfPhotoPath:noImgPath}" class="profilePhoto" alt="프로필 사진"/>
+                            </div>
+                            <div class="selectProfileInfoWrapper">
+                                <p class='profileNm selectedProfileName'><span class='nm'>${mem.rnm}</span><span class='engNm'>${mem.engNm?mngr.engNm:''}</span></p>
+                                <p class='profileEmail selectedProfileEmail'>${mem.email}</p>
+                            </div>
+                            <div>
+                                <span id="closeBtn" class="closeBtn">&times;</span>
+                            </div>
                         </div>
-                        <div>
-                            <p class='profileNm'><span class='nm'>${mem.rnm}</span><span class='engNm'>${mem.engNm?mngr.engNm:''}</span></p>
-                            <p class='profileEmail'>${mem.email}</p>
-                        </div>
-                    </div>
-                </c:forEach>
-                </c:if>
+                    </c:forEach>
+                    </c:if>
+                </div>
             </div>
         </div>
-        <div id="btnContainer">
-            <button type="button" id="cancelBtn">취소</button>
-            <button type="button" id="submitBtn">저장</button>
+        <div id="btnContainer" class="btnWrapper">
+            <button type="button" id="cancelBtn" class="btnM2">취소</button>
+            <button type="button" id="submitBtn" class="btnM2">저장</button>
         </div>
     </div>
     <script>
@@ -107,7 +117,7 @@
         }
         const search = {
             CLASSES: {
-                HIDE: 'hide'
+                HIDE: 'hidden'
             },
             isModalVisible: false,
             modalEl: document.getElementById("searchResult"),
@@ -206,15 +216,17 @@
                 search.modalEl.innerHTML = objs.map((r, index) => {
                     const isDuplicated = memProfile.checkDuplication(r.emplId);
 
-                    return `<div id='searchedEmpl${'${index}'}' class='searchedEmpl emplProfile ${'${isDuplicated?\'unclickable\':\'\'}'}' data-id='${'${r.emplId}'}'>
-                                <div class='imgContainer'>
-                                    <img src="${'${r.prfPhotoPath?r.prfPhotoPath:\'\'}'}" class='emplImg profileImg' alt="프로필 사진"/>
+                    return `<div id='searchedEmpl\${index}' class='searchedEmpl emplProfile searchedProfile \${isDuplicated?'unclickable':""}' data-id='\${r.emplId}'>
+                                <div class="searchedProfileImageContent">
+                                    <div class='imgContainer searchedProfileImageWrapper'>
+                                        <img src='\${r.prfPhotoPath?profileImgPath+'/'+r.prfPhotoPath:"/img/noImg.png"}' class='emplImg profileImg searchedProfileImage' alt="프로필 사진"/>
+                                    </div>
                                 </div>
-                                <div>
-                                    <p class='profileNm'><span class='emplNm'>${'${r.rnm}'}</span><span class='emplEngNm'>${'${r.engNm?\'(\'+r.engNm+\')\':\'\'}'}</span>
-                                        ${'${isDuplicated?\'<span>(이미 선택된 구성원입니다.)</span>\':\'\'}'}
+                                <div class='searchedProfileInfoContent'>
+                                    <p class='profileNm searchedProfileName'><span class='emplNm'>\${r.rnm}</span><span class='emplEngNm'>\${r.engNm?'('+r.engNm+')':''}</span>
+                                        \${isDuplicated?'<span class="duplicationInfo">(이미 선택된 구성원입니다.)</span>':''}
                                     </p>
-                                    <p class='emplEmail profileEmail'>${'${r.email}'}</p>
+                                    <p class='emplEmail profileEmail searchedProfileEmail'>\${r.email}</p>
                                 </div>
                             </div>`
                 }).join('');
@@ -255,14 +267,16 @@
                     return false;
                 }
                 memProfile.memContainerEl.insertAdjacentHTML("afterbegin",
-                    `<div class="memProfile" data-id="${'${id}'}">
-                        <span class="closeBtn">&times;</span>
-                        <div>
-                            <img src="${'${img}'}" class="profilePhoto" alt="프로필 사진"/>
+                    `<div class="memProfile selectProfile marginBottom10" data-id="\${id}">
+                        <div class="selectProfileImgWrapper">
+                            <img src="\${img}" class="profilePhoto" alt="프로필 사진"/>
+                        </div>
+                        <div class="selectProfileInfoWrapper">
+                            <p class="profileNm selectedProfileName"><span class="nm">\${nm}</span><span class="engNm">\${engNm?'('+engNm+')':''}</span></p>
+                            <p class="profileEmail selectedProfileEmail">\${email}</p>
                         </div>
                         <div>
-                            <p class="profileNm"><span class="nm">${'${nm}'}</span><span class="engNm">${'${engNm?\'(\'+engNm+\')\':\'\'}'}</span></p>
-                            <p class="profileEmail">${'${email}'}</p>
+                            <span class="closeBtn">&times;</span>
                         </div>
                     </div>`);
                 return true;

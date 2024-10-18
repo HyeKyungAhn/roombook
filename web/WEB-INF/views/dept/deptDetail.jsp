@@ -11,103 +11,109 @@
 <!DOCTYPE>
 <html lang="kr">
 <head>
-    <title>roombook | 부서</title>
+    <title></title>
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/deptStyle.css"/>
 </head>
 <body>
-<div>
-    <h1>부서 상세페이지</h1>
-    <a class="" href="<c:url value='/dept/mod?deptCd=${deptAndMngrData.deptCd}'/>">
-        <span>부서 수정</span>
-    </a>
-    <button id="deptDelBtn">
-        <span>부서 삭제</span>
-    </button>
-    <div>
-        <h2>부서 정보</h2>
-        <div>
-            <span>부서명</span>
-            <span>${deptAndMngrData.deptNm}</span>
-        </div>
-
-        <div>
-            <span>부서 영문명</span>
-            <span>${deptAndMngrData.engDeptNm}</span>
-        </div>
-
-        <div>
-            <p>관리자 직원</p>
-            <c:choose>
-            <c:when test="${deptAndMngrData.emplId ne null}">
-            <div>
-                <span>직원 아이디</span>
-                <span>${deptAndMngrData.emplId}</span>
-            </div>
-            <div>
-                <span>사진</span>
-                <span>${deptAndMngrData.prfPhotoPath}</span>
-            </div>
-            <div>
-                <span>이름</span>
-                <span>${deptAndMngrData.rnm}</span>
-            </div>
-            <div>
-                <span>영문명</span>
-                <span>${deptAndMngrData.engNm}</span>
-            </div>
-            <div>
-                <span>사원번호</span>
-                <span>${deptAndMngrData.empno}</span>
-            </div>
-            <div>
-                <span>이메일</span>
-                <span>${deptAndMngrData.email}</span>
-            </div>
-            </c:when>
-            <c:otherwise>
-            <div>없음</div>
-            </c:otherwise>
-            </c:choose>
-        </div>
-
-        <div>
-            <h2>구성원</h2>
-            <a href="<c:url value='/dept/mem?deptCd=${deptAndMngrData.deptCd}'/>">
-                <span>추가/수정</span>
+    <div class="horizontalCenter800 deptDetailRoot paddingTop40">
+        <div class="breadScrumbContainer">
+            <a href="${pageContext.request.contextPath}/dept/list"  class="breadScrumb">
+                <span>부서 목록</span>
             </a>
-            <div>
-                <c:forEach var="mem" items="${memberInfo}">
-                <div>
-                    <div>
-                        <span>직원 아이디</span>
-                        <span>${mem.emplId}</span>
+            <span class="breadScrumbCurrentPage">부서 상세 정보</span>
+        </div>
+        <div class="headerWrapper">
+            <h1>부서 상세페이지</h1>
+        </div>
+        <div>
+            <div class="flexRightAlignment flexRow flexJustifyContentEnd">
+                <a class="btnM marginRight10 bg_gray" href="<c:url value='/dept/mod?deptCd=${deptAndMngrData.deptCd}'/>">부서 수정</a>
+                <button id="deptDelBtn" class="btnM bg_gray">부서 삭제</button>
+            </div>
+            <div class="infoSection">
+                <div class="subHeaderWrapper">
+                    <h2>부서 정보</h2>
+                </div>
+                <div class="infoRow">
+                    <span class="infoName">부서명</span>
+                    <span class="infoContent">${deptAndMngrData.deptNm}</span>
+                </div>
+                <div class="infoRow">
+                    <span class="infoName">부서 영문명</span>
+                    <span class="infoContent">${deptAndMngrData.engDeptNm}</span>
+                </div>
+                <div class="infoRow">
+                    <p class="infoName">관리자 직원</p>
+                    <div class="profileWrapper">
+                    <c:choose>
+                    <c:when test="${deptAndMngrData.emplId ne null}">
+                    <div class="profileContent">
+                        <div class="profileImageWrapper">
+                            <img alt="사원 프로필 사진" src="${deptAndMngrData.prfPhotoPath?profileImgPath+'/'+deptAndMngrData.prfPhotoPath:noImgPath}"/>
+                        </div>
+                        <div class="profileInfo">
+                            <div class="profileInfoRow profileName">
+                                <span>${deptAndMngrData.rnm}</span>${deptAndMngrData.engNm?'<span>('+deptAndMngrData.engNm+')</span>':''}
+                            </div>
+                            <div class="profileInfoRow profileEmail">
+                                <span>${deptAndMngrData.email}</span>
+                            </div>
+                        </div>
                     </div>
-                    <div>
-                        <span>사진</span>
-                        <span>${mem.prfPhotoPath}</span>
-                    </div>
-                    <div>
-                        <span>이름</span>
-                        <span>${mem.rnm}</span>
-                    </div>
-                    <div>
-                        <span>영문명</span>
-                        <span>${mem.engNm}</span>
-                    </div>
-                    <div>
-                        <span>사원번호</span>
-                        <span>${mem.empno}</span>
-                    </div>
-                    <div>
-                        <span>이메일</span>
-                        <span>${mem.email}</span>
+                    </c:when>
+                    <c:otherwise>
+                    <div class="noProfile">없음</div>
+                    </c:otherwise>
+                    </c:choose>
                     </div>
                 </div>
-                </c:forEach>
+            </div>
+            <div class="infoSection">
+                <div class="flexRow alignItemCenter flexSpaceBetween">
+                    <div class="subHeaderWrapper">
+                        <h2>구성원</h2>
+                    </div>
+                    <div>
+                        <a class="btnM bg_gray" href="<c:url value='/dept/mem?deptCd=${deptAndMngrData.deptCd}'/>">추가 및 수정</a>
+                    </div>
+                </div>
+                <div class="profileListScroll">
+                    <div class="profileListScrollContent">
+                        <c:choose>
+                        <c:when test="${deptAndMngrData.emplId ne null}">
+                        <c:forEach var="mem" items="${memberInfo}">
+                        <div class="profileWrapper">
+                            <div class="profileContent">
+                                <div class="profileImageWrapper">
+                                    <img alt="사원 프로필 사진" src="${mem.prfPhotoPath?profileImgPath+'/'+mem.prfPhotoPath:noImgPath}"/>
+                                </div>
+                                <div class="profileInfo">
+                                    <div class="profileInfoRow profileName">
+                                        <span>${mem.rnm}</span>${mem.engNm?'<span>('+mem.engNm+')</span>':''}
+                                    </div>
+                                    <div class="profileInfoRow profileEmail">
+                                        <span>${mem.email}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        </c:forEach>
+                        </c:when>
+                        <c:otherwise>
+                        <div>없음</div>
+                        </c:otherwise>
+                        </c:choose>
+                    </div>
+                </div>
             </div>
         </div>
+        <div class="btnWrapper">
+            <button type="button" id="listBtn" class="btnM2">부서 목록</button>
+        </div>
     </div>
-</div>
 <script>
+    const listBtnEl = document.getElementById('listBtn');
+
     let msg = '${msg}';
     switch (msg){
         case "MOD_SUCCESS": alert("수정이 완료되었습니다."); break;
@@ -139,7 +145,7 @@
             switch (msg){
                 case 'DEL_OK':
                     alert('부서 삭제가 완료되었습니다.');
-                    window.location.replace('<c:url value="/dept/list"/>'); break;
+                    window.location.replace('<c:url value="${deptListUri}"/>'); break;
                 case 'MEM':
                     alert('구성원이 있는 부서는 삭제할 수 없습니다.\n구성원을 이동하거나 삭제 후 다시 시도하세요.'); break;
                 case 'SUB_DEPT':
@@ -152,6 +158,10 @@
             console.error('Error sending data:', error);
         });
     }
+
+    listBtnEl.addEventListener('click', () =>{
+        location.href = '<c:url value="${deptListUri}"/>';
+    });
 </script>
 </body>
 </html>

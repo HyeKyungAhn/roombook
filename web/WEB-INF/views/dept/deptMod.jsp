@@ -12,49 +12,52 @@
 <html lang="kr">
 <head>
     <title>roombook | 부서 수정</title>
-    <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/style.css">
     <link rel='stylesheet' href='https://unpkg.com/ionicons@4.5.10-0/dist/css/ionicons.min.css'>
     <link rel='stylesheet' href='https://fonts.googleapis.com/css?family=Montserrat:500,700&amp;display=swap'>
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/deptStyle.css">
 </head>
 <body>
-    <div>
-        <h1>부서 수정</h1>
-        <div>
-            <h2>부서 정보</h2>
+    <div class="horizontalCenter800">
+        <div class="headerWrapper">
+            <h1>부서 정보 수정</h1>
+        </div>
+        <div  class="infoSection">
             <form action="<c:url value="/dept/mod"/>" method="POST" id="deptModForm">
+                <p>* 필수정보를 모두 입력해주세요</p>
                 <input type="hidden" name="deptCd" class="deptCdInput" value="${deptInfo.deptCd}">
-                <div>
-                    <label>부서명
-                        <input type="text" name="deptNm" id="deptNm" class="deptNmInput" value="${deptInfo.deptNm}">
-                    </label>
+                <div class="infoRow">
+                    <label for="deptNm" class="infoName">부서명<span>*</span></label>
+                        <input type="text" name="deptNm" id="deptNm" class="deptNmInput roundInputWidth200" value="${deptInfo.deptNm}">
                 </div>
-                <div>
-                    <label>부서 영문명
-                        <input type="text" name="engDeptNm" id="engDeptNm" class="engDeptNmInput" value="${deptInfo.engDeptNm}">
-                    </label>
+                <div class="infoRow">
+                    <label class="infoName">영문 부서명</label>
+                        <input type="text" name="engDeptNm" id="engDeptNm" class="engDeptNmInput roundInputWidth200" value="${deptInfo.engDeptNm}">
                 </div>
-                <div>
-                    <div>관리자 직원</div>
+                <div class="infoRow">
+                    <label for="searchInput" class="infoName">관리자 직원</label>
+                </div>
+                <div class="infoRow">
                     <input id="mngrId" type="hidden" name="mngrId" value="${mngr.emplId}">
-                    <div id="searchMngr" class="hide">
-                        <label>
-                            <input id="searchInput" type="text" placeholder="이름 또는 이메일을 입력하세요"/>
-                        </label>
-                        <div id="searchResult" class="searchResult hide"></div>
+                    <div id="searchMngr" class="hidden">
+                        <input id="searchInput" class="searchInput" type="text" placeholder="이름 또는 이메일을 입력하세요"/>
+                        <div id="searchResult" class="searchResult searchList hidden"></div>
                     </div>
-                    <div id="mngrProfile" class="mngrProfile hide">
-                        <span id="closeBtn" class="closeBtn">&times;</span>
-                        <div>
-                            <img src="${mngr.prfPhotoPath}" class="profilePhoto" alt="프로필 사진"/>
+                    <div id="mngrProfile" class="mngrProfile selectProfile hidden">
+                        <div class="selectProfileImgWrapper">
+                            <img src="${mngr.prfPhotoPath?profileImgPath+'/'+mngr.prfPhotoPath:noImgPath}" class="profilePhoto" alt="프로필 사진"/>
+                        </div>
+                        <div class="selectProfileInfoWrapper">
+                            <p class='profileNm selectedProfileName'><span class='nm'>${mngr.rnm}</span><span class='engNm'>${mngr.engNm?mngr.engNm:''}</span></p>
+                            <p class='profileEmail selectedProfileName'>${mngr.email}</p>
                         </div>
                         <div>
-                            <p class='profileNm'><span class='nm'>${mngr.rnm}</span><span class='engNm'>${mngr.engNm?mngr.engNm:''}</span></p>
-                            <p class='profileEmail'>${mngr.email}</p>
+                            <span id="closeBtn" class="closeBtn">&times;</span>
                         </div>
                     </div>
                 </div>
-                <div>
-                    <button type="button" id="cancelBtn">취소</button><button type="submit" id="submitBtn">저장</button>
+                <div class="btnWrapper">
+                    <button type="button" id="cancelBtn" class="btnM2">취소</button>
+                    <button type="submit" id="submitBtn" class="btnM2">저장</button>
                 </div>
             </form>
         </div>

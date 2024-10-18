@@ -10,14 +10,24 @@
 <html lang="kr">
 <head>
     <meta charset="utf-8">
-    <title>roombook | 부서 이동</title>
+    <title></title>
     <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/jstree/dist/themes/default/style.min.css" />
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/deptStyle.css"/>
 </head>
 <body>
-<div id="jstree"></div>
-<button>저장</button>
-
+    <div class="horizontalCenter800 paddingTop40">
+        <div class="headerWrapper">
+            <h1>부서 이동</h1>
+        </div>
+        <p>부서를 드래그하여 이동해주세요.</p>
+        <div class="jsTreeWrapper">
+            <div id="jstree"></div>
+        </div>
+        <div class="btnWrapper">
+            <button class="btnM2 bg_yellow">저장</button>
+        </div>
+    </div>
 <script src="${pageContext.request.contextPath}/jstree/dist/jstree.min.js"></script>
 <script>
     $(function () {

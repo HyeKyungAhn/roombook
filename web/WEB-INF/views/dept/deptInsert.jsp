@@ -11,10 +11,8 @@
 <!DOCTYPE>
 <html lang="kr">
 <head>
-    <title>roombook | 부서 추가</title>
-    <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/style.css">
-    <link rel='stylesheet' href='https://unpkg.com/ionicons@4.5.10-0/dist/css/ionicons.min.css'>
-    <link rel='stylesheet' href='https://fonts.googleapis.com/css?family=Montserrat:500,700&amp;display=swap'>
+    <title></title>
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/deptStyle.css">
 </head>
 <script>
     const msg = '${msg}';
@@ -29,52 +27,57 @@
     }
 </script>
 <body>
-    <div>
-        <form method="post" action="<c:url value='/dept/save'/>" accept-charset="UTF-8" name="deptInfo" id="deptForm">
-            <p>* 필수정보를 모두 입력해주세요</p>
-            <div>
-                <label>부서명*
-                <input type="text" name="deptNm" id="deptNm" value="${deptNm}" ${param != null ? 'autofocus': null}>
-                </label>
-            </div>
-            <div>
-                <label>영문 부서명
-                <input type="text" name="engDeptNm" id="engDeptNm" value="${engDeptNm}">
-                </label>
-            </div>
-            <div>
-                <label>상위 부서*
-                <select name="parent" id="parent">
-                    <option value="#">최상위 부서</option>
-                    <c:forEach var="dept" items="${CdAndNm}">
-                        <option value="${dept.deptCd}" ${dept.deptNm==param.parent ? 'selected' : null}>${dept.deptNm}</option>
-                    </c:forEach>
-                </select>
-                </label>
-            </div>
-            <div>
-                <div>관리자 직원</div>
-                <input type="hidden" name="mngrId" id="mngrId" value="${mngr.emplId}">
-                <div id="searchMngr" class="hide">
-                    <label>
-                        <input id="searchInput" type="text" placeholder="이름 또는 이메일을 입력하세요"/>
-                    </label>
-                    <div id="searchResult" class="searchResult hide"></div>
+    <div class="horizontalCenter800 deptInsertRoot">
+        <div class="headerWrapper">
+            <h1>새 부서 추가</h1>
+        </div>
+        <div class="infoSection">
+            <form method="post" action="<c:url value='/dept/save'/>" accept-charset="UTF-8" name="deptInfo" id="deptForm">
+                <p>* 필수정보를 모두 입력해주세요</p>
+                <div class="infoRow">
+                    <label for="deptNm" class="infoName">부서명<span>*</span></label>
+                    <input type="text" name="deptNm" id="deptNm" class="roundInputWidth200" value="${deptNm}" ${param != null ? 'autofocus': null}>
                 </div>
-                <div id="mngrProfile" class="mngrProfile hide">
-                    <span id="closeBtn" class="closeBtn">&times;</span>
-                    <div>
-                        <img src="${mngr.prfPhotoPath}" class="profilePhoto" alt="프로필 사진"/>
+                <div class="infoRow">
+                    <label class="infoName">영문 부서명</label>
+                    <input type="text" name="engDeptNm" id="engDeptNm" class="roundInputWidth200" value="${engDeptNm}">
+                </div>
+                <div class="infoRow">
+                    <label class="parent infoName">상위 부서<span>*</span></label>
+                    <select name="parent" id="parent" class="roundInputWidth200">
+                        <option value="#">최상위 부서</option>
+                        <c:forEach var="dept" items="${CdAndNm}">
+                            <option value="${dept.deptCd}" ${dept.deptNm==param.parent ? 'selected' : null}>${dept.deptNm}</option>
+                        </c:forEach>
+                    </select>
+                </div>
+                <div class="infoRow">
+                    <label for="searchInput" class="infoName">관리자 직원</label>
+                </div>
+                <div class="infoRow">
+                    <input type="hidden" name="mngrId" id="mngrId" value="${mngr.emplId}">
+                    <div id="searchMngr" class="hidden searchInputWrapper">
+                        <input id="searchInput" class="searchInput" type="text" placeholder="이름 또는 이메일을 입력하세요"/>
+                        <div id="searchResult" class="searchResult searchList hidden"></div>
                     </div>
-                    <div>
-                        <p class='profileNm'><span class='nm'>${mngr.rnm}</span><span class='engNm'>${mngr.engNm?mngr.engNm:''}</span></p>
-                        <p class='profileEmail'>${mngr.email}</p>
+                    <div id="mngrProfile" class="mngrProfile selectProfile hidden">
+                        <div class="selectProfileImgWrapper">
+                            <img src="${mngr.prfPhotoPath?profileImgPath+'/'+mngr.prfPhotoPath:noImgPath}" class="profilePhoto" alt="프로필 사진"/>
+                        </div>
+                        <div class="selectProfileInfoWrapper">
+                            <p class='profileNm selectedProfileName'><span class='nm'>${mngr.rnm}</span><span class='engNm'>${mngr.engNm?mngr.engNm:''}</span></p>
+                            <p class='profileEmail selectedProfileEmail'>${mngr.email}</p>
+                        </div>
+                        <div>
+                            <span id="closeBtn" class="closeBtn">&times;</span>
+                        </div>
                     </div>
                 </div>
-            </div>
-        </form>
-
-        <button type="submit" form="deptForm">제출하기</button>
+            </form>
+        </div>
+        <div class="btnWrapper">
+            <button type="submit" form="deptForm" class="btnM2">다음으로</button>
+        </div>
     </div>
     <script src="${pageContext.request.contextPath}/js/searchScript.js"></script>
     <script>
@@ -84,6 +87,7 @@
         return false;
     };
     const submitForm = document.getElementById('deptForm');
+
     submitForm.addEventListener('submit', function(e) {
         e.preventDefault();
         window.onbeforeunload = null;
