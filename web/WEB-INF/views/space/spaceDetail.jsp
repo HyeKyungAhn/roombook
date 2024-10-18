@@ -11,9 +11,8 @@
 <!DOCTYPE>
 <html lang="kr">
 <head>
-    <title>roombook | 공간 상세</title>
+    <title></title>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/spaceDetail.css"/>
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/customTag.css"/>
     <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/space.css"/>
     <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/jsCalendar/jsCalendar.css">
     <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/jsCalendar/jsCalendar.micro.css">
@@ -22,68 +21,87 @@
     <script type="text/javascript" src="${pageContext.request.contextPath}/js/jsCalendar/jsCalendar.lang.ko.js"></script>
 </head>
 <body>
-<h1>공간 상세 정보</h1>
-<div>
-    <div class="product-imgs">
-        <div class = "img-display">
-            <div id="imgShowcase" class = "img-showcase">
-            </div>
-        </div>
-        <div id="imgSelect" class="img-select">
-        </div>
+<div class="spaceDetailRootWrapper">
+    <div class="breadScrumbContainer">
+        <a href="${pageContext.request.contextPath}/spaces"  class="breadScrumb">
+            <span>공간 목록</span>
+        </a>
+        <span class="breadScrumbCurrentPage">공간 상세 정보</span>
+    </div>
+    <div class="headerWrapper">
+        <h1 id="name" class="spaceName"></h1>
     </div>
     <div>
-        <button type="button" id="bookBtn">예약하기</button>
-    </div>
-    <div class="spaceInfo">
-        <div>
-            <span>공간명</span>
-            <span id="name"></span>
-        </div>
-        <div>
-            <span>위치(20자 이내)</span>
-            <span id="location"></span>
-        </div>
-        <div>
-            <span>공간 설명(100자)</span>
-            <span id="description"></span>
-        </div>
-        <div>
-            <span>최대 연속 예약 가능 시간(시간 단위)</span>
-            <span id="maxTime"></span>
-        </div>
-        <div>
-            <span>공간 주말 이용 가능 여부</span>
-            <span id="weekend"></span>
-        </div>
-        <div>
-            <span>이용시간</span>
-            <span id="startTime"></span>
-            <span>-</span>
-            <span id="finishTime"></span>
-        </div>
-        <div>
-            <span>최대 수용인원</span>
-            <span id="capacity"></span>
-        </div>
-        <div>
-            <span>옵션(facility)</span>
-            <div id="resources"></div>
-        </div>
-        <div>
-            <div>
-                <input type="text" name="myCalendar" value="" id="myCalendar" class="myCalendar">
+        <div class="product-imgs">
+            <div class = "img-display">
+                <div id="imgShowcase" class = "img-showcase"></div>
             </div>
-            <div id="timeTable"></div>
+            <div id="imgSelect" class="img-select"></div>
         </div>
-        <div>
-            <button type="button" id="listBtn">목록</button>
+        <div class="bookingBtnWrapper">
+            <button type="button" class="btnM bg_yellow" id="bookBtn">예약하기</button>
+        </div>
+        <div class="spaceInfo">
+            <div class="spaceInfoRow">
+                <span class="spaceInfoName">위치</span>
+                <span id="location" class="spaceInfoContent"></span>
+            </div>
+            <div class="spaceInfoRow">
+                <span class="spaceInfoName">예약 가능 시간</span>
+                <span id="maxTime" class="spaceInfoContent"></span>
+                <div class="tooltip">
+                    <span class="toolTipMsg tooltipRight">최대 <strong>연속</strong>으로 예약 가능한 시간입니다.</span>
+                </div>
+            </div>
+            <div class="spaceInfoRow">
+                <span class="spaceInfoName">주말 이용</span>
+                <span id="weekend" class="spaceInfoContent"></span>
+            </div>
+            <div class="spaceInfoRow">
+                <span class="spaceInfoName">이용시간</span>
+                <div class="spaceInfoContent usgTime">
+                    <span id="startTime"></span>
+                    <span>-</span>
+                    <span id="finishTime"></span>
+                </div>
+            </div>
+            <div class="spaceInfoRow">
+                <span class="spaceInfoName">최대 수용인원</span>
+                <span id="capacity" class="spaceInfoContent"></span>
+            </div>
+            <div class="spaceInfoRow">
+                <span class="spaceInfoName">공간 설명</span>
+            </div>
+            <div class="spaceInfoRow">
+                <p id="description" class="spaceInfoContent spaceDescription"></p>
+            </div>
+            <div class="spaceInfoRow">
+                <span class="spaceInfoName">옵션(facility)</span>
+            </div>
+            <div class="spaceInfoRow">
+                <div id="resources" class="spaceInfoContent"></div>
+            </div>
+            <div class="spaceInfoRow">
+                <span class="spaceInfoName">공간 예약 스케줄</span>
+            </div>
+            <div class="timeTableWrapper">
+                <span class="spaceInfoName"></span>
+                <div>
+                    <label for="myCalendar" class="hidden">예약 날짜</label>
+                    <input type="text" name="myCalendar" value="" id="myCalendar" class="myCalendar">
+                </div>
+                <div id="timeTable" class="timeTable"></div>
+            </div>
+            <div class="btnWrapper">
+                <button type="button" id="listBtn" class="btnM2">목록</button>
+            </div>
         </div>
     </div>
 </div>
 <script>
     const jsonData = JSON.parse('${jsonSpace}');
     const imgPath = '${imgPath}';
+    const noImgPath = '${noImgPath}';
 
     const nameEl = document.getElementById('name');
     const locationEl = document.getElementById('location');
@@ -125,6 +143,7 @@
         renderSpaceInfo();
         renderResources();
         requestTimeslots();
+        calendarEl.readOnly = true;
     });
 
     myDatePicker.jsCalendar.onDateClick(function(event, date){
@@ -154,10 +173,10 @@
         locationEl.innerText = jsonData.spaceLoc;
         descriptionEl.innerText = jsonData.spaceDesc;
         maxTimeEl.innerText = jsonData.maxRsvsTms + '시간';
-        weekendEl.innerText = jsonData.weekend;
+        weekendEl.innerText = jsonData.weekend === 'Y' ? '가능' : '불가';
         startTimeEl.innerText = `\${jsonData.startTm[0].toString().padStart(2,'0')}:\${jsonData.startTm[1].toString().padStart(2,'0')}`;
         finishTimeEl.innerText = `\${jsonData.finishTm[0].toString().padStart(2,'0')}:\${jsonData.finishTm[1].toString().padStart(2,'0')}`;
-        capacityEl.innerText = jsonData.maxCapacity;
+        capacityEl.innerText = jsonData.maxCapacity + '명';
     }
 
     function renderResources() {
@@ -165,7 +184,12 @@
         const resourcesEl = document.getElementById('resources');
 
         resourcesEl.innerHTML = jsonResources.map((resc, index) => {
-            return `<span class='rescTag'>${'${resc.value}'}</span>`
+            return `
+            <div class="rescItem">
+                <span>#</span>
+                <span>${'${resc.value}'}</span>
+            </div>
+            `
         }).join('');
     }
 

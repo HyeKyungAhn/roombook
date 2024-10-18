@@ -11,27 +11,26 @@
 <!DOCTYPE>
 <html lang="kr">
 <head>
-  <title>roombook | 공간 목록</title>
+  <title></title>
   <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/jsCalendar/jsCalendar.css">
   <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/jsCalendar/jsCalendar.micro.css">
   <script type="text/javascript" src="${pageContext.request.contextPath}/js/jsCalendar/jsCalendar.js"></script>
   <script type="text/javascript" src="${pageContext.request.contextPath}/js/jsCalendar/jsCalendar.datepicker.js"></script>
   <script type="text/javascript" src="${pageContext.request.contextPath}/js/jsCalendar/jsCalendar.lang.ko.js"></script>
   <link rel="stylesheet" href="${pageContext.request.contextPath}/css/space.css">
+  <link rel="stylesheet" href="${pageContext.request.contextPath}/css/pagination.css">
 </head>
 <body>
-<div>
-  <div>
-    <h1>공간 목록</h1>
-  </div>
-  <div>
-    <div>
-      <input type="text" name="myCalendar" value="" id="myCalendar" class="myCalendar">
+  <div class="spaceListRoot">
+    <div class="headerWrapper">
+      <h1>공간 목록</h1>
     </div>
-    <div id="spaceList" class="spaceList">
+    <div class="datePickerWrapper">
+      <label for="myCalendar" class="hidden">날짜 선택</label>
+      <input type="text" name="myCalendar" value="" id="myCalendar" class="myCalendar datePicker" readonly>
     </div>
+    <div id="spaceList" class="spaceList"></div>
   </div>
-</div>
 <nav id="paginationNav" class="paginationContainer" aria-label="pagination">
 </nav>
 <script>
@@ -71,7 +70,7 @@
 
   //// Space List ////
 
-  function requestSpaceList(page, date) {
+  function requestSpaceList(page, date, callback) {
     fetch(`<c:url value="${spaceListRequestUrl}"/>?page=\${page}&date=\${date}`, {
       method: 'GET',
     }).then(response => {
@@ -98,9 +97,17 @@
       pagination.pageHandler = jsonData.pageHandler;
       pagination.showPaginationNav();
       pagination.initialize();
+
+      if(typeof callback === "function"){
+        callback();
+      }
     }).catch(error => {
       console.error('ERROR: ', error);
     });
+  }
+
+  function scrollToBottom() {
+    window.scrollTo(0, 0);
   }
 
   function informListEmpty() {
@@ -121,34 +128,35 @@
       rescWrapper.classList.add('rescInfo');
       for (let resc of rescs) {
         rescWrapper.insertAdjacentHTML('beforeend',`
-          <span data-no="\${resc.rescNo}">\${resc.value}</span>
+          <div class="rescItem" data-no="\${resc.rescNo}"><span>#</span><span>\${resc.value}</span></div>
         `);
       }
 
       const spaceWrapper = document.createElement('div');
-      spaceWrapper.classList.add('spaceInfo');
       spaceWrapper.insertAdjacentHTML('beforeend', `
-        <div>
+        <div class="spaceName">
             <a href="\${jsonData.links.find(link => link.rel === 'spaceDetail').href.replace('{spaceNo}', space.spaceNo)}">\${space.spaceNm}</a>
         </div>
         <div>
-            <span>\${space.maxCapacity}명</span>
-            <span>\${space.spaceLoc}</span>
-            <span>\${space.spaceDesc}</span>
-        </div>
-        <div>
-            <span>최대 연속 예약 시간:\${space.maxRsvsTms}</span>
-            <div>
-              <span>\${space.startTm[0].toString().padStart(2,'0')}:\${space.startTm[1].toString().padStart(2,'0')}</span>
-              <span>-</span>
-              <span>\${space.finishTm[0].toString().padStart(2,'0')}:\${space.finishTm[1].toString().padStart(2,'0')}</span>
+            <div class="spaceBriefInfoRow">
+              <span class="spaceCapacity">\${space.maxCapacity}명</span>
+              <div class="spaceUsgTime">
+                <span class="spaceStartTime">\${space.startTm[0].toString().padStart(2,'0')}:\${space.startTm[1].toString().padStart(2,'0')}</span>
+                <span>-</span>
+                <span class="spaceFinishTime">\${space.finishTm[0].toString().padStart(2,'0')}:\${space.finishTm[1].toString().padStart(2,'0')}</span>
+              </div>
+              <span class="spaceMaxBookingTime">\${space.maxRsvsTms} 시간</span>
+              <span class="spaceWeekend \${space.weekend == 'Y'?'bookable':'unbookable'}">주말 이용 \${space.weekend == 'Y'? '가능' : '불가'}</span>
             </div>
-            <span>주말 이용 \${space.weekend == 'Y'? '가능' : '불가'}</span>
+            <div class="spaceBriefInfoRow">
+              <p class="spaceLocation">\${space.spaceLoc}</p>
+            </div>
         </div>
+        <div class="spaceDescription">\${space.spaceDesc}</div>
       `);
 
       const infoWrapper = document.createElement('div');
-      infoWrapper.classList.add('info');
+      infoWrapper.classList.add('spaceInfo');
       infoWrapper.appendChild(spaceWrapper);
       infoWrapper.appendChild(rescWrapper);
 
@@ -157,7 +165,7 @@
 
       const bookingBtnWrapper = document.createElement('div');
       const bookingUrl = jsonData.links.find((link) => link.rel==='booking').href.replace('{space-no}', space.spaceNo).replace('{?date}',`?date=\${getPlainDate()}`)
-      bookingBtnWrapper.insertAdjacentHTML('afterbegin', `<a class="bookingBtn" href="\${bookingUrl}">예약하기</a>`)
+      bookingBtnWrapper.insertAdjacentHTML('afterbegin', `<a class="btnS bg_yellow color_lightBlack bookingBtn" href="\${bookingUrl}">예약하기</a>`)
 
       const spaceContent = document.createElement('div');
       spaceContent.classList.add('spaceContent');
@@ -226,10 +234,14 @@
     },
     doRedirect: e => {
       if (e.target.classList.contains("iconChevronStart") && pagination.pageHandler.currentPage !== 1) {
-        requestSpaceList(pagination.pageHandler.currentPage-1, convertDateToPlainDate(convertSlashDateToDate(calendarEl.value)));
+        requestSpaceList(pagination.pageHandler.currentPage-1, convertDateToPlainDate(convertSlashDateToDate(calendarEl.value)), () => {
+          scrollToBottom();
+        });
       }
       if(e.target.classList.contains("iconChevronEnd") && pagination.pageHandler.currentPage !== pagination.pageHandler.totalPage){
-        requestSpaceList(pagination.pageHandler.currentPage+1, convertDateToPlainDate(convertSlashDateToDate(calendarEl.value)));
+        requestSpaceList(pagination.pageHandler.currentPage+1, convertDateToPlainDate(convertSlashDateToDate(calendarEl.value)), () => {
+          scrollToBottom();
+        });
       }
     },
     removePaginationNav: () => {

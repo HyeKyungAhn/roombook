@@ -1,11 +1,40 @@
+/* common */
 a {
     text-decoration: none;
 }
 
 body {
-    background: #EEE;
     font-family: 'Roboto', sans-serif;
 }
+
+.spaceInfo .spaceName {
+    font-size: 25px;
+    font-weight: 600;
+}
+
+.spaceInfoRow {
+    margin: 0 0 7px 0;
+    display: flex;
+    align-items: center;
+}
+
+.spaceInfoRow .usgTime {
+    display: inline-block;
+}
+
+.spaceInfoName {
+    margin-right: 13px;
+    line-height: 30px;
+    vertical-align: middle;
+    font-size: 17px;
+}
+
+.spaceInfo .spaceInfoContent {
+    font-weight: 600;
+    line-height: 30px;
+}
+
+/* dropzone */
 
 .dropzone {
     width: 98%;
@@ -73,34 +102,174 @@ span.plus {
 }
 
 /*list img*/
-.thumbnailImg{
-    height: 120px;
-    width: 120px;
-    object-fit: cover;
-}
+
 
 /* Space List */
-.spaceList {
+.spaceListRoot {
+    width: 800px;
+    margin: 0 auto;
+    padding: 25px 0;
+}
 
+.spaceListRoot .headerWrapper {
+    width: 800px;
+    margin: 0 auto;
+}
+
+.spaceListRoot .headerWrapper h1 {
+    font-size: 33px;
+}
+
+
+.spaceList {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
 .spaceList .item {
     min-width: 600px;
-    width: 60%;
+    width: 800px;
+    margin-bottom: 30px;
 }
 
 .spaceList .spaceContent {
     display: flex;
+    justify-content: space-between;
 }
 
-.spaceContent .info {
+.spaceContent .spaceInfo {
+    width: 65%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+}
+
+.spaceContent .spaceName {
+    margin-bottom: 2px;
+}
+
+.spaceContent .spaceName a {
+    font-family: "Noto Sans KR Light", sans-serif;
+    font-size: 18px;
+    font-weight: 600;
+}
+
+.spaceContent .spaceName a:hover {
+    text-decoration: black solid underline;
+}
+
+.spaceContent .spaceCapacity {
+    position: relative;
+    display: flex;
+    align-items: center;
+    line-height: 18px;
+}
+
+.spaceContent .spaceCapacity:before {
+    content: '';
+    display: inline-block;
+    background: url(../img/icon_person.svg);
+    background-size: cover;
+    width: 16px;
+    height: 16px;
+    filter: contrast(0.1);
+    margin-right: 2px;
+}
+
+.spaceContent .spaceLocation {
+    display: flex;
+    align-items: center;
+    line-height: 18px;
+}
+
+.spaceContent .spaceLocation:before {
+    content: '';
+    display: inline-block;
+    background: url('../img/icon_location.svg');
+    background-size: cover;
+    width: 16px;
+    height: 16px;
+    filter: contrast(0.2);
+    margin-right: 2px;
+}
+
+.spaceContent .spaceUsgTime {
+    display: flex;
+    align-items: center;
+    line-height: 18px;
+}
+
+.spaceContent .spaceUsgTime:before {
+    content: '';
+    display: inline-block;
+    background: url('../img/icon_clock.svg');
+    background-size: cover;
+    width: 16px;
+    height: 16px;
+    filter: contrast(0.1);
+    margin-right: 2px;
+}
+
+.spaceContent .spaceStartTime {
 
 }
+
+.spaceContent .spaceFinishTime {
+
+}
+
+.spaceContent .spaceMaxBookingTime {
+    display: flex;
+    align-items: center;
+    line-height: 18px;
+}
+
+.spaceContent .spaceMaxBookingTime:before {
+    content: '';
+    display: inline-block;
+    background: url('../img/icon_lock_clock.svg');
+    background-size: cover;
+    width: 16px;
+    height: 16px;
+    filter: contrast(0.2);
+    margin-right: 2px;
+}
+
+.spaceInfo .spaceWeekend {
+    display: inline-block;
+    border-radius: 3px;
+    padding: 3px 5px;
+    text-align: center;
+    font-size: 13px;
+    line-height: 20px;
+    font-weight: 600;
+}
+
+.spaceList .spaceDescription {
+    margin: 9px 0 0 0;
+    font-size: 18px;
+    width: 90%;
+    height: 30px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
 
 .spaceContent .thumbnailImg {
-    height: 120px;
-    width: 120px;
+    height: 150px;
+    width: 150px;
     object-fit: cover;
+    border-radius: 5px;
+}
+
+.spaceList .spaceBriefInfoRow {
+    display: flex;
+}
+
+.spaceList .spaceBriefInfoRow>* {
+    margin: 0 13px 0 0;
 }
 
 .timeslotWrapper {
@@ -117,17 +286,36 @@ span.plus {
 }
 
 .timeslot .slot {
-    width: 100%;
+    width: 97%;
     display: inline-block;
-    height: 15px;
-    background-color: gray;
-    border-radius: 20px;
+    height: 13px;
+    background-color: #9c9c9c;
+    border-radius: 4px;
 }
 
 .timeslot .booked {
-    background-color: blue;
+    background-color: #ffd880;
 }
 
 .show {
 
+}
+
+/* resources */
+.rescInfo {
+    margin: 4px 0 0 0;
+}
+
+.rescItem {
+    display: inline-block;
+    margin: 0 4px 0 0;
+}
+
+/*#ffd168*/
+
+/* space edit */
+.spaceDesc {
+    width: 100%;
+    height: 100px;
+    margin: 10px 0;
 }

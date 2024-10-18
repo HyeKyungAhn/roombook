@@ -4,6 +4,7 @@ input[type="number"]::-webkit-inner-spin-button {
     -moz-appearance: none;
     appearance: none;
 }
+
 .rootContainer {
     width: 1000px;
 }
@@ -23,10 +24,15 @@ input[type="number"]::-webkit-inner-spin-button {
     margin: 0 55px;
 }
 
-.paginationArrow button:disabled{
-    color: #1d1d1f52;
+.paginationArrow button {
     background-color: transparent;
     border: none;
+    cursor: pointer;
+}
+
+.paginationArrow button:disabled{
+    color: #1d1d1f52;
+    cursor: default;
 }
 
 .iconChevronStart::after{
@@ -50,8 +56,7 @@ input[type="number"]::-webkit-inner-spin-button {
     font-size: 17px;
     color: #515151;
 }
-
-.currentPageInput {
+body .currentPageInput {
     width: 25px;
     height: 35px;
     border-radius: 7px;
@@ -59,10 +64,11 @@ input[type="number"]::-webkit-inner-spin-button {
     text-align: center;
     font-size: 17px;
     color: #515151;
+    padding: 0;
 }
 
 .pageSlash {
-    margin: 0px 8px;
+    margin: 0 8px;
 }
 
 .totalPageNumber {

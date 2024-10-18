@@ -19,7 +19,8 @@
 }
 
 table {
-    width: 100%;
+    margin: 20px 0 60px 0;
+    width: 800px;
 }
 th, td {
     text-align: left;
@@ -27,6 +28,19 @@ th, td {
 }
 tr:nth-child(even){background-color: #f2f2f2}
 th {
-    background-color: #4CAF50;
+    background-color: #9DC08B;
     color: white;
+    border-radius: 3px;
+}
+
+.removeFileBtn {
+    border: none;
+    cursor: pointer;
+    background-color: #388E3C;
+    color: white;
+    border-radius: 3px;
+}
+
+.fileUploadTableRow td:last-child {
+    text-align: center;
 }

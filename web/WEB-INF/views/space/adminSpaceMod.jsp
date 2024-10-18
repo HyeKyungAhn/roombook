@@ -22,92 +22,85 @@
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/tagifyCustom.css"/>
 </head>
 <body>
-    <h1>공간 정보 수정</h1>
-    <form action="<c:url value="${modificationRequestUrl}"/>" method="post" id="spaceForm">
-        <div>
-            <label>
-                공간명
-                <input type="text" name="spaceNm" id="name" value="">
-            </label>
+    <div class="horizontalCenter800 spaceModificationRoot">
+        <div class="headerWrapper">
+            <h1>공간 정보 수정</h1>
         </div>
-        <div>
-            <label>
-                위치(20자 이내)
-                <input type="text" name="spaceLoc" id="location" value="">
-            </label>
-        </div>
-        <div>
-            <label>
-                공간 설명(100자)
-                <textarea name="spaceDesc" id="description"></textarea>
-            </label>
-        </div>
-        <div id="dropzone">
-            <div class="dropzone needsclick" id="demo-upload">
-                <div class="dz-message needsclick">
-                    <span class="text">
-                        <img src="http://www.freeiconspng.com/uploads/------------------------------iconpngm--22.png" alt="Camera" />
-                            파일 업로드를 위해 클릭 또는 드래그 하세요
-                    </span>
-                    <span class="plus">+</span>
+        <form action="<c:url value="${modificationRequestUrl}"/>" method="post" id="spaceForm" class="spaceInfo">
+            <div class="spaceInfoRow">
+                <label for="nameInputElement" class="spaceInfoName">공간명</label>
+                <input type="text" name="spaceNm" id="nameInputElement" value="" class="spaceInfoInput roundInputWidth200">
+            </div>
+            <div class="spaceInfoRow">
+                <label for="locationInputElement" class="spaceInfoName">위치(20자 이내)</label>
+                <input type="text" name="spaceLoc" id="locationInputElement" value="" class="spaceInfoInput roundInputWidth200">
+            </div>
+            <div class="spaceInfoRow">
+                <label class="spaceInfoName">이용시간</label>
+                <div>
+                    <label for="startTime" class="hidden">이용 시작 시간</label><input type="time" name="startTm" id="startTime" placeholder="시작시간" value="">
+                    <span>-</span>
+                    <label for="finishTime" class="hidden">이용 종료 시간</label><input type="time" name="finishTm" id="finishTime" placeholder="종료시간" value="">
                 </div>
             </div>
-        </div>
-        <div>
-            <label>
-                최대 연속 예약 가능 시간(시간 단위)
-                <input type="number" name="maxRsvsTms" id="maxTime" value="">
-            </label>
-        </div>
-        <div>
-            <label>
-                <label for="weekend">공간 주말 이용 가능 여부</label>
-                <input type="checkbox" name="weekend" id="weekend">
-            </label>
-        </div>
-        <div>
-            <label>
-                이용시간
-                <input type="time" name="startTm" id="startTime" placeholder="시작시간" value="">
-                <span>-</span>
-                <input type="time" name="finishTm" id="finishTime" placeholder="종료시간" value="">
-            </label>
-        </div>
-        <div>
-            <label>
-                최대 수용인원
-                <input type="number" name="maxCapacity" id="capacity" value="">
-            </label>
-        </div>
-        <div>
-            <p><label for="facilityInputElement">옵션(facility)</label><span id="facilityInfo" class="info"></span></p>
-            <input name="spaceFacility" id="facilityInputElement" class="customLook" >
-        </div>
-        <div>
-            <label>
-                <label for="hideYn">목록 숨김 여부</label>
-                <input type="checkbox" name="hide" id="hideYn">
-            </label>
-        </div>
-        <div>
-            <button type="submit" id="saveBtn">저장</button>
-            <button type="button" id="cancelBtn">취소</button>
-        </div>
-    </form>
+            <div class="spaceInfoRow">
+                <label for="maxTimeInputElement" class="spaceInfoName">최대 연속 예약 가능 시간(시간 단위)</label>
+                <input type="number" name="maxRsvsTms" id="maxTimeInputElement" value="" class="roundInputWidth200">
+            </div>
+            <div class="spaceInfoRow">
+                <label for="weekendInputElement" class="spaceInfoName">공간 주말 이용 가능 여부</label>
+                <input type="checkbox" name="weekend" id="weekendInputElement" class="marginTop5">
+            </div>
+            <div class="spaceInfoRow">
+                <label for="maxCapacityInputElement" class="spaceInfoName">최대 수용인원</label>
+                <input type="number" name="maxCapacity" id="maxCapacityInputElement" value="" class="roundInputWidth200">
+            </div>
+            <div class="spaceInfoRow flexColumn flexStart">
+                <label for="descriptionInputElement" class="spaceInfoName">공간 설명(100자)</label>
+                <textarea name="spaceDesc" id="descriptionInputElement" class="spaceDesc roundInputWidth200"></textarea>
+            </div>
+            <div>
+                <label class="spaceInfoName">사진 업로드</label>
+                <div id="dropzone">
+                    <div class="dropzone needsclick" id="demo-upload">
+                        <div class="dz-message needsclick">
+                            <span class="text">
+                                <img src="http://www.freeiconspng.com/uploads/------------------------------iconpngm--22.png" alt="Camera" />
+                                    파일 업로드를 위해 클릭 또는 드래그 하세요
+                            </span>
+                            <span class="plus">+</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="spaceInfoRow">
+                <p><label for="facilityInputElement" class="spaceInfoName">옵션(facility)</label><span id="facilityInfo" class="info"></span></p>
+                <input name="spaceFacility" id="facilityInputElement" class="customLook" >
+            </div>
+            <div class="spaceInfoRow">
+                <label for="hideInputElement"  class="spaceInfoName">목록 숨김 여부</label>
+                <input type="checkbox" name="hide" id="hideInputElement" class="marginTop5">
+            </div>
+            <div class="btnWrapper">
+                <button type="submit" id="saveBtn" class="btnM2 bg_yellow">저장</button>
+                <button type="button" id="cancelBtn" class="btnM2">취소</button>
+            </div>
+        </form>
+    </div>
 <script>
     const jsonData = JSON.parse('${jsonSpace}');
     const jsonRescs = jsonData.resources;
     const jsonFiles = jsonData.files;
 
-    const nameEl = document.getElementById('name');
-    const locationEl = document.getElementById('location');
-    const descriptionEl = document.getElementById('description');
-    const maxTimeEl = document.getElementById('maxTime');
-    const weekendEl = document.getElementById('weekend');
+    const nameEl = document.getElementById('nameInputElement');
+    const locationEl = document.getElementById('locationInputElement');
+    const descriptionEl = document.getElementById('descriptionInputElement');
+    const maxTimeEl = document.getElementById('maxTimeInputElement');
+    const weekendEl = document.getElementById('weekendInputElement');
     const startTimeEl = document.getElementById('startTime');
     const finishTimeEl = document.getElementById('finishTime');
-    const capacityEl = document.getElementById('capacity');
-    const hideYnEl = document.getElementById('hideYn');
+    const capacityEl = document.getElementById('maxCapacityInputElement');
+    const hideYnEl = document.getElementById('hideInputElement');
     const cancelBtnEl = document.getElementById('cancelBtn');
 
     const spaceForm = document.getElementById("spaceForm");

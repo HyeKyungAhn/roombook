@@ -73,18 +73,12 @@ span.plus {
     background-color: transparent;
 }
 
-
-.spaceInfo {
-    margin: 100px 0;
-}
-
 /* image slider */
 
 *{
     box-sizing: border-box;
     padding: 0;
     margin: 0;
-    font-family: 'Open Sans', sans-serif;
 }
 body{
     line-height: 1.5;
@@ -107,7 +101,9 @@ img{
 }
 .img-showcase img{
     min-width: 100%;
-    object-fit: contain;
+    object-fit: cover;
+    max-height: 500px;
+    overflow: hidden;
 }
 .img-select{
     display: flex;
@@ -290,4 +286,37 @@ img{
     .product-content{
         padding-top: 0;
     }
+}
+
+/* space Detail */
+.spaceDetailRootWrapper {
+    width: 800px;
+    margin: 0 auto;
+    padding: 40px 0;
+}
+
+.spaceDetailRootWrapper .headerWrapper {
+    margin: 20px 0;
+}
+
+.spaceDetailRootWrapper .bookingBtnWrapper {
+    text-align: end;
+    margin: 20px 0;
+}
+
+.rescItem {
+    display: inline-block;
+    margin: 0 4px 0 0;
+}
+
+.spaceDetailRootWrapper .timeTableWrapper {
+    margin: 12px 0 45px 0;
+}
+
+.timeTableWrapper .timeTable {
+    margin: 20px 0;
+}
+
+.spaceDetailRootWrapper .spaceDescription {
+
 }
