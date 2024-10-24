@@ -48,9 +48,9 @@ public class EmailServiceImpl implements EmailService{
             msg.addRecipient(Message.RecipientType.TO,
                     new InternetAddress(email, "Mr. User"));
 
-            msg.setSubject("Your Example.com account has been activated");
+            msg.setSubject("[roombook] 인증번호를 안내해드립니다.");
 
-            msg.setText(String.format("인증번호는 %s 입니다.", authCode));
+            msg.setText(String.format("[roombook] 회원가입 인증번호는 %s 입니다.", authCode));
 
             Transport.send(msg);
         } catch (AddressException e) {
