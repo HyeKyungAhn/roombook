@@ -17,7 +17,7 @@
     <context:property-placeholder order="2" location="classpath:application.properties"/>
 
     <tx:annotation-driven/>
-    <context:component-scan base-package="site.roombook">
+    <context:component-scan base-package="store.roombook">
         <context:exclude-filter type="regex" expression="site\.roombook\.controller\.*"/>
         <context:exclude-filter type="regex" expression="site\.roombook\.exception\.*"/>
     </context:component-scan>

@@ -8,20 +8,20 @@
         <setting name="logImpl" value="STDOUT_LOGGING"/>
     </settings>
     <typeAliases>
-        <typeAlias alias="DeptDto" type="site.roombook.domain.DeptDto"/>
+        <typeAlias alias="DeptDto" type="store.roombook.domain.DeptDto"/>
         <typeAlias alias="List" type="java.util.List"/>
-        <typeAlias alias="EmplDto" type="site.roombook.domain.EmplDto"/>
-        <typeAlias alias="BlngDeptDto" type="site.roombook.domain.BlngDeptDto"/>
-        <typeAlias alias="DeptAndEmplDto" type="site.roombook.domain.DeptAndEmplDto"/>
-        <typeAlias alias="RescDto" type="site.roombook.domain.RescDto"/>
-        <typeAlias alias="SpaceDto" type="site.roombook.domain.SpaceDto"/>
-        <typeAlias alias="FileDto" type="site.roombook.domain.FileDto"/>
-        <typeAlias alias="SpaceRescDto" type="site.roombook.domain.SpaceRescDto"/>
-        <typeAlias alias="SpaceInfoAndTimeslotDto" type="site.roombook.domain.SpaceInfoAndTimeslotDto"/>
-        <typeAlias alias="EmailVerfDto" type="site.roombook.domain.EmailVerfDto"/>
-        <typeAlias alias="JwtDto" type="site.roombook.domain.JwtDto"/>
-        <typeAlias alias="AuthChgHistDto" type="site.roombook.domain.AuthChgHistDto"/>
-        <typeAlias alias="SpaceBookDto" type="site.roombook.domain.SpaceBookDto"/>
-        <typeAlias alias="SpaceBookAndSpaceDto" type="site.roombook.domain.SpaceBookAndSpaceDto"/>
+        <typeAlias alias="EmplDto" type="store.roombook.domain.EmplDto"/>
+        <typeAlias alias="BlngDeptDto" type="store.roombook.domain.BlngDeptDto"/>
+        <typeAlias alias="DeptAndEmplDto" type="store.roombook.domain.DeptAndEmplDto"/>
+        <typeAlias alias="RescDto" type="store.roombook.domain.RescDto"/>
+        <typeAlias alias="SpaceDto" type="store.roombook.domain.SpaceDto"/>
+        <typeAlias alias="FileDto" type="store.roombook.domain.FileDto"/>
+        <typeAlias alias="SpaceRescDto" type="store.roombook.domain.SpaceRescDto"/>
+        <typeAlias alias="SpaceInfoAndTimeslotDto" type="store.roombook.domain.SpaceInfoAndTimeslotDto"/>
+        <typeAlias alias="EmailVerfDto" type="store.roombook.domain.EmailVerfDto"/>
+        <typeAlias alias="JwtDto" type="store.roombook.domain.JwtDto"/>
+        <typeAlias alias="AuthChgHistDto" type="store.roombook.domain.AuthChgHistDto"/>
+        <typeAlias alias="SpaceBookDto" type="store.roombook.domain.SpaceBookDto"/>
+        <typeAlias alias="SpaceBookAndSpaceDto" type="store.roombook.domain.SpaceBookAndSpaceDto"/>
     </typeAliases>
 </configuration>

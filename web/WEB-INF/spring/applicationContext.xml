@@ -20,9 +20,9 @@
     <context:property-placeholder order="2" location="classpath:application.properties"/>
 
     <tx:annotation-driven/>
-    <context:component-scan base-package="site.roombook">
-        <context:exclude-filter type="regex" expression="site\.roombook\.controller\.*"/>
-        <context:exclude-filter type="regex" expression="site\.roombook\.exception\.*"/>
+    <context:component-scan base-package="store.roombook">
+        <context:exclude-filter type="regex" expression="store\.roombook\.controller\.*"/>
+        <context:exclude-filter type="regex" expression="store\.roombook\.exception\.*"/>
     </context:component-scan>
 
     <bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
