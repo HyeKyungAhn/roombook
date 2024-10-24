@@ -976,12 +976,13 @@ body .paddingTop40 {
     margin-right: auto;
 }
 
-.breadScrumbContainer .breadScrumb a {
+.breadScrumbContainer .breadScrumb span {
     margin-right: .5rem;
 }
 
-.breadScrumbContainer .breadScrumb a:hover {
-    text-decoration: black solid underline;
+.breadScrumbContainer .breadScrumb span:hover {
+    text-decoration: #4b4b4b solid underline;
+    text-underline-offset: 3px;
 }
 
 
