@@ -80,7 +80,7 @@
                 <div class="profileListScroll">
                     <div class="profileListScrollContent">
                         <c:choose>
-                        <c:when test="${deptAndMngrData.emplId ne null}">
+                        <c:when test="${!empty memberInfo}">
                         <c:forEach var="mem" items="${memberInfo}">
                         <div class="profileWrapper">
                             <div class="profileContent">
@@ -113,7 +113,7 @@
     </div>
 <script>
     const listBtnEl = document.getElementById('listBtn');
-    const deptAndMngrData = "${deptAndMngrData}";
+
     let msg = '${msg}';
 
     switch (msg){
