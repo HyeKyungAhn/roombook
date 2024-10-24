@@ -140,10 +140,6 @@ input[type="time"] {
     display: inline-block;
 }
 
-.myAccountBtn {
-
-}
-
 .myAccountBtn:before {
     content: '';
     background: url(../img/icon_account_circle.svg);
@@ -354,14 +350,6 @@ body .success {
     margin: 0 34px 30px 34px;
 }
 
-.spaceTileLink {
-
-}
-
-.spaceTileImageWrapper {
-
-}
-
 .spaceTileImage {
     width: 230px;
     border-radius: 5px;
@@ -408,14 +396,6 @@ body .success {
     position: relative;
     display: flex;
     align-items: center;
-}
-
-.spaceTileStartTime {
-
-}
-
-.spaceTileFinishTime {
-
 }
 
 .spaceTileName {
@@ -738,10 +718,6 @@ body .paddingTop40 {
 }
 
 /* input elements */
-.inputBox {
-
-}
-
 .inputLabel {
     display: block;
     margin: 0 0 8px 0;
@@ -830,10 +806,6 @@ body .paddingTop40 {
     margin: 10px 0;
 }
 
-.linkBtn {
-
-}
-
 /* color */
 .color_lightBlack {
     color: #2e2e2e;
@@ -862,10 +834,6 @@ body .paddingTop40 {
 
 .datePickerWrapper {
     margin: 25px 0;
-}
-
-.datePicker {
-
 }
 
 .datePicker:focus {
@@ -958,10 +926,6 @@ body .paddingTop40 {
     justify-content: center;
 }
 
-.profileInfoRow {
-
-}
-
 .profileInfo .profileName {
     font-weight: 600;
     font-size: 17px;
@@ -1010,10 +974,6 @@ body .paddingTop40 {
     align-items: center;
     display: flex;
     margin-right: auto;
-}
-
-.breadScrumbContainer .breadScrumb {
-
 }
 
 .breadScrumbContainer .breadScrumb a {
@@ -1124,6 +1084,7 @@ body .paddingTop40 {
     padding: 10px 14px;
     border: 1px solid #DDD;
     border-radius: 12px;
+    background-color: white;
 }
 
 .selectProfileImgWrapper {

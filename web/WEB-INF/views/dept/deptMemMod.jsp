@@ -34,23 +34,25 @@
                     <input type="text" id="searchInput" class="searchInput" placeholder="이름 또는 이메일을 입력하세요">
                     <div id="searchResult" class="searchResult searchList hidden"></div>
                 </div>
-                <div id="memProfileContainer" class="memProfileContainer">
-                    <c:if test="${deptMemAndDeptNm ne null}">
-                    <c:forEach var="mem" items="${deptMemAndDeptNm}" varStatus="status">
-                        <div class="memProfile selectProfile marginBottom10" data-id="${mem.emplId}">
-                            <div class="selectProfileImgWrapper">
-                                <img src="${mngr.prfPhotoPath?profileImgPath+'/'+mngr.prfPhotoPath:noImgPath}" class="profilePhoto" alt="프로필 사진"/>
+                <div class="profileListScroll">
+                    <div id="memProfileContainer" class="memProfileContainer">
+                        <c:if test="${deptMemAndDeptNm ne null}">
+                        <c:forEach var="mem" items="${deptMemAndDeptNm}" varStatus="status">
+                            <div class="memProfile selectProfile marginBottom10" data-id="${mem.emplId}">
+                                <div class="selectProfileImgWrapper">
+                                    <img src="${mngr.prfPhotoPath?profileImgPath+'/'+mngr.prfPhotoPath:noImgPath}" class="profilePhoto" alt="프로필 사진"/>
+                                </div>
+                                <div class="selectProfileInfoWrapper">
+                                    <p class='profileNm selectedProfileName'><span class='nm'>${mem.rnm}</span><span class='engNm'>${mem.engNm?mngr.engNm:''}</span></p>
+                                    <p class='profileEmail selectedProfileEmail'>${mem.email}</p>
+                                </div>
+                                <div>
+                                    <span id="closeBtn" class="closeBtn">&times;</span>
+                                </div>
                             </div>
-                            <div class="selectProfileInfoWrapper">
-                                <p class='profileNm selectedProfileName'><span class='nm'>${mem.rnm}</span><span class='engNm'>${mem.engNm?mngr.engNm:''}</span></p>
-                                <p class='profileEmail selectedProfileEmail'>${mem.email}</p>
-                            </div>
-                            <div>
-                                <span id="closeBtn" class="closeBtn">&times;</span>
-                            </div>
-                        </div>
-                    </c:forEach>
-                    </c:if>
+                        </c:forEach>
+                        </c:if>
+                    </div>
                 </div>
             </div>
         </div>
