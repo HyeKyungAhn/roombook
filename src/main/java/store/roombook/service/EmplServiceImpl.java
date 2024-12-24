@@ -83,7 +83,7 @@ public class EmplServiceImpl implements EmplService {
             }
 
             if (authRequestRecord != null) {
-                updateAuthCodeRequestCnt(authRequestRecord, ip);
+                updateAuthCodeRequestInfo(authRequestRecord, verificationCode, ip);
             } else {
                 saveAuthCodeRequest(email, ip, verificationCode);
             }
@@ -127,7 +127,7 @@ public class EmplServiceImpl implements EmplService {
                     return new ServiceResult(false, ExceptionMsg.SIGNUP_EXCEED_MAX_AUTH_ATTEMPTS_COUNT);
                 }
 
-                updateAuthAttemptsCnt(authRequestRecord, ip);
+                updateAuthAttemptsInfo(authRequestRecord, ip);
 
                 return new ServiceResult(false, ExceptionMsg.SIGNUP_WRONG_AUTH_CODE);
             }
@@ -249,24 +249,25 @@ public class EmplServiceImpl implements EmplService {
         recordService.storeTempValue(generateKey(email), emailVerfDto);
     }
 
-    private void updateAuthCodeRequestCnt(EmailVerfDto authRequestRecord, String ip){
+    private void updateAuthCodeRequestInfo(EmailVerfDto authRequestRecord, String verificationCode, String ip){
         Integer authRequestCnt = authRequestRecord.getAuthRequestCnt();
 
         EmailVerfDto emailVerfDto = copyEmailVerfDtoBuilder(authRequestRecord)
-                .authRequestCnt(++authRequestCnt)
                 .ip(ip)
+                .verificationCode(verificationCode)
+                .creDtm(LocalDateTime.now())
+                .expiDtm(LocalDateTime.now().plusMinutes(EmplServiceImpl.AUTH_TIMEOUT))
+                .authRequestCnt(++authRequestCnt)
                 .build();
 
         recordService.storeTempValue(generateKey(emailVerfDto.getEmail()), emailVerfDto);
     }
 
-    private void updateAuthAttemptsCnt(EmailVerfDto authRequestRecord, String ip) {
+    private void updateAuthAttemptsInfo(EmailVerfDto authRequestRecord, String ip) {
         Integer authAttemptsCount = authRequestRecord.getAuthAttemptsCnt();
 
         EmailVerfDto emailVerfDto = copyEmailVerfDtoBuilder(authRequestRecord)
-                .authRequestCnt(++authAttemptsCount)
-                .creDtm(LocalDateTime.now())
-                .expiDtm(LocalDateTime.now().plusMinutes(EmplServiceImpl.AUTH_TIMEOUT))
+                .authAttemptsCnt(++authAttemptsCount)
                 .ip(ip)
                 .build();
 
