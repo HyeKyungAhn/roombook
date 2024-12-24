@@ -95,6 +95,18 @@ input[type="time"] {
     color: white;
 }
 
+.fontColor_red {
+    color: red;
+}
+
+.fontColor_green {
+    color: green;
+}
+
+.fontColor_yellow {
+    color: #ffe14a;
+}
+
 .adminHeaderLogo {
     display: flex;
     align-items: center;
@@ -618,6 +630,10 @@ body .flexJustifyContentEnd {
     justify-content: flex-end;
 }
 
+body .flexJustifyContentCenter {
+    justify-content: center;
+}
+
 body .marginRight10 {
     margin-right: 10px;
 }
@@ -643,6 +659,10 @@ body .marginBottom5 {
 
 body .paddingTop40 {
     padding-top: 40px;
+}
+
+body .viewPort90 {
+    height: 90vh;
 }
 
 .fontSize20 {
@@ -1155,4 +1175,23 @@ body .paddingTop40 {
     font-family: "Noto Sans KR Medium", sans-serif;
 }
 
+.infoMsg{
+    font-size: 30px;
+}
 
+.boldInfoMsg {
+    font-size: 45px;
+    font-family: "Noto Sans KR Medium", sans-serif;
+}
+
+/* throbber */
+.throbberImage {
+    width: 15px;
+    height: 15px;
+}
+
+.throbberText {
+    font-size: 15px;
+    line-height: 15px;
+    padding: 0 4px 0 0;
+}

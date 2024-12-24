@@ -36,12 +36,13 @@
             <div class="marginBottom10">
                 <div class="marginBottom5"><label for="pwdInput">비밀번호</label></div>
                 <div><input type="password" id="pwdInput" class="roundInputWidth200" name="pwd" autocomplete="new-password" required></div>
-                <div><span id="pwdScore"></span></div>
+                <div id="pwdScoreBox">
+                    <span id="pwdScore"></span>
+                </div>
                 <p id="pwdValidationMsg" class="marginTop5"></p>
             </div>
-
             <div class="marginBottom10">
-                <div>
+                <div id="emailInputBox">
                     <div class="marginBottom5"><label for="emailInput">이메일</label></div>
                     <div class="flexRow">
                         <input type="text" id="emailInput" class="roundInputWidth200 marginRight10" name="email" autocomplete="email" required>

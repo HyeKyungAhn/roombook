@@ -1,8 +1,10 @@
 const nameInputEl = document.getElementById('nameInput');
 const idInputEl = document.getElementById('idInput');
 const pwdInputEl = document.getElementById('pwdInput');
+const pwdScoreBoxEl = document.getElementById('pwdScoreBox');
 const pwdScoreInputEl = document.getElementById('pwdScore');
 const emailInputEl = document.getElementById('emailInput');
+const emailInputBoxEl = document.getElementById('emailInputBox');
 const verificationCodeInputEl = document.getElementById('verificationCodeInput');
 const emplnoInputEl = document.getElementById('emplnoInput');
 
@@ -21,6 +23,12 @@ const emplnoMsgEl = document.getElementById('emplnoValidationMsg');
 
 let appState;
 
+const CLASSES_COLOR = {
+    error: 'fontColor_red',
+    warning: 'fontColor_yellow',
+    green: 'fontColor_green'
+}
+
 function init() {
     idDupCheckBtn.disabled = appState.idDubCheckBtnDisabled;
     emailVerificationBtn.disabled = appState.verificationBtnDisabled;
@@ -34,8 +42,17 @@ function init() {
     emplnoInputEl.value = '';
 }
 
-function toggleVerificationCodeInputBox(){
+function showVerificationCodeInputBox() {
     verificationCodeBox.classList.remove('hidden');
+}
+
+function hideVerificationCodeInputBox() {
+    verificationCodeBox.classList.add('hidden');
+}
+
+function setColoredMsg(msgElement, msg, color) {
+    msgElement.innerText = msg;
+    msgElement.classList.add(color);
 }
 
 //////////// Validation ////////////
@@ -44,6 +61,9 @@ const myZxcvbn = {
     onInputPwd : function(){
         pwdMsgEl.innerText = '';
         const pwd = pwdInputEl.value;
+
+        pwdScoreInputEl.classList.remove(CLASSES_COLOR.error, CLASSES_COLOR.warning, CLASSES_COLOR.green);
+        pwdMsgEl.classList.remove(CLASSES_COLOR.error, CLASSES_COLOR.green);
 
         if(!pwd) {
             pwdScoreInputEl.innerText = '';
@@ -57,29 +77,29 @@ const myZxcvbn = {
 
         switch (result.score){
             case 0: {
-                pwdScoreInputEl.innerText = '나쁨';
-                pwdMsgEl.innerText = appState.validationMessages.pwdInsafe;
+                setColoredMsg(pwdScoreInputEl, '안전도 나쁨', CLASSES_COLOR.error);
+                setColoredMsg(pwdMsgEl, appState.validationMessages.pwdInsafe, CLASSES_COLOR.error);
                 appState.pwdSafe = false;
                 break;
             }
             case 1: {
-                pwdScoreInputEl.innerText = '낮음';
-                pwdMsgEl.innerText = appState.validationMessages.pwdInsafe;
+                setColoredMsg(pwdScoreInputEl, '안전도 낮음', CLASSES_COLOR.error);
+                setColoredMsg(pwdMsgEl, appState.validationMessages.pwdInsafe, CLASSES_COLOR.error);
                 appState.pwdSafe = false;
                 break;
             }
             case 2: {
-                pwdScoreInputEl.innerText = '보통';
+                setColoredMsg(pwdScoreInputEl, '안전도 보통', CLASSES_COLOR.warning);
                 appState.pwdSafe = true;
                 break;
             }
             case 3: {
-                pwdScoreInputEl.innerText = '좋음';
+                setColoredMsg(pwdScoreInputEl, '안전도 좋음', CLASSES_COLOR.green);
                 appState.pwdSafe = true;
                 break;
             }
             case 4: {
-                pwdScoreInputEl.innerText = '아주좋음';
+                setColoredMsg(pwdScoreInputEl, '안전도 아주좋음', CLASSES_COLOR.green);
                 appState.pwdSafe = true;
                 break;
             }
@@ -105,11 +125,12 @@ function showErrorMsg(res){
 //////////// Validation(Event Handlers) ////////////
 
 function validateName(){
-    nameMsgEl.innerText = '';
     const name = nameInputEl.value;
+    nameMsgEl.innerText = '';
+    nameMsgEl.classList.remove(CLASSES_COLOR.error);
 
     if(!name) {
-        nameMsgEl.innerText = appState.validationMessages.nameEmpty;
+        setColoredMsg(nameMsgEl, appState.validationMessages.nameEmpty, CLASSES_COLOR.error);
         appState.nameValid = false;
         checkSignUpEligibility();
         return;
@@ -123,7 +144,7 @@ function validateName(){
         appState.nameValid = true;
     } else {
         appState.nameValid = false;
-        nameMsgEl.innerText = appState.validationMessages.nameInvalid;
+        setColoredMsg(nameMsgEl, appState.validationMessages.nameInvalid, CLASSES_COLOR.error);
     }
 
     checkSignUpEligibility();
@@ -131,11 +152,13 @@ function validateName(){
 
 
 function validateId(){
-    idMsgEl.innerText = '';
     const id = idInputEl.value;
+    idMsgEl.innerText = '';
+    appState.idUnique = false;
+    idMsgEl.classList.remove(CLASSES_COLOR.error);
 
     if(!id) {
-        idMsgEl.innerText = appState.validationMessages.idEmpty;
+        setColoredMsg(idMsgEl, appState.validationMessages.idEmpty, CLASSES_COLOR.error);
         appState.idValid = false;
         checkSignUpEligibility();
         return;
@@ -150,7 +173,7 @@ function validateId(){
         idDupCheckBtn.disabled = false;
     } else {
         appState.idValid = false;
-        idMsgEl.innerText = appState.validationMessages.idInvalid;
+        setColoredMsg(idMsgEl, appState.validationMessages.idInvalid, CLASSES_COLOR.error);
         idDupCheckBtn.disabled = true;
     }
 
@@ -160,11 +183,12 @@ function validateId(){
 let timeout = null
 
 function validateEmail(){
-    emailMsgEl.innerText = '';
     const email = emailInputEl.value;
+    emailMsgEl.innerText = '';
+    emailMsgEl.classList.remove(CLASSES_COLOR.error);
 
     if(!email) {
-        emailMsgEl.innerText = appState.validationMessages.emailEmpty;
+        setColoredMsg(emailMsgEl, appState.validationMessages.emailEmpty, CLASSES_COLOR.error);
         appState.emailValid = false;
         emailVerificationBtn.disabled = true;
         checkSignUpEligibility();
@@ -181,18 +205,19 @@ function validateEmail(){
     } else {
         appState.emailValid = false;
         emailVerificationBtn.disabled = true;
-        emailMsgEl.innerText = appState.validationMessages.emailInvalid;
+        setColoredMsg(emailMsgEl, appState.validationMessages.emailInvalid, CLASSES_COLOR.error);
     }
 
     checkSignUpEligibility();
 }
 
 function validateEmplno(){
-    emplnoMsgEl.innerText = '';
     const emplno = emplnoInputEl.value;
+    emplnoMsgEl.innerText = '';
+    emplnoMsgEl.classList.remove(CLASSES_COLOR.error);
 
     if(!emplno) {
-        emplnoMsgEl.innerText = appState.validationMessages.emplnoEmpty;
+        setColoredMsg(emplnoMsgEl, appState.validationMessages.emplnoEmpty, CLASSES_COLOR.error);
         appState.emplnoValid = false;
         checkSignUpEligibility();
         return;
@@ -206,18 +231,19 @@ function validateEmplno(){
         appState.emplnoValid = true;
     } else {
         appState.emplnoValid = false;
-        emplnoMsgEl.innerText = appState.validationMessages.emplnoInvalid;
+        setColoredMsg(emplnoMsgEl, appState.validationMessages.emplnoInvalid, CLASSES_COLOR.error);
     }
 
     checkSignUpEligibility();
 }
 
 function validateVerificationCode() {
-    verificationCodeMsgEl.innerText = '';
     const verificationCode = verificationCodeInputEl.value;
+    verificationCodeMsgEl.innerText = '';
+    verificationCodeMsgEl.classList.remove(CLASSES_COLOR.error);
 
     if(!verificationCode) {
-        verificationCodeMsgEl.innerText = appState.validationMessages.verificationCodeEmpty;
+        setColoredMsg(verificationCodeMsgEl, appState.validationMessages.verificationCodeEmpty, CLASSES_COLOR.error);
         appState.verificationCodeEmpty = true;
     } else {
         appState.verificationCodeEmpty = false;
@@ -280,11 +306,11 @@ idDupCheckBtn.addEventListener('click', function(){
             .then((response) => {
                 const jsonResponse = JSON.parse(response);
                 if(jsonResponse.hasId){
-                    idMsgEl.innerText = appState.validationMessages.duplicatedId;
+                    setColoredMsg(idMsgEl, appState.validationMessages.duplicatedId, CLASSES_COLOR.error);
                     appState.idUnique = false;
                     idInputEl.focus();
                 } else{
-                    idMsgEl.innerText = appState.validationMessages.usableId;
+                    setColoredMsg(idMsgEl, appState.validationMessages.usableId, CLASSES_COLOR.green);
                     appState.idUnique = true;
                 }
 
@@ -305,28 +331,59 @@ emailInputEl.addEventListener('keydown', function() {
     }, 200); // 100ms 동안 대기
 });
 
+function toggleVcodeThrobber() {
+    const throbberBoxEl = document.getElementById('throbberBox');
+
+    if(throbberBoxEl) {
+        throbberBoxEl.remove();
+    } else {
+        emailInputBoxEl.insertAdjacentHTML('afterend', `
+            <div id="throbberBox" class="flexRow marginTop5 marginBottom5">
+                <div>
+                    <span class="throbberText">발급중</span>
+                </div>
+                <img alt="인증 메일 전송 중" class="throbberImage" src="/img/throbber.gif">
+            </div>
+            `);
+    }
+}
+
 emailVerificationBtn.addEventListener('click', function(){
+    verificationCodeInputEl.innerText = '';
+    hideVerificationCodeInputBox();
+
     const emailVerificationLink = appState.links.find((element) => element.rel === 'emailVerification');
     const email = {
         'email': emailInputEl.value,
     }
 
-    fetch(emailVerificationLink.href, {
+    fetchVerificationCode(emailVerificationLink.href, email);
+});
+
+function fetchVerificationCode(url, email) {
+    const defaultOptions = {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
         },
         body: JSON.stringify(email),
-    })
+    }
+
+    const fetchPromise = fetch(url, defaultOptions);
+
+    toggleVcodeThrobber();
+
+    fetchPromise
         .then(response => response.text())
         .then(response => {
+            toggleVcodeThrobber();
             const jsonResponse = JSON.parse(response);
 
             if(jsonResponse.result === "SUCCESS"){
                 appState.verificationCodeSent = true;
-                toggleVerificationCodeInputBox();
+                showVerificationCodeInputBox();
                 checkSignUpEligibility();
-            } else if(jsonResponse.result === "SIGNUP_UNABLE") {
+            } else if(jsonResponse.result === "SIGNUP_UNABLE" || jsonResponse.result === "FAIL") {
                 alert(jsonResponse.errorMessage);
             } else if(jsonResponse.result === "EMAIL_EXIST"){
                 emailMsgEl.innerText = jsonResponse.errorMessage;
@@ -335,7 +392,7 @@ emailVerificationBtn.addEventListener('click', function(){
             }
         })
         .catch(error => console.error('Error:', error));
-});
+}
 
 signupBtn.addEventListener('click', function(){
     const signupLink = appState.links.find((element) => element.rel === 'signup');
