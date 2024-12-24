@@ -51,7 +51,7 @@
         <constructor-arg name="hostName" value="${redis.hostname}" />
         <constructor-arg name="port" value="${redis.port}" />
         <property name="password">
-            <bean class="org.springframework.data.redis.connection.RedisPassword">
+            <bean class="org.springframework.data.redis.connection.RedisPassword" factory-method="of">
                 <constructor-arg value="${redis.password}"/>
             </bean>
         </property>
