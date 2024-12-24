@@ -45,9 +45,9 @@
                 </div>
             </div>
             </sec:authorize>
-            <sec:authorize access="hasAnyRole('ROLE_RSC_ADMIN', 'ROLE_EMPL_ADMIN', 'ROLE_SUPER_ADMIN')">
+            <sec:authorize access="hasAnyRole('RSC_ADMIN', 'EMPL_ADMIN', 'SUPER_ADMIN')">
             <div class="accountItem">
-                <a href="${pageContext.request.contextPath}/admin/spaces">관리자 페이지</a>
+                <a href="${pageContext.request.contextPath}/admin/home">관리자 페이지</a>
             </div>
             </sec:authorize>
         </sec:authorize>

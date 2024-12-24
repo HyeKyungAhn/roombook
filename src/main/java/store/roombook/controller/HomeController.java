@@ -102,4 +102,9 @@ public class HomeController {
 
         return stringifiedLinkMap;
     }
+
+    @GetMapping("/admin/home")
+    public ModelAndView getAdminHome(){
+        return new ModelAndView("admin/adminHome.adminTiles");
+    }
 }
