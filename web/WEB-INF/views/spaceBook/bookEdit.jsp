@@ -63,7 +63,8 @@
 </div>
 <script type="text/javascript" src="${pageContext.request.contextPath}/js/dateTimeConverter.js"></script>
 <script>
-    const spaceAndBookData = JSON.parse('${spaceAndBookData}');
+    const escapedSpaceAndBookData = '${spaceAndBookData}'.replace(/\n/g, '\\n');
+    const spaceAndBookData = JSON.parse(escapedSpaceAndBookData);
     let timeslots;
     const spaceNameEl = document.getElementById('spaceName');
     const maxCapacityEl = document.getElementById('maxCapacity');
@@ -112,7 +113,7 @@
         maxBookingTimeEl.innerText = spaceAndBookData.maxRsvsTms + '시간';
         startTimeEl.innerText = DateTimeConverter.convertTimeArrToString(spaceAndBookData.startTm);
         endTimeEl.innerText = DateTimeConverter.convertTimeArrToString(spaceAndBookData.finishTm);
-        bookingContentEl.innerText = spaceAndBookData.content;
+        bookingContentEl.textContent = spaceAndBookData.content;
     }
 
     function initBookingData() {
@@ -164,9 +165,11 @@
 
     ////Request API////
     bookingBtnEl.addEventListener('click', function() {
+        let escapedBookingContent = bookingContentEl.value.replace(/\n/g, "\\n");
+
         const bookingData = {
             'spaceNo': spaceAndBookData.spaceNo,
-            'spaceBookCn': bookingContentEl.value,
+            'spaceBookCn': escapedBookingContent,
             'date': calendarEl.value,
             'beginTime': DateTimeConverter.convertTimeArrToString([bookingBeginTimeEl.value,0]),
             'endTime': DateTimeConverter.convertTimeArrToString([bookingEndTimeEl.value,0]),

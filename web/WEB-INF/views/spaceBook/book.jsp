@@ -134,9 +134,11 @@
 
     ////API Request////
     bookingBtnEl.addEventListener('click', function() {
+        let escapedBookingContent = bookingContentEl.value.replace(/\n/g, "\\n");
+
         const bookingData = {
             'spaceNo': spaceData.spaceNo,
-            'spaceBookCn': bookingContentEl.value,
+            'spaceBookCn': escapedBookingContent,
             'date': myCalendar.value,
             'beginTime': DateTimeConverter.convertTimeArrToString([bookingBeginTimeEl.value,0]),
             'endTime': DateTimeConverter.convertTimeArrToString([bookingEndTimeEl.value,0]),
