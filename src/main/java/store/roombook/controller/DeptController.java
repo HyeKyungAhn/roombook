@@ -48,13 +48,13 @@ public class DeptController {
     @GetMapping("/dept")
     public String getDeptDetailPage(@RequestParam String deptCd, Model m){
         if(Strings.isEmpty(deptCd)){
-            return "notFound.adminTiles";
+            return "forward:/admin/not-found";
         }
 
         DeptAndEmplDto deptAndMngrData = deptService.getDeptDetailInfo(deptCd);
 
         if(Objects.isNull(deptAndMngrData)){
-            return "notFound.adminTiles";
+            return "forward:/admin/not-found";
         }
 
         String deptList = linkTo(methodOn(DeptController.class).getDeptListPage()).toUri().toString();

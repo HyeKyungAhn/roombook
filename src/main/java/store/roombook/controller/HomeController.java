@@ -85,6 +85,19 @@ public class HomeController {
         return mv;
     }
 
+    @GetMapping("/admin/not-found")
+    public ModelAndView getAdminNotFoundPage() {
+        ModelAndView mv = new ModelAndView();
+
+        Map<String, String> linkMap = new HashMap<>();
+        linkMap.put("home", linkTo(methodOn(HomeController.class).getAdminHome()).withRel("home").toUri().toString());
+
+        mv.addObject("links", stringifyLinkMap(linkMap));
+        mv.setViewName("notFound.adminTiles");
+
+        return mv;
+    }
+
     @GetMapping("/error")
     public ModelAndView getServerErrorPage(){
         return new ModelAndView("error500.tiles");
