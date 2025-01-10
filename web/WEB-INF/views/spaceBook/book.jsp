@@ -53,6 +53,7 @@
                 <div class="spaceInfoRow">
                     <label for="bookingContent" class="hidden">예약 내용</label>
                     <textarea id="bookingContent" class="bookingContent" name="bookCn" rows="2" cols="50"></textarea>
+                    <p>* 본인의 예약 직후 1시간 이내에는 예약이 불가합니다.</p>
                 </div>
                 <div class="spaceInfoRow bookingBtnWrapper">
                     <button id="bookingBtn" class="btnM bg_yellow color_lightBlack" type="button">예약하기</button>
@@ -144,7 +145,7 @@
             'endTime': DateTimeConverter.convertTimeArrToString([bookingEndTimeEl.value,0]),
         }
 
-        if(!validateBookingData(bookingData)) return false;
+        if(!validateBooking(bookingData)) return false;
 
        fetch('<c:url value="${bookingUrl}"/>', {
            method: 'POST',
@@ -190,7 +191,7 @@
     }
 
     ////Validation////
-    function validateBookingData(bookingData) {
+    function validateBooking(bookingData) {
         let result = true;
         if(!bookingData.spaceNo){
             alert('예약정보가 잘못되었습니다.\n새로고침 후 다시 예약해주세요.');
@@ -212,6 +213,9 @@
             ||!bookingData.beginTime || !bookingData.endTime){
             alert('시간을 선택해주세요.');
             result = false;
+        } else if(isBookingAfterOwn()){
+            alert('본인 예약 직후 1시간 내에 새로운 예약을 할 수 없습니다.');
+            result = false;
         }
 
         return result;
@@ -227,7 +231,7 @@
 
     function isContinuousBooking(timeslots, bookingBeginTime, bookingEndTime) {
         for (const timeslot of timeslots) {
-            if (bookingBeginTime <= timeslot.beginTime[3] && timeslot.beginTime[3] < bookingEndTime) {
+            if (bookingBeginTime <= timeslot.beginTime[0] && timeslot.beginTime[0] < bookingEndTime) {
                 return false;
             }
         }
@@ -235,9 +239,8 @@
     }
 
     function isBookingAfterOwn(){
-        for (const element of timeslots) {
-            if(element.selfBook && parseInt(bookingBeginTimeEl.value) === (element.endTime[3] + 1)){
-                alert('본인 예약 바로 뒤에 새로운 예약을 할 수 없습니다.\n기존 예약을 삭제/수정 후 다시 시도해주세요.');
+        for (const timeslot of timeslots) {
+            if(timeslot.selfBook && timeslot.endTime[0] === parseInt(bookingBeginTimeEl.value)){
                 return true;
             }
         }
@@ -301,11 +304,11 @@
     /** 현재 시간이 예약 시작 시간 이후일 때
      * 현재 이후에 예약 가능하도록 예약 시작 시간 조정 **/
     function adjustBookingStartTime(today, bookingStartTime){
-        if(today.getHours() <= bookingStartTime) {
+        if(today.getHours() < bookingStartTime) {
             return bookingStartTime;
-        } else {
-            return today.getHours();
         }
+
+        return today.getHours() + 1;
     }
 
     function printOptions(element, timeslots, bookingStartHour, bookingFinishHour) {
