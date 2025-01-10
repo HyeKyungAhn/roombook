@@ -68,8 +68,8 @@ public class SecurityConfig {
                 .addFilterAfter(jsonUsernamePasswordSignInFilter(), JWTAuthenticationFilter.class)
                 .authorizeHttpRequests(authorize -> authorize
                         .dispatcherTypeMatchers(DispatcherType.FORWARD, DispatcherType.ERROR).permitAll()
-                        .requestMatchers("/js/**", "/css/**", "/img/**", "/uploads/thumbnails/*", "/font/**").permitAll()
-                        .requestMatchers("/favicon/**").permitAll()
+                        .requestMatchers("/resources/js/**", "/resources/css/**", "/resources/img/**", "/resources/uploads/thumbnails/*", "/resources/font/**").permitAll()
+                        .requestMatchers("/resources/favicon/**").permitAll()
                         .requestMatchers("/", "/signin/**", "/api/signin/**", "/signup/**", "/api/signup/**", "/password-reset/**", "/id-inquiry/**", "/error/**", "/invalid-access/**", "/not-found/**", "/api/empls/*/dupcheck").permitAll()
                         .requestMatchers( "/spaces/**", "/book/spaces/**", "/api/spaces/**", "/api/book/**", "/api/mybook/**", "/mybook/**").access(userAuthorityAuthorizationManager())
                         .requestMatchers("/admin/spaces/**", "/api/admin/spaces/**").access(rscAdminAuthorityAuthorizationManager())

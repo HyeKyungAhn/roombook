@@ -12,7 +12,7 @@
 <html lang="kr">
 <head>
     <title></title>
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/deptStyle.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/deptStyle.css">
 </head>
 <script>
     const msg = '${msg}';
@@ -79,7 +79,7 @@
             <button type="submit" form="deptForm" class="btnM2">다음으로</button>
         </div>
     </div>
-    <script src="${pageContext.request.contextPath}/js/searchScript.js"></script>
+    <script src="${pageContext.request.contextPath}/resources/js/searchScript.js"></script>
     <script>
     window.onbeforeunload = function(e) {
         console.log(e);

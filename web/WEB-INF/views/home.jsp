@@ -17,7 +17,7 @@
             <div class="carousel">
                 <div class="carouselItem fade">
                     <a class="carouselItemLink" href="${moreSpaceUri}">
-                        <img alt="대여 공간 예시 사진" src="/img/aleksandrs-karevs-ZCDA1-cih6o-unsplash-min.jpg"/>
+                        <img alt="대여 공간 예시 사진" src="/resources/img/aleksandrs-karevs-ZCDA1-cih6o-unsplash-min.jpg"/>
                         <div class="carouselItemText">
                             <div class="mainText">roombook 회의실 예약</div>
                             <div class="subText">공간 예약하러 가기</div>
@@ -26,7 +26,7 @@
                 </div>
                 <div class="carouselItem fade">
                     <a class="carouselItemLink" href="${moreSpaceUri}">
-                        <img alt="대여 공간 예시 사진" src="/img/jiran-family-0rqS3f0txBQ-unsplash-min.jpg"/>
+                        <img alt="대여 공간 예시 사진" src="/resources/img/jiran-family-0rqS3f0txBQ-unsplash-min.jpg"/>
                         <div class="carouselItemText">
                             <div class="mainText">roombook 회의실 예약</div>
                             <div class="subText">공간 예약하러 가기</div>
@@ -35,7 +35,7 @@
                 </div>
                 <div class="carouselItem fade">
                     <a class="carouselItemLink" href="${moreSpaceUri}">
-                        <img alt="대여 공간 예시 사진" src="/img/m-monk-E813FON0wDQ-unsplash-min.jpg"/>
+                        <img alt="대여 공간 예시 사진" src="/resources/img/m-monk-E813FON0wDQ-unsplash-min.jpg"/>
                         <div class="carouselItemText">
                             <div class="mainText">roombook 회의실 예약</div>
                             <div class="subText">공간 예약하러 가기</div>

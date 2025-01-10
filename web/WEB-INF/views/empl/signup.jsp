@@ -12,7 +12,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title></title>
-    <script type="text/javascript" src="${pageContext.request.contextPath}/js/zxcvbn/zxcvbn.js"></script>
+    <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/zxcvbn/zxcvbn.js"></script>
 </head>
 <body>
     <div class="horizontalCenter800">
@@ -68,6 +68,6 @@
             </div>
         </form>
     </div>
-<script src="${pageContext.request.contextPath}/js/signupValidation.js"></script>
+<script src="${pageContext.request.contextPath}/resources/js/signupValidation.js"></script>
 </body>
 </html>

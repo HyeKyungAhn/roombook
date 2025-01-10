@@ -11,12 +11,12 @@
 <html lang="kr">
 <head>
     <title>roombook | 공간 예약</title>
-    <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/jsCalendar/jsCalendar.css">
-    <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/jsCalendar/jsCalendar.micro.css">
-    <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/spaceBook.css"/>
-    <script type="text/javascript" src="${pageContext.request.contextPath}/js/jsCalendar/jsCalendar.js"></script>
-    <script type="text/javascript" src="${pageContext.request.contextPath}/js/jsCalendar/jsCalendar.datepicker.js"></script>
-    <script type="text/javascript" src="${pageContext.request.contextPath}/js/jsCalendar/jsCalendar.lang.ko.js"></script>
+    <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/resources/css/jsCalendar/jsCalendar.css">
+    <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/resources/css/jsCalendar/jsCalendar.micro.css">
+    <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/resources/css/spaceBook.css"/>
+    <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/jsCalendar/jsCalendar.js"></script>
+    <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/jsCalendar/jsCalendar.datepicker.js"></script>
+    <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/jsCalendar/jsCalendar.lang.ko.js"></script>
 </head>
 <body>
 <div>
@@ -62,7 +62,7 @@
         </div>
     </div>
 </div>
-<script type="text/javascript" src="${pageContext.request.contextPath}/js/dateTimeConverter.js"></script>
+<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/dateTimeConverter.js"></script>
 <script>
     const spaceData = JSON.parse('${spaceData}');
     let timeslots;

@@ -11,7 +11,7 @@
 <html lang="kr">
 <head>
     <title></title>
-    <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/spaceBook.css">
+    <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/resources/css/spaceBook.css">
 </head>
 <body>
     <div class="myBookRoot">

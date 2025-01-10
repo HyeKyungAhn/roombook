@@ -12,7 +12,7 @@
 <html lang="kr">
 <head>
     <title>roombook | 구성원 수정</title>
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/deptStyle.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/deptStyle.css">
     <link rel="stylesheet" href="https://unpkg.com/ionicons@4.5.10-0/dist/css/ionicons.min.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Montserrat:500,700&amp;display=swap">
 </head>

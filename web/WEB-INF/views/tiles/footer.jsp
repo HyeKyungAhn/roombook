@@ -10,7 +10,7 @@
     <div class="globalFooterContent">
         <div class="footerTopWrapper">
             <div class="logoWrapper">
-                <img class="logoImg" alt="roombook logo" src="${pageContext.request.contextPath}/img/logo.png"/>
+                <img class="logoImg" alt="roombook logo" src="${pageContext.request.contextPath}/resources/img/logo.png"/>
             </div>
             <div class="footerLinksWrapper">
                 <a href="#">이용약관</a><span>|</span>

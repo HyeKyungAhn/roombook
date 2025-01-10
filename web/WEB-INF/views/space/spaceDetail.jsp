@@ -12,13 +12,13 @@
 <html lang="kr">
 <head>
     <title></title>
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/spaceDetail.css"/>
-    <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/space.css"/>
-    <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/jsCalendar/jsCalendar.css">
-    <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/jsCalendar/jsCalendar.micro.css">
-    <script type="text/javascript" src="${pageContext.request.contextPath}/js/jsCalendar/jsCalendar.js"></script>
-    <script type="text/javascript" src="${pageContext.request.contextPath}/js/jsCalendar/jsCalendar.datepicker.js"></script>
-    <script type="text/javascript" src="${pageContext.request.contextPath}/js/jsCalendar/jsCalendar.lang.ko.js"></script>
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/spaceDetail.css"/>
+    <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/resources/css/space.css"/>
+    <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/resources/css/jsCalendar/jsCalendar.css">
+    <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/resources/css/jsCalendar/jsCalendar.micro.css">
+    <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/jsCalendar/jsCalendar.js"></script>
+    <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/jsCalendar/jsCalendar.datepicker.js"></script>
+    <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/jsCalendar/jsCalendar.lang.ko.js"></script>
 </head>
 <body>
 <div class="spaceDetailRootWrapper">
@@ -255,6 +255,6 @@
         return new Date(year, monthIndex, day);
     }
 </script>
-<script src="${pageContext.request.contextPath}/js/imgSlider.js"></script>
+<script src="${pageContext.request.contextPath}/resources/js/imgSlider.js"></script>
 </body>
 </html>

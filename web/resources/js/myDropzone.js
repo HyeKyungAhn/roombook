@@ -31,7 +31,7 @@ const dropzone = new Dropzone("div.dropzone", {
             let callback = null;
             let crossOrigin = null;
             let resizeThumbnail = false;
-            this.displayExistingFile(file, '/uploads/thumbnails/'+file.rename, callback, crossOrigin, resizeThumbnail);
+            this.displayExistingFile(file, '/resources/uploads/thumbnails/'+file.rename, callback, crossOrigin, resizeThumbnail);
         });
 
         let fileCountFromServer = files.length;

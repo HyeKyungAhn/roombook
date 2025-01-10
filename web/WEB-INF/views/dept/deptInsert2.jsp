@@ -14,8 +14,8 @@
     <meta charset="utf-8">
     <title>roombook | 부서 추가</title>
     <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/jstree/dist/themes/default/style.min.css" />
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/deptStyle.css"/>
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/jstree/dist/themes/default/style.min.css" />
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/deptStyle.css"/>
 </head>
 <body>
     <div class="horizontalCenter800">
@@ -29,7 +29,7 @@
             <button class="btnM2 bg_yellow">저장하기</button>
         </div>
     </div>
-<script src="${pageContext.request.contextPath}/jstree/dist/jstree.min.js"></script>
+<script src="${pageContext.request.contextPath}/resources/jstree/dist/jstree.min.js"></script>
 <script>
     $(function () {
         $('#jstree').on('ready.jstree', (e, data) => {

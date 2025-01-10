@@ -11,7 +11,7 @@
 <html lang="kr">
 <head>
     <title><tiles:getAsString name="title"/></title>
-    <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/globalStyle.css" />
+    <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/resources/css/globalStyle.css" />
 </head>
 <body>
     <div>

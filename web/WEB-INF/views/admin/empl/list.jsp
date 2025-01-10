@@ -10,8 +10,8 @@
 <html lang="kr">
 <head>
     <title>roombook admin |권한 관리</title>
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/empl.css"/>
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/pagination.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/empl.css"/>
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/pagination.css">
 </head>
 <body>
     <div class="horizontalCenter1000 paddingTop40">

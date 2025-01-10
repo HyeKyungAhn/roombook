@@ -28,7 +28,11 @@ public class WebApplicationInitializerImpl implements WebApplicationInitializer 
         //servlet context configuration
         XmlWebApplicationContext appContext = new XmlWebApplicationContext();
         appContext.setConfigLocation("/WEB-INF/spring/dispatcher-servlet.xml");
-        ServletRegistration.Dynamic dispatcher = servletContext.addServlet("dispatcher", new DispatcherServlet(appContext));
+
+        DispatcherServlet dispatcherServlet = new DispatcherServlet(appContext);
+        dispatcherServlet.setThrowExceptionIfNoHandlerFound(true);
+
+        ServletRegistration.Dynamic dispatcher = servletContext.addServlet("dispatcher", dispatcherServlet);
         dispatcher.setLoadOnStartup(1);
         dispatcher.addMapping("/");
 

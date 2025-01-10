@@ -18,8 +18,8 @@
     <script src="https://unpkg.com/dropzone@5/dist/min/dropzone.min.js"></script>
     <link rel="stylesheet" href="https://unpkg.com/dropzone@5/dist/min/dropzone.min.css" type="text/css"/>
     <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/space.css"/>
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/tagifyCustom.css"/>
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/space.css"/>
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/tagifyCustom.css"/>
 </head>
 <body>
     <div class="horizontalCenter800 spaceModificationRoot">
@@ -190,7 +190,7 @@
         return true;
     }
 </script>
-<script src="${pageContext.request.contextPath}/js/myDropzone.js"></script>
-<script src="${pageContext.request.contextPath}/js/myTagify.js"></script>
+<script src="${pageContext.request.contextPath}/resources/js/myDropzone.js"></script>
+<script src="${pageContext.request.contextPath}/resources/js/myTagify.js"></script>
 </body>
 </html>

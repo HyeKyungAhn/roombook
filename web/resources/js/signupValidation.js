@@ -342,7 +342,7 @@ function toggleVcodeThrobber() {
                 <div>
                     <span class="throbberText">발급중</span>
                 </div>
-                <img alt="인증 메일 전송 중" class="throbberImage" src="/img/throbber.gif">
+                <img alt="인증 메일 전송 중" class="throbberImage" src="/resources/img/throbber.gif">
             </div>
             `);
     }

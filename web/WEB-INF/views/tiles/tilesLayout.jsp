@@ -12,9 +12,9 @@
 <html lang="kr">
 <head>
     <title><tiles:getAsString name="title"/></title>
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/globalStyle.css"/>
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/globalStyle.css"/>
     <sec:authorize access="isAuthenticated()">
-    <script src="${pageContext.request.contextPath}/js/accountDropdown.js"></script>
+    <script src="${pageContext.request.contextPath}/resources/js/accountDropdown.js"></script>
     </sec:authorize>
 </head>
 <body>

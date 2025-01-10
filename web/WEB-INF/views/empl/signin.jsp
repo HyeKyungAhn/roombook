@@ -10,7 +10,7 @@
 <html lang="kr">
 <head>
     <title>roombook | 로그인</title>
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/login.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/login.css">
 </head>
 <body>
 <div class="loginRootWrapper">

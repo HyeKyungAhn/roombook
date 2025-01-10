@@ -11,7 +11,7 @@
         <div class="adminHeaderLogo">
             <div class="logoWrapper">
                 <a href="${pageContext.request.contextPath}/admin/spaces">
-                    <img class="logoImg invertLogoImage" alt="roombook logo" src="${pageContext.request.contextPath}/img/logo.png"/>
+                    <img class="logoImg invertLogoImage" alt="roombook logo" src="${pageContext.request.contextPath}/resources/img/logo.png"/>
                 </a>
             </div>
             <span class="adminHeaderLogoText">관리자 페이지</span>

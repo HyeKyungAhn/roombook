@@ -15,8 +15,8 @@
     <script src="https://cdn.jsdelivr.net/npm/@yaireo/tagify"></script>
     <script src="https://cdn.jsdelivr.net/npm/@yaireo/tagify/dist/tagify.polyfills.min.js"></script>
     <link href="https://cdn.jsdelivr.net/npm/@yaireo/tagify/dist/tagify.css" rel="stylesheet" type="text/css" />
-    <link href="${pageContext.request.contextPath}/css/tagifyCustom.css" rel="stylesheet" type="text/css"/>
-    <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/space.css"/>
+    <link href="${pageContext.request.contextPath}/resources/css/tagifyCustom.css" rel="stylesheet" type="text/css"/>
+    <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/resources/css/space.css"/>
 </head>
 <body>
     <div class="horizontalCenter800">
@@ -147,7 +147,7 @@
         return true;
     }
 </script>
-<script src="${pageContext.request.contextPath}/js/fileUploadList.js"></script>
-<script src="${pageContext.request.contextPath}/js/myTagify.js"></script>
+<script src="${pageContext.request.contextPath}/resources/js/fileUploadList.js"></script>
+<script src="${pageContext.request.contextPath}/resources/js/myTagify.js"></script>
 </body>
 </html>

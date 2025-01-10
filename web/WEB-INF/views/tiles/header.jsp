@@ -12,7 +12,7 @@
     <div class="globalNavContent">
         <div class="logoWrapper">
             <a href="${pageContext.request.contextPath}/">
-                <img class="logoImg" alt="roombook logo" src="${pageContext.request.contextPath}/img/logo.png"/>
+                <img class="logoImg" alt="roombook logo" src="${pageContext.request.contextPath}/resources/img/logo.png"/>
             </a>
         </div>
         <div class="globalNavMenuList">

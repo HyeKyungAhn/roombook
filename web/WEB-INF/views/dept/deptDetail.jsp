@@ -12,7 +12,7 @@
 <html lang="kr">
 <head>
     <title></title>
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/deptStyle.css"/>
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/deptStyle.css"/>
 </head>
 <body>
     <div class="horizontalCenter800 deptDetailRoot paddingTop40">
