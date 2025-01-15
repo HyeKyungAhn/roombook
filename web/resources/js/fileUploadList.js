@@ -3,10 +3,12 @@ const fileUpload = {
         REMOVE: 'removeFileBtn',
         HEADER: 'fileListHeader',
         INFO: 'uploadInfo',
+        RED: 'fontColor_red',
     },
     fileListEl: document.getElementById('fileListElement'),
     fileInputEl: document.getElementById('fileInputElement'),
     fileListHeaderEl: document.getElementsByClassName('fileListHeader')[0],
+    uploadInfoEl: document.getElementById('uploadInfoElement'),
     fileStore: new Map(),
     allowedImageFormat : ['image/png', 'image/jpeg'],
     initialize(){
@@ -34,7 +36,9 @@ const fileUpload = {
     },
     eventHandlers: {
         onFileInput(){
-            // fileUpload.fileInputEl.value = null;
+            fileUpload.printInfo(``);
+            fileUpload.unColorInfo(fileUpload.CLASSES.RED);
+
             let duplicatedFileCnt = 0;
             let invalidFileCnt = 0;
             let exceedFileCnt = 0;
@@ -64,8 +68,15 @@ const fileUpload = {
                 savedFileCnt++;
             }
 
-            if(duplicatedFileCnt || invalidFileCnt){
-                alert(`${savedFileCnt}개 파일이 추가되었습니다.\n(중복 파일 ${duplicatedFileCnt}개, 업로드 불가 파일 ${invalidFileCnt}개 추가 실패)`);
+            if(duplicatedFileCnt) {
+                fileUpload.colorInfo(fileUpload.CLASSES.RED);
+                fileUpload.printInfo(`중복 파일은 추가할 수 없습니다.`);
+            } else if(invalidFileCnt) {
+                fileUpload.colorInfo(fileUpload.CLASSES.RED);
+                fileUpload.printInfo(`${fileUpload.allowedImageFormat.toString()} 형식만 추가할 수 있습니다.`);
+            } else if(exceedFileCnt) {
+                fileUpload.colorInfo(fileUpload.CLASSES.RED);
+                fileUpload.printInfo('개별 파일 최대 용량은 1MB 입니다.');
             }
         },
         onListClick(event){
@@ -79,8 +90,14 @@ const fileUpload = {
     generateId() {
         return Date.now().toString(16) + Math.random().toString(16).slice(2, 8);
     },
-    printInfo(info){
+    printInfo(info) {
         document.getElementsByClassName(fileUpload.CLASSES.INFO)[0].innerText = info;
+    },
+    colorInfo(color) {
+        fileUpload.uploadInfoEl.classList.toggle(color, true);
+    },
+    unColorInfo(color) {
+        fileUpload.uploadInfoEl.classList.toggle(color, false);
     },
     isDuplicated(file) {
         let isDuplicated = false;

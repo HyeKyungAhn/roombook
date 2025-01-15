@@ -211,14 +211,6 @@ span.plus {
     margin-right: 2px;
 }
 
-.spaceContent .spaceStartTime {
-
-}
-
-.spaceContent .spaceFinishTime {
-
-}
-
 .spaceContent .spaceMaxBookingTime {
     display: flex;
     align-items: center;
@@ -281,10 +273,6 @@ span.plus {
     width: 100%;
 }
 
-.timeslot .time {
-
-}
-
 .timeslot .slot {
     width: 97%;
     display: inline-block;
@@ -295,10 +283,6 @@ span.plus {
 
 .timeslot .booked {
     background-color: #ffd880;
-}
-
-.show {
-
 }
 
 /* resources */
@@ -318,4 +302,9 @@ span.plus {
     width: 100%;
     height: 100px;
     margin: 10px 0;
+}
+
+.uploadInfo {
+    font-size: 13px;
+    padding-left: 10px;
 }

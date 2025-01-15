@@ -161,7 +161,10 @@
       infoWrapper.appendChild(rescWrapper);
 
       const thumbnailWrapper = document.createElement('div');
-      thumbnailWrapper.insertAdjacentHTML('afterbegin',`<img class="thumbnailImg" alt="공간 대표사진" src="\${file.rename? jsonData.thumbnailPath+'/'+file.rename:jsonData.noImgPath}"/>`);
+      thumbnailWrapper.insertAdjacentHTML('afterbegin',`
+        <a href="\${jsonData.links.find(link => link.rel === 'spaceDetail').href.replace('{spaceNo}', space.spaceNo)}">
+          <img class="thumbnailImg" alt="공간 대표사진" src="\${file.rename? jsonData.thumbnailPath+'/'+file.rename:jsonData.noImgPath}"/>
+        </a>`);
 
       const bookingBtnWrapper = document.createElement('div');
       const bookingUrl = jsonData.links.find((link) => link.rel==='booking').href.replace('{space-no}', space.spaceNo).replace('{?date}',`?date=\${getPlainDate()}`)

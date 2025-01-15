@@ -40,7 +40,7 @@
                 <div>
                     <label for="fileInputElement" id="spaceInfoName" class="spaceInfoName">사진 업로드</label>
                     <input type="file" name="files" multiple id="fileInputElement" class="customLook" size="50">
-                    <span class="uploadInfo"></span>
+                    <span id="uploadInfoElement" class="uploadInfo"></span>
                 </div>
                 <table aria-describedby="spaceInfoName" id="fileListElement">
                     <tr class="fileListHeader">
@@ -100,7 +100,6 @@
             hide: e.target.hide.checked ? 'Y':'N',
         };
 
-        console.log(space.startTm);
         if(!validate(space)) return false;
 
         formData.append('space', JSON.stringify(space));
