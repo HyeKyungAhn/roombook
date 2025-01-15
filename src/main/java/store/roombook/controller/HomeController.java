@@ -53,7 +53,7 @@ public class HomeController {
         mv.addObject("spaceDetailUri", spaceDetailUri);
         mv.addObject("moreSpaceUri", moreSpaceUri);
         mv.addObject("imgPath", properties.getThumbnailUploadPath());
-        mv.addObject("noImgPath", "/img/noImg.png");
+        mv.addObject("noImgPath", properties.getNoImgPath());
         mv.addObject("spaces", spaceList);
         mv.setViewName("home.tiles");
         return mv;

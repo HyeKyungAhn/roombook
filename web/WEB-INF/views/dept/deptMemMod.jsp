@@ -221,7 +221,7 @@
                     return `<div id='searchedEmpl\${index}' class='searchedEmpl emplProfile searchedProfile \${isDuplicated?'unclickable':""}' data-id='\${r.emplId}'>
                                 <div class="searchedProfileImageContent">
                                     <div class='imgContainer searchedProfileImageWrapper'>
-                                        <img src='\${r.prfPhotoPath?profileImgPath+'/'+r.prfPhotoPath:"/img/noImg.png"}' class='emplImg profileImg searchedProfileImage' alt="프로필 사진"/>
+                                        <img src='\${r.prfPhotoPath?profileImgPath+'/'+r.prfPhotoPath:"${noImgPath}"}' class='emplImg profileImg searchedProfileImage' alt="프로필 사진"/>
                                     </div>
                                 </div>
                                 <div class='searchedProfileInfoContent'>
