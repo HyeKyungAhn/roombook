@@ -35,17 +35,19 @@ public class FileServiceImpl implements FileService{
     @Autowired
     private FileStorageProperties fileStorageProperties;
 
-    private static final int THUMBNAIL_WIDTH = 120;
-    private static final int THUMBNAIL_HEIGHT = 120;
+    private static final int THUMBNAIL_WIDTH = 230;
+    private static final int THUMBNAIL_HEIGHT = 230;
     private static final boolean SUCCESS = true;
     private static final boolean FAIL = false;
     private static final String FILE_DIRECTORY_ORIGINAL = "originals";
     private static final String FILE_DIRECTORY_THUMBNAIL = "thumbnails";
     private static final String INFO = "INFO";
     private static final int MAX_FILE_CNT = 5;
+    private static final int CAPACITY_PER_FILE = 1024*1024; //1MB
     private static final List<String> IMAGE_TYPES = Arrays.asList("jpeg", "jpg", "png");
     private static final Logger logger = LogManager.getLogger(FileServiceImpl.class);
     private static final List<String> ALLOWED_IMAGE_TYPES = Arrays.asList("image/jpeg", "image/png");
+    private static final String ATTACHED_LOCATION_CODE = "atchLocCd";
 
 
     @Override
@@ -53,10 +55,8 @@ public class FileServiceImpl implements FileService{
     public FileServiceResult saveFiles(MultipartFile[] newFiles, int atchLocNum, String emplId) throws MultipartException, IllegalStateException {
         FileServiceResult result = new FileServiceResult();
 
-        if(Objects.isNull(newFiles) || newFiles.length==0){
-            result.setSaved(true);
-            result.setFileCntExceeded(1);
-            return result;
+        if (isExceedCapacity(newFiles)) {
+            throw new IllegalArgumentException("a file size exceeds the limit.");
         }
 
         List<FileDto> fileDtoList = new ArrayList<>();
@@ -77,6 +77,7 @@ public class FileServiceImpl implements FileService{
             if(extension != null && extension.equals("jfif")) extension = "jpg";
 
             String uniqueFileName = UUID.randomUUID() + "." + extension;
+
             boolean isSaveSuccess;
 
             if(isValidFileType(file)){
@@ -156,9 +157,10 @@ public class FileServiceImpl implements FileService{
     public List<FileDto> getFileData(int spaceNo, CmnCode locCode) {
         Map<String, Object> spaceData = new HashMap<>();
 
-        switch (locCode) {
-            case ATCH_LOC_CD_SPACE -> spaceData.put("atchLocCd", CmnCode.ATCH_LOC_CD_SPACE.getCode());
-            case ATCH_LOC_CD_NOTICE -> spaceData.put("atchLocCd", CmnCode.ATCH_LOC_CD_NOTICE.getCode());
+        if (locCode.equals(CmnCode.ATCH_LOC_CD_SPACE)) {
+            spaceData.put(ATTACHED_LOCATION_CODE, CmnCode.ATCH_LOC_CD_SPACE.getCode());
+        } else if (locCode.equals(CmnCode.ATCH_LOC_CD_NOTICE)) {
+            spaceData.put(ATTACHED_LOCATION_CODE, CmnCode.ATCH_LOC_CD_NOTICE.getCode());
         }
 
         spaceData.put("ATCH_LOC_NO", spaceNo);
@@ -168,7 +170,7 @@ public class FileServiceImpl implements FileService{
     @Override
     public FileDto getFile(int ATCH_LOC_NO, CmnCode atchLocCd) {
         Map<String, Object> spaceData = new HashMap<>();
-        spaceData.put("atchLocCd", CmnCode.ATCH_LOC_CD_SPACE.getCode());
+        spaceData.put(ATTACHED_LOCATION_CODE, CmnCode.ATCH_LOC_CD_SPACE.getCode());
         spaceData.put("atchLocNo", ATCH_LOC_NO);
         return fileDao.selectOneFileWithSpaceData(spaceData);
     }
@@ -220,7 +222,7 @@ public class FileServiceImpl implements FileService{
 
                 optimizePng(originalImgFile.getPath(), outputStream, thumbnailFile.getPath());
             } else {
-                thumbnailBuilder.outputQuality(0.7)
+                thumbnailBuilder.outputQuality(1.0)
                         .toFile(thumbnailFile);
             }
         } catch (IOException e){
@@ -247,5 +249,14 @@ public class FileServiceImpl implements FileService{
     private boolean isValidFileType(MultipartFile file) {
         String contentType = file.getContentType();
         return contentType != null && ALLOWED_IMAGE_TYPES.contains(contentType.toLowerCase());
+    }
+
+    private boolean isExceedCapacity(MultipartFile[] files) {
+        for (MultipartFile file : files) {
+            if (file.getSize() > CAPACITY_PER_FILE) {
+                return true;
+            }
+        }
+        return false;
     }
 }

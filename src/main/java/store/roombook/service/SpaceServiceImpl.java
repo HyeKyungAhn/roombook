@@ -171,16 +171,16 @@ public class SpaceServiceImpl implements SpaceService {
         Set<String> fileNmSet = new HashSet<>();
         Set<Integer> rescNoSet = new HashSet<>();
 
-        List<FileDto> files = new ArrayList<>();
-        List<RescDto> rescs = new ArrayList<>();
+        List<FileDto> files;
+        List<RescDto> rescs;
 
         for (SpaceInfoAndTimeslotDto detail : spaceDetails) {
             fileNmSet.add(detail.getFileNm());
             rescNoSet.add(detail.getRescNo());
         }
 
-        filterFileData(fileNmSet, files, spaceDetails);
-        filterRescData(rescNoSet, rescs, spaceDetails);
+        files = filterFileData(fileNmSet, spaceDetails);
+        rescs = filterRescData(rescNoSet, spaceDetails);
 
         SpaceDto.Builder build = new SpaceDto.Builder()
                 .spaceNo(spaceNo)
@@ -202,8 +202,10 @@ public class SpaceServiceImpl implements SpaceService {
         return build.build();
     }
 
-    private void filterRescData(Set<Integer> rescNoSet, List<RescDto> rescs, List<SpaceInfoAndTimeslotDto> spaceDetails) {
-        if(rescNoSet.size()==1&&rescNoSet.contains(null)) return;
+    private List<RescDto> filterRescData(Set<Integer> rescNoSet, List<SpaceInfoAndTimeslotDto> spaceDetails) {
+        List<RescDto> rescs = new ArrayList<>();
+
+        if(rescNoSet.size()==1&&rescNoSet.contains(null)) return rescs;
 
         Iterator<Integer> rescIterator = rescNoSet.stream().iterator();
 
@@ -220,10 +222,13 @@ public class SpaceServiceImpl implements SpaceService {
             }
         }
 
+        return rescs;
     }
 
-    private void filterFileData(Set<String> fileNmSet, List<FileDto> files, List<SpaceInfoAndTimeslotDto> spaceDetails) {
-        if(fileNmSet.size()==1&&fileNmSet.contains(null)) return;
+    private List<FileDto> filterFileData(Set<String> fileNmSet, List<SpaceInfoAndTimeslotDto> spaceDetails) {
+        List<FileDto> files = new ArrayList<>();
+
+        if(fileNmSet.size()==1&&fileNmSet.contains(null)) return files;
 
         Iterator<String> fileIterator = fileNmSet.stream().iterator();
 
@@ -233,6 +238,7 @@ public class SpaceServiceImpl implements SpaceService {
             for (SpaceInfoAndTimeslotDto detail : spaceDetails) {
                 if (detail.getFileNm().equals(fileNm)) {
                     FileDto file = FileDto.builder(fileNm).
+                            fileNo(detail.getFileNo()).
                             fileOrglNm(detail.getFileOrglNm()).
                             fileTypNm(detail.getFileTypNm()).
                             fileSize(detail.getFileSize()).build();
@@ -241,6 +247,27 @@ public class SpaceServiceImpl implements SpaceService {
                 }
             }
         }
+
+        putThumbnailFileFirst(files);
+        return removeFileNo(files);
+    }
+
+    private void putThumbnailFileFirst(List<FileDto> files) {
+        files.sort(Comparator.comparingInt(FileDto::getFileNo));
+    }
+
+    private List<FileDto> removeFileNo(List<FileDto> files) {
+        List<FileDto> filesWithNoFileNo = new ArrayList<>();
+
+        for (FileDto file : files) {
+            FileDto fileWithNoFileNo = FileDto.builder(file.getFileNm()).
+                    fileOrglNm(file.getFileOrglNm()).
+                    fileTypNm(file.getFileTypNm()).
+                    fileSize(file.getFileSize()).build();
+            filesWithNoFileNo.add(fileWithNoFileNo);
+        }
+
+        return filesWithNoFileNo;
     }
 
     @Override

@@ -37,6 +37,7 @@ const fileUpload = {
             // fileUpload.fileInputEl.value = null;
             let duplicatedFileCnt = 0;
             let invalidFileCnt = 0;
+            let exceedFileCnt = 0;
             let savedFileCnt = 0;
             let newFileCnt = fileUpload.fileInputEl.files.length;
 
@@ -51,10 +52,11 @@ const fileUpload = {
                 if(fileUpload.isDuplicated(file)){
                     duplicatedFileCnt++;
                     continue;
-                }
-
-                if(fileUpload.isInvalidFormat(file)){
+                } else if(fileUpload.isInvalidFormat(file)){
                     invalidFileCnt++;
+                    continue;
+                } else if(fileUpload.isExceedCapacity(file)){
+                    exceedFileCnt++;
                     continue;
                 }
 
@@ -74,7 +76,7 @@ const fileUpload = {
             }
         }
     },
-    generateId(){
+    generateId() {
         return Date.now().toString(16) + Math.random().toString(16).slice(2, 8);
     },
     printInfo(info){
@@ -86,8 +88,11 @@ const fileUpload = {
             if(v.name === file.name && v.size === file.size) isDuplicated = true;});
         return isDuplicated;
     },
-    isInvalidFormat(file){
+    isInvalidFormat(file) {
         return !this.allowedImageFormat.includes(file.type);
+    },
+    isExceedCapacity(file) {
+        return file.size > 1024 * 1024;
     }
 }
 

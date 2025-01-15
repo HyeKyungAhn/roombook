@@ -104,7 +104,7 @@ public class SpaceRestController {
         } catch (DateTimeParseException e){
             return createErrorResponse("날짜를 확인한 후 다시 입력해주세요.");
         } catch (IllegalArgumentException e){
-            return createErrorResponse("파일은 5개까지 저장할 수 있습니다.");
+            return createErrorResponse("1MB 이하의 파일을 최대 5개까지 저장할 수 있습니다.");
         } catch (MultipartException e){
             return createErrorResponse("jpg/jpeg, png 파일만 업로드할 수 있습니다.");
         } catch (IOException e){
@@ -136,10 +136,8 @@ public class SpaceRestController {
 
         try {
             space = parseJson(spaceData, SpaceDto.class);
-            rescs = parseJson(resc, new TypeReference<>() {
-            });
-            fileNameArray = parseJson(deletedFileNames, new TypeReference<>() {
-            });
+            rescs = parseJson(resc, new TypeReference<>() {});
+            fileNameArray = parseJson(deletedFileNames, new TypeReference<>() {});
 
             modifyResult = spaceTransactionService.modifySpace(spaceNo, empl.getEmplId(), space, newFiles, fileNameArray, rescs);
         } catch (JsonProcessingException e) {
